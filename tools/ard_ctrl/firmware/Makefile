@@ -2,8 +2,8 @@ SRC_DIR := ./
 OUT_DIR := ./out
 SRC_FILES := $(wildcard $(SRC_DIR)/*.c)
 OBJ_FILES := $(patsubst $(SRC_DIR)/%.c,$(OUT_DIR)/%.o,$(SRC_FILES))
-OUT_PRG	:= $(OUT_DIR)/arductrl.elf
-OUT_HEX	:= $(OUT_DIR)/arductrl.hex
+OUT_PRG	:= $(OUT_DIR)/ard_ctrl.elf
+OUT_HEX	:= $(OUT_DIR)/ard_ctrl.hex
 
 MMCU := atmega1280
 
@@ -22,9 +22,8 @@ all: clean $(OBJ_FILES)
 	avr-size -C --mcu=$(MMCU) $(OUT_PRG)
 
 clean:
-	rm ./out/*.o -f
-	rm ./out/*.elf -f
-	rm ./out/*.hex -f
+	rm ./out -r -f 
+	mkdir ./out
 
 $(OUT_DIR)/%.o: $(SRC_DIR)/%.c 
 	$(GCC) $(CFLAGS) -c $(DEFS) $< -o $@ 
