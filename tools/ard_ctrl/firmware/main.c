@@ -44,6 +44,10 @@ inline static void io_setup() {
     CLK_LOW;
     _delay_ms(1);
   }
+
+  // set reset pin high
+  RSTB_PORT |= 1<<RSTB_PIN;
+  _delay_ms(1);
 }
 
 inline static void io_update() {
