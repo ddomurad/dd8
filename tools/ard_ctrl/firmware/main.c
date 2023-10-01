@@ -6,33 +6,8 @@
 #include <stdint.h>
 #include <util/delay.h>
 
-#define ADDR_L_DDR    DDRA
-#define ADDR_H_DDR    DDRC
-#define DATA_DDR      DDRL
-#define CTRL_DDR      DDRK
-
-#define ADDR_L_PORT   PORTA
-#define ADDR_H_PORT   PORTC
-#define DATA_PORT     PORTL
-#define CTRL_PORT     PORTK
-
-#define ADDR_L_PIN    PINA
-#define ADDR_H_PIN    PINC
-#define DATA_PIN      PINL
-#define CTR_PINS      PINK
-
-#define CLK_DDR       DDRG
-#define CLK_PORT      PORTG
-#define CLK_PIN       PING0 
-
-#define RSTB_DDR       DDRG
-#define RSTB_PORT      PORTG
-#define RSTB_PIN       PING1 
-
-#define CTRL_RW_PIN    PINK0
-
-#define CLK_LOW (CLK_PORT &= ~(1<<CLK_PORT))
-#define CLK_HIGH (CLK_PORT |= (1<<CLK_PORT))
+#define CLK_LOW (CLK_PORT &= ~(1<<CLK_PIN))
+#define CLK_HIGH (CLK_PORT |= (1<<CLK_PIN))
 
 #define CLK_HALF_DELAY CLK_HALF_DELAY_FUNC
 
@@ -65,11 +40,9 @@ inline static void io_setup() {
   // 
   for(int8_t i=0; i<4; i++) {
     CLK_HIGH;
-    CLK_HALF_DELAY;
-    CLK_HALF_DELAY;
+    _delay_ms(1);
     CLK_LOW;
-    CLK_HALF_DELAY;
-    CLK_HALF_DELAY;
+    _delay_ms(1);
   }
 }
 
@@ -78,7 +51,7 @@ inline static void io_update() {
 
   CLK_LOW;
   CLK_HALF_DELAY;
-  ctrl_pin_val = CTR_PINS;
+  ctrl_pin_val = CTRL_PINS;
 
   if(IS_WRITE_OP(ctrl_pin_val)) {
     DATA_DDR = 0x00; //DATA bus to input mode
@@ -103,6 +76,7 @@ int main() {
   uart_init();
   emu_init();
 
+  uart_write("init\n", 5);
   while(1){
     io_update();
   }
