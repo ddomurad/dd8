@@ -1,0 +1,17 @@
+  ; this is an nonsense asm program
+  ; used only for testing the final binary output
+
+  php
+  php ; some test comment
+
+  .org $2077
+  lda #$00
+  lda #$ff   
+  lda #$01 
+
+  .org $1077
+  lda $1111
+test_label_1:
+  lda $41,x 
+  lda $1077,x 
+  lda test_label_1

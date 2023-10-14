@@ -2,58 +2,9 @@ package assemblers
 
 import (
 	"errors"
-	"fmt"
-	"reflect"
 
 	"github.com/ddomurad/dd8/tools/asm/internal"
 )
-
-func eRegister(operands []any, index int) (string, error) {
-	if len(operands) <= index {
-		return "", fmt.Errorf("lolA") //todo: ??
-	}
-
-	sv, ok := operands[index].(internal.ASTRegister)
-	if !ok {
-		return "", fmt.Errorf("lolA") //todo: ??
-	}
-
-	return string(sv), nil
-}
-
-func e16bit(operands []any, index int) (uint16, error) {
-	if len(operands) <= index {
-		return 0, fmt.Errorf("lolA") //todo: ??
-	}
-
-	v := operands[index]
-	switch tv := v.(type) {
-	case internal.ASTNumber:
-		if tv > 0xffff || tv < 0 {
-			return 0, fmt.Errorf("expected 16bit value, got: %x (hex)", tv)
-		}
-		return uint16(tv), nil
-	}
-
-	return 0, fmt.Errorf("unexpected value type, expected int64 got %v", reflect.TypeOf(v))
-}
-
-func e8bit(operands []any, index int) (uint8, error) {
-	if len(operands) <= index {
-		return 0, fmt.Errorf("lolA") //todo: ??
-	}
-
-	v := operands[index]
-	switch tv := v.(type) {
-	case internal.ASTNumber:
-		if tv > 0xff || tv < 0 {
-			return 0, fmt.Errorf("expected 8bit value, got: %x (hex)", tv)
-		}
-		return uint8(tv), nil
-	}
-
-	return 0, fmt.Errorf("unexpected value type, expected int64 got %v", reflect.TypeOf(v))
-}
 
 func OpcodeAssemblerW65C02S(inst internal.ASTInstruction) ([]byte, error) {
 	switch inst.OpCode {
@@ -64,13 +15,13 @@ func OpcodeAssemblerW65C02S(inst internal.ASTInstruction) ([]byte, error) {
 	case "php":
 		return []byte{0x08}, nil
 	case "ldai":
-		p0, err := e8bit(inst.Operands, 0)
+		p0, err := internal.Ens8bit(inst.Operands, 0)
 		if err != nil {
 			return nil, err
 		}
 		return []byte{0xa9, byte(p0)}, nil
 	case "lda":
-		p0, err := e16bit(inst.Operands, 0)
+		p0, err := internal.Ens16bit(inst.Operands, 0)
 		if err != nil {
 			return nil, err
 		}
@@ -86,7 +37,7 @@ func OpcodeAssemblerW65C02S(inst internal.ASTInstruction) ([]byte, error) {
 		}
 		// absolute indexed, absolute indexed zero_page
 		if len(inst.Operands) == 2 {
-			p1, err := eRegister(inst.Operands, 1)
+			p1, err := internal.EnsRegister(inst.Operands, 1)
 			if err != nil {
 				return nil, err
 			}

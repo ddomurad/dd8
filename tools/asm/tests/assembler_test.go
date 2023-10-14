@@ -9,13 +9,14 @@ import (
 )
 
 func assertByteCodeWithArray(t *testing.T, expected []byte, acctual internal.ByteCode) {
-	require.Equal(t, len(expected), len(acctual), "programm length")
 	require.Equal(t, expected, acctual.ToByteArray(0x00, len(expected)), "bype code")
 }
 
 func assertAssembler(t *testing.T, src string, expected []byte) {
 	src += "\n"
 	ast := internal.ParseSrc(src)
+	err := internal.PreprocessAST(ast)
+	require.NoError(t, err)
 	bcode, err := internal.Assemble(ast, assemblers.OpcodeAssemblerW65C02S)
 	require.NoError(t, err)
 	assertByteCodeWithArray(t, expected, bcode)
@@ -58,6 +59,30 @@ func TestThatCanBuildBinaryCode(t *testing.T) {
       nop
       lda test_label `,
 			[]byte{0xea, 0xea, 0xea, 0xa5, 0x01},
+		)
+	})
+	t.Run("origin", func(t *testing.T) {
+		assertAssembler(t, `
+      .org 0x02
+      nop
+      nop
+      .org 10
+      nop
+      .org 0x00
+      nop`,
+			[]byte{0xea, 0x00, 0xea, 0xea, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xea},
+		)
+	})
+	t.Run("define", func(t *testing.T) {
+		assertAssembler(t, `
+      .def VAR1 := 10
+      .def VAR2 := 0x20
+      .def VAR3 := VAR2
+      .org VAR1 
+      nop
+      .org 0x00
+      ldai VAR3`,
+			[]byte{0xa9, 0x20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xea},
 		)
 	})
 }

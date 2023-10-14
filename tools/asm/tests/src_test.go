@@ -12,7 +12,8 @@ import (
 func TestThatCanParseAssemlyFile(t *testing.T) {
 	srcReader := internal.NewFileSourceReader("./res/")
 	testCases := map[string]string{
-		"test.asm": "test.out",
+		"test.asm":  "test.out",
+		"test2.asm": "test2.out",
 	}
 
 	for srcName, expectedOutputFile := range testCases {

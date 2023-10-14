@@ -287,7 +287,7 @@ func (v *progVisitor) buildPrepDefine(children []antlr.Tree) interface{} {
 	return defs
 }
 
-func applyDefToOperand(operand any, defs map[string]any) (any, bool) {
+func applyDefsToOperand(operand any, defs map[string]any) (any, bool) {
 	nameOp, ok := operand.(ASTName)
 	if !ok {
 		return nil, false
@@ -300,7 +300,7 @@ func applyDefToOperand(operand any, defs map[string]any) (any, bool) {
 func applyDefsToOperands(operands []any, defs map[string]any) bool {
 	rok := false
 	for i, op := range operands {
-		nv, ok := applyDefToOperand(op, defs)
+		nv, ok := applyDefsToOperand(op, defs)
 		if ok {
 			operands[i] = nv
 			rok = true
@@ -315,7 +315,7 @@ func applyDefinitions(ast *AST, defs map[string]any) bool {
 	for i, st := range ast.Statements {
 		switch tst := st.(type) {
 		case ASTOrigin:
-			nv, ok := applyDefToOperand(tst.Address, defs)
+			nv, ok := applyDefsToOperand(tst.Address, defs)
 			if ok {
 				tst.Address = nv
 				ast.Statements[i] = tst
@@ -354,6 +354,10 @@ func PreprocessDefinitions(ast *AST) error {
 	}
 
 	return nil
+}
+
+func PreprocessAST(ast *AST) error {
+	return PreprocessDefinitions(ast)
 }
 
 func ParseSrc(src string) *AST {
