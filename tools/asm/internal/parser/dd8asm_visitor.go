@@ -17,11 +17,14 @@ type DD8ASMVisitor interface {
 	// Visit a parse tree produced by DD8ASMParser#prep_instruction.
 	VisitPrep_instruction(ctx *Prep_instructionContext) interface{}
 
+	// Visit a parse tree produced by DD8ASMParser#prep_def_args.
+	VisitPrep_def_args(ctx *Prep_def_argsContext) interface{}
+
+	// Visit a parse tree produced by DD8ASMParser#prep_def_arg_lines.
+	VisitPrep_def_arg_lines(ctx *Prep_def_arg_linesContext) interface{}
+
 	// Visit a parse tree produced by DD8ASMParser#instruction.
 	VisitInstruction(ctx *InstructionContext) interface{}
-
-	// Visit a parse tree produced by DD8ASMParser#prep_arglist.
-	VisitPrep_arglist(ctx *Prep_arglistContext) interface{}
 
 	// Visit a parse tree produced by DD8ASMParser#arglist.
 	VisitArglist(ctx *ArglistContext) interface{}
@@ -35,6 +38,6 @@ type DD8ASMVisitor interface {
 	// Visit a parse tree produced by DD8ASMParser#name.
 	VisitName(ctx *NameContext) interface{}
 
-	// Visit a parse tree produced by DD8ASMParser#prep_name.
-	VisitPrep_name(ctx *Prep_nameContext) interface{}
+	// Visit a parse tree produced by DD8ASMParser#label.
+	VisitLabel(ctx *LabelContext) interface{}
 }

@@ -7,21 +7,25 @@ prog
   ;
 
 statement
-  : (instruction | prep_instruction)? EOL
+  : (instruction | prep_instruction | label)? EOL
   ;
 
 prep_instruction
-  : prep_name prep_arglist?
-  | prep_name '(' prep_arglist? ')'
+  : P_ORG argument
+  | P_DEF '(' EOL prep_def_arg_lines EOL ')'
+  | P_DEF prep_def_args
+  ;
+
+prep_def_args
+  : name ':=' argument
+  ;
+
+prep_def_arg_lines
+  : prep_def_args (EOL prep_def_arg_lines)?
   ;
 
 instruction
   : name arglist?
-  ;
-
-prep_arglist
-  : argument (',' arglist)?
-  | argument ('=' arglist)?
   ;
 
 arglist
@@ -40,16 +44,15 @@ name
   : NAME
   ;
 
-prep_name
-  : PREP_NAME
+label
+  : NAME ':'
   ;
+
+P_DEF: '.def';
+P_ORG: '.org';
 
 NAME
-  : [A-Z_-]+
-  ;
-
-PREP_NAME
-  : '.'[A-Z_-]+
+  : [A-Z_-]+[A-Z_0-9-]*
   ;
 
 HEX_NUM
@@ -65,13 +68,14 @@ DEC_NUM
   ;
 
 COMMENT
-   : ';' ~ [\r\n]* -> skip
-   ;
+  : ';' ~ [\r\n]* -> skip
+  ;
 
 EOL
-   : [\r\n] +
-   ;
+  : [\r\n] +
+  ;
 
 WS
-   : [ \t] -> skip
-   ;
+  : [ \t] -> skip
+  ;
+

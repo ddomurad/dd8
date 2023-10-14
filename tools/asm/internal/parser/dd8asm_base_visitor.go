@@ -20,11 +20,15 @@ func (v *BaseDD8ASMVisitor) VisitPrep_instruction(ctx *Prep_instructionContext) 
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseDD8ASMVisitor) VisitInstruction(ctx *InstructionContext) interface{} {
+func (v *BaseDD8ASMVisitor) VisitPrep_def_args(ctx *Prep_def_argsContext) interface{} {
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseDD8ASMVisitor) VisitPrep_arglist(ctx *Prep_arglistContext) interface{} {
+func (v *BaseDD8ASMVisitor) VisitPrep_def_arg_lines(ctx *Prep_def_arg_linesContext) interface{} {
+	return v.VisitChildren(ctx)
+}
+
+func (v *BaseDD8ASMVisitor) VisitInstruction(ctx *InstructionContext) interface{} {
 	return v.VisitChildren(ctx)
 }
 
@@ -44,6 +48,6 @@ func (v *BaseDD8ASMVisitor) VisitName(ctx *NameContext) interface{} {
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseDD8ASMVisitor) VisitPrep_name(ctx *Prep_nameContext) interface{} {
+func (v *BaseDD8ASMVisitor) VisitLabel(ctx *LabelContext) interface{} {
 	return v.VisitChildren(ctx)
 }

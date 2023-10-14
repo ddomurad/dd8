@@ -13,7 +13,7 @@ func eStr(operands []any, index int) (string, error) {
 		return "", fmt.Errorf("lolA") //todo: ??
 	}
 
-	sv, ok := operands[index].(internal.ASTStringOperand)
+	sv, ok := operands[index].(internal.ASTNameOperand)
 	if !ok {
 
 		return "", fmt.Errorf("lolA") //todo: ??
@@ -60,6 +60,8 @@ func OpcodeAssemblerW65C02S(inst internal.ASTInstruction) ([]byte, error) {
 	switch inst.OpCode {
 	case "brk":
 		return []byte{0x00}, nil
+	case "nop":
+		return []byte{0xea}, nil
 	case "php":
 		return []byte{0x08}, nil
 	case "ldai":

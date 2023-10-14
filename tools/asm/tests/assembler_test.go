@@ -25,6 +25,9 @@ func TestThatCanBuildBinaryCode(t *testing.T) {
 	t.Run("brk", func(t *testing.T) {
 		assertAssembler(t, "brk", []byte{0x00})
 	})
+	t.Run("nop", func(t *testing.T) {
+		assertAssembler(t, "nop", []byte{0xea})
+	})
 	t.Run("php", func(t *testing.T) {
 		assertAssembler(t, "php", []byte{0x08})
 	})
@@ -46,5 +49,15 @@ func TestThatCanBuildBinaryCode(t *testing.T) {
 	})
 	t.Run("lda_ax", func(t *testing.T) {
 		assertAssembler(t, "lda 0x113b, x", []byte{0xbd, 0x3b, 0x11})
+	})
+	t.Run("label_test", func(t *testing.T) {
+		assertAssembler(t, `
+      nop
+      test_label:
+      nop
+      nop
+      lda test_label `,
+			[]byte{0xea, 0xea, 0xea, 0xa5, 0x01},
+		)
 	})
 }

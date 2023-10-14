@@ -45,16 +45,37 @@ func (c ByteCode) GetAddresses() []int {
 
 type OpcodeAssembler func(inst ASTInstruction) ([]byte, error)
 
+func substituteLabel(inst *ASTInstruction, labels map[string]int) {
+	for i, op := range inst.Operands {
+		strVal, ok := op.(ASTNameOperand)
+		if !ok {
+			continue
+		}
+		lblAddr, ok := labels[string(strVal)]
+		if ok {
+			inst.Operands[i] = ASTNumericOperand(lblAddr)
+		}
+	}
+}
+
 func Assemble(ast *AST, opcodeAssembler OpcodeAssembler) (ByteCode, error) {
 	programCounter := 0x00
 	byteCode := make(ByteCode)
+	labels := map[string]int{}
 
 	for _, s := range ast.Statements {
+		lbl, ok := s.(ASTLabel)
+		if ok {
+			labels[lbl.Name] = programCounter
+			continue
+		}
+
 		inst, ok := s.(ASTInstruction)
 		if !ok {
 			panic("elo !") //todo: ??
 		}
 
+		substituteLabel(&inst, labels)
 		opBytes, err := opcodeAssembler(inst)
 		if err != nil {
 			panic(err) //todo: ??

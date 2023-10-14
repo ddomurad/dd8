@@ -1,6 +1,7 @@
 package internal
 
 import (
+	"errors"
 	"strconv"
 	"strings"
 
@@ -9,12 +10,20 @@ import (
 )
 
 type ASTNumericOperand int64
-type ASTStringOperand string
+type ASTNameOperand string
 type ASTStatement any
 
-type ASTPreprocessInstruction struct {
-	Instruction string
-	Parameters  []any
+type ASTLabel struct {
+	Name string
+}
+
+type ASTOrigin struct {
+	Address any
+}
+
+type ASTPrepDefine struct {
+	Name  string
+	Value any
 }
 
 type ASTInstruction struct {
@@ -59,7 +68,14 @@ func (v *progVisitor) VisitProg(ctx *parser.ProgContext) interface{} {
 			continue
 		}
 
-		ast.Statements = append(ast.Statements, result)
+		switch tres := result.(type) {
+		case []interface{}:
+			for _, st := range tres {
+				ast.Statements = append(ast.Statements, st)
+			}
+		case interface{}:
+			ast.Statements = append(ast.Statements, tres)
+		}
 	}
 
 	return &ast
@@ -67,41 +83,11 @@ func (v *progVisitor) VisitProg(ctx *parser.ProgContext) interface{} {
 
 func (v *progVisitor) VisitStatement(ctx *parser.StatementContext) interface{} {
 	children := ctx.GetChildren()
-	// v.VisitChildren(ctx)
 	if len(children) != 1 && len(children) != 2 {
 		panic("lol !") //todo: ??
 	}
 
 	return v.Visit(children[0].(antlr.ParseTree))
-}
-
-func (v *progVisitor) VisitPrep_instruction(ctx *parser.Prep_instructionContext) interface{} {
-	children := ctx.GetChildren()
-	//todo: check for length ?
-	opcodeResp := v.Visit(children[0].(antlr.ParseTree))
-	instStr, ok := opcodeResp.(string)
-	if !ok {
-		panic("lol 2") //todo: ??
-	}
-
-	inst := ASTPreprocessInstruction{
-		Instruction: instStr,
-		Parameters:  []any{},
-	}
-
-	if len(children) > 2 {
-		panic("lol") //todo: ??
-	}
-	if len(children) == 2 {
-		x := v.Visit(children[1].(antlr.ParseTree))
-		_ = x
-		inst.Parameters, ok = v.Visit(children[1].(antlr.ParseTree)).([]interface{})
-		if !ok {
-			panic("lol") //todo: ??
-		}
-	}
-
-	return inst
 }
 
 func (v *progVisitor) VisitInstruction(ctx *parser.InstructionContext) interface{} {
@@ -123,7 +109,7 @@ func (v *progVisitor) VisitInstruction(ctx *parser.InstructionContext) interface
 	}
 	if len(children) == 2 {
 		x := v.Visit(children[1].(antlr.ParseTree))
-		_ = x
+		_ = x //todo: clean up pls ?
 		inst.Operands, ok = v.Visit(children[1].(antlr.ParseTree)).([]interface{})
 		if !ok {
 			panic("lol") //todo: ??
@@ -131,31 +117,6 @@ func (v *progVisitor) VisitInstruction(ctx *parser.InstructionContext) interface
 	}
 
 	return inst
-}
-
-func (v *progVisitor) VisitPrep_arglist(ctx *parser.Prep_arglistContext) interface{} {
-	childrenRes := v.VisitChildren(ctx).([]interface{})
-	args := []interface{}{}
-
-	for _, cr := range childrenRes {
-		if cr == nil {
-			continue
-		}
-		switch tr := cr.(type) {
-		case []interface{}:
-			args = append(args, tr...)
-		case string:
-			args = append(args, ASTStringOperand(tr))
-		case int64:
-			args = append(args, ASTNumericOperand(tr))
-		case interface{}:
-			args = append(args, tr)
-		default:
-			panic("lol") //todo: ??
-		}
-	}
-
-	return args
 }
 
 func (v *progVisitor) VisitArglist(ctx *parser.ArglistContext) interface{} {
@@ -169,10 +130,6 @@ func (v *progVisitor) VisitArglist(ctx *parser.ArglistContext) interface{} {
 		switch tr := cr.(type) {
 		case []interface{}:
 			args = append(args, tr...)
-		case string:
-			args = append(args, ASTStringOperand(tr))
-		case int64:
-			args = append(args, ASTNumericOperand(tr))
 		case interface{}:
 			args = append(args, tr)
 		default:
@@ -188,7 +145,18 @@ func (v *progVisitor) VisitArgument(ctx *parser.ArgumentContext) interface{} {
 	if len(children) != 1 {
 		panic("lol") //todo: ???
 	}
-	return v.Visit(children[0].(antlr.ParseTree))
+	cr := v.Visit(children[0].(antlr.ParseTree))
+
+	switch tr := cr.(type) {
+	case string:
+		return ASTNameOperand(tr)
+	case int64:
+		return ASTNumericOperand(tr)
+	case interface{}:
+		return tr
+	default:
+		panic("lol") //todo: ??
+	}
 }
 
 func (v *progVisitor) VisitNum(ctx *parser.NumContext) interface{} {
@@ -227,18 +195,161 @@ func (v *progVisitor) VisitName(ctx *parser.NameContext) interface{} {
 	return ctx.NAME().GetText()
 }
 
-func (v *progVisitor) VisitPrep_name(ctx *parser.Prep_nameContext) interface{} {
-	return v.VisitChildren(ctx)
+func (v *progVisitor) VisitLabel(ctx *parser.LabelContext) interface{} {
+	return ASTLabel{Name: ctx.NAME().GetText()}
 }
 
-// func (v *progVisitor) visitOperands(ctx antlr.ParseTree) []interface{} {
-// 	children := ctx.GetChildren()
-// 	if len(children) != 1 {
-// 		panic("lol") //todo: ??
-// 	}
-//
-// 	return v.Visit(children[0].(antlr.ParseTree))
-// }
+func (v *progVisitor) VisitPrep_instruction(ctx *parser.Prep_instructionContext) interface{} {
+	children := ctx.GetChildren()
+	if len(children) == 0 {
+		panic("elo 123") //todo: ??
+	}
+
+	insType, ok := children[0].(antlr.TerminalNode)
+	if !ok {
+		panic("elo ppp") //todo: ??
+	}
+
+	prepInst := insType.GetText()
+	switch prepInst {
+	case ".org":
+		return v.buildPrepOrigin(children[1:])
+	case ".def":
+		return v.buildPrepDefine(children[1:])
+	}
+
+	panic("lul") //todo: ??
+}
+
+func (v *progVisitor) VisitPrep_def_args(ctx *parser.Prep_def_argsContext) interface{} {
+	argCtx, ok := ctx.Argument().(*parser.ArgumentContext)
+	if !ok {
+		panic("lol") //todo: lol
+	}
+	return []interface{}{
+		ASTPrepDefine{
+			Name:  ctx.Name().GetText(),
+			Value: v.VisitArgument(argCtx),
+		}}
+}
+
+func (v *progVisitor) VisitPrep_def_arg_lines(ctx *parser.Prep_def_arg_linesContext) interface{} {
+	children := ctx.GetChildren()
+	defs := []interface{}{}
+
+	for _, child := range children {
+		vc := v.Visit(child.(antlr.ParseTree))
+		if vc == nil {
+			continue
+		}
+		switch tc := vc.(type) {
+		case []interface{}:
+			defs = append(defs, tc...)
+		case ASTPrepDefine:
+			defs = append(defs, tc)
+		default:
+			panic("ulala") //todo:: ??
+		}
+	}
+
+	return defs
+}
+
+func (v *progVisitor) buildPrepOrigin(children []antlr.Tree) interface{} {
+	if len(children) != 1 {
+		panic("wolo wolo") //todo: ??
+	}
+
+	vc := v.Visit(children[0].(antlr.ParseTree))
+	return ASTOrigin{Address: vc}
+}
+
+func (v *progVisitor) buildPrepDefine(children []antlr.Tree) interface{} {
+	defs := make([]interface{}, 0, len(children))
+	for _, c := range children {
+		vc := v.Visit(c.(antlr.ParseTree))
+		if vc == nil {
+			continue
+		}
+		switch tv := vc.(type) {
+		case []interface{}:
+			defs = append(defs, tv...)
+		default:
+			panic("lol 00-") //todo: ??
+		}
+	}
+
+	return defs
+}
+
+func applyDefToOperand(operand any, defs map[string]any) (any, bool) {
+	nameOp, ok := operand.(ASTNameOperand)
+	if !ok {
+		return nil, false
+	}
+
+	nv, ok := defs[string(nameOp)]
+	return nv, ok
+}
+
+func applyDefsToOperands(operands []any, defs map[string]any) bool {
+	rok := false
+	for i, op := range operands {
+		nv, ok := applyDefToOperand(op, defs)
+		if ok {
+			operands[i] = nv
+			rok = true
+		}
+	}
+
+	return rok
+}
+
+func applyDefinitions(ast *AST, defs map[string]any) bool {
+	rok := false
+	for i, st := range ast.Statements {
+		switch tst := st.(type) {
+		case ASTOrigin:
+			nv, ok := applyDefToOperand(tst.Address, defs)
+			if ok {
+				tst.Address = nv
+				ast.Statements[i] = tst
+				rok = ok
+			}
+		case ASTInstruction:
+			rok = rok || applyDefsToOperands(tst.Operands, defs)
+			ast.Statements[i] = tst
+		default:
+			continue
+		}
+	}
+
+	return rok
+}
+
+func PreprocessDefinitions(ast *AST) error {
+	filtSts := make([]ASTStatement, 0, len(ast.Statements))
+	defs := map[string]any{}
+	for _, st := range ast.Statements {
+		def, ok := st.(ASTPrepDefine)
+		if !ok {
+			filtSts = append(filtSts, st)
+			continue
+		}
+		_, ok = defs[def.Name]
+		if ok {
+			return errors.New("00000A ") //todo: ??
+		}
+
+		defs[def.Name] = def.Value
+	}
+
+	ast.Statements = filtSts
+	for applyDefinitions(ast, defs) {
+	}
+
+	return nil
+}
 
 func ParseSrc(src string) *AST {
 	input := antlr.NewInputStream(src)

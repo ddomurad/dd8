@@ -33,50 +33,49 @@ var DD8ASMParserStaticData struct {
 func dd8asmParserInit() {
 	staticData := &DD8ASMParserStaticData
 	staticData.LiteralNames = []string{
-		"", "'('", "')'", "','", "'='",
+		"", "'('", "')'", "':='", "','", "':'", "'.def'", "'.org'",
 	}
 	staticData.SymbolicNames = []string{
-		"", "", "", "", "", "NAME", "PREP_NAME", "HEX_NUM", "BIN_NUM", "DEC_NUM",
-		"COMMENT", "EOL", "WS",
+		"", "", "", "", "", "", "P_DEF", "P_ORG", "NAME", "HEX_NUM", "BIN_NUM",
+		"DEC_NUM", "COMMENT", "EOL", "WS",
 	}
 	staticData.RuleNames = []string{
-		"prog", "statement", "prep_instruction", "instruction", "prep_arglist",
-		"arglist", "argument", "num", "name", "prep_name",
+		"prog", "statement", "prep_instruction", "prep_def_args", "prep_def_arg_lines",
+		"instruction", "arglist", "argument", "num", "name", "label",
 	}
 	staticData.PredictionContextCache = antlr.NewPredictionContextCache()
 	staticData.serializedATN = []int32{
-		4, 1, 12, 79, 2, 0, 7, 0, 2, 1, 7, 1, 2, 2, 7, 2, 2, 3, 7, 3, 2, 4, 7,
-		4, 2, 5, 7, 5, 2, 6, 7, 6, 2, 7, 7, 7, 2, 8, 7, 8, 2, 9, 7, 9, 1, 0, 5,
-		0, 22, 8, 0, 10, 0, 12, 0, 25, 9, 0, 1, 0, 1, 0, 1, 1, 1, 1, 3, 1, 31,
-		8, 1, 1, 1, 1, 1, 1, 2, 1, 2, 3, 2, 37, 8, 2, 1, 2, 1, 2, 1, 2, 3, 2, 42,
-		8, 2, 1, 2, 1, 2, 3, 2, 46, 8, 2, 1, 3, 1, 3, 3, 3, 50, 8, 3, 1, 4, 1,
-		4, 1, 4, 3, 4, 55, 8, 4, 1, 4, 1, 4, 1, 4, 3, 4, 60, 8, 4, 3, 4, 62, 8,
-		4, 1, 5, 1, 5, 1, 5, 3, 5, 67, 8, 5, 1, 6, 1, 6, 3, 6, 71, 8, 6, 1, 7,
-		1, 7, 1, 8, 1, 8, 1, 9, 1, 9, 1, 9, 0, 0, 10, 0, 2, 4, 6, 8, 10, 12, 14,
-		16, 18, 0, 1, 1, 0, 7, 9, 80, 0, 23, 1, 0, 0, 0, 2, 30, 1, 0, 0, 0, 4,
-		45, 1, 0, 0, 0, 6, 47, 1, 0, 0, 0, 8, 61, 1, 0, 0, 0, 10, 63, 1, 0, 0,
-		0, 12, 70, 1, 0, 0, 0, 14, 72, 1, 0, 0, 0, 16, 74, 1, 0, 0, 0, 18, 76,
-		1, 0, 0, 0, 20, 22, 3, 2, 1, 0, 21, 20, 1, 0, 0, 0, 22, 25, 1, 0, 0, 0,
-		23, 21, 1, 0, 0, 0, 23, 24, 1, 0, 0, 0, 24, 26, 1, 0, 0, 0, 25, 23, 1,
-		0, 0, 0, 26, 27, 5, 0, 0, 1, 27, 1, 1, 0, 0, 0, 28, 31, 3, 6, 3, 0, 29,
-		31, 3, 4, 2, 0, 30, 28, 1, 0, 0, 0, 30, 29, 1, 0, 0, 0, 30, 31, 1, 0, 0,
-		0, 31, 32, 1, 0, 0, 0, 32, 33, 5, 11, 0, 0, 33, 3, 1, 0, 0, 0, 34, 36,
-		3, 18, 9, 0, 35, 37, 3, 8, 4, 0, 36, 35, 1, 0, 0, 0, 36, 37, 1, 0, 0, 0,
-		37, 46, 1, 0, 0, 0, 38, 39, 3, 18, 9, 0, 39, 41, 5, 1, 0, 0, 40, 42, 3,
-		8, 4, 0, 41, 40, 1, 0, 0, 0, 41, 42, 1, 0, 0, 0, 42, 43, 1, 0, 0, 0, 43,
-		44, 5, 2, 0, 0, 44, 46, 1, 0, 0, 0, 45, 34, 1, 0, 0, 0, 45, 38, 1, 0, 0,
-		0, 46, 5, 1, 0, 0, 0, 47, 49, 3, 16, 8, 0, 48, 50, 3, 10, 5, 0, 49, 48,
-		1, 0, 0, 0, 49, 50, 1, 0, 0, 0, 50, 7, 1, 0, 0, 0, 51, 54, 3, 12, 6, 0,
-		52, 53, 5, 3, 0, 0, 53, 55, 3, 10, 5, 0, 54, 52, 1, 0, 0, 0, 54, 55, 1,
-		0, 0, 0, 55, 62, 1, 0, 0, 0, 56, 59, 3, 12, 6, 0, 57, 58, 5, 4, 0, 0, 58,
-		60, 3, 10, 5, 0, 59, 57, 1, 0, 0, 0, 59, 60, 1, 0, 0, 0, 60, 62, 1, 0,
-		0, 0, 61, 51, 1, 0, 0, 0, 61, 56, 1, 0, 0, 0, 62, 9, 1, 0, 0, 0, 63, 66,
-		3, 12, 6, 0, 64, 65, 5, 3, 0, 0, 65, 67, 3, 10, 5, 0, 66, 64, 1, 0, 0,
-		0, 66, 67, 1, 0, 0, 0, 67, 11, 1, 0, 0, 0, 68, 71, 3, 14, 7, 0, 69, 71,
-		3, 16, 8, 0, 70, 68, 1, 0, 0, 0, 70, 69, 1, 0, 0, 0, 71, 13, 1, 0, 0, 0,
-		72, 73, 7, 0, 0, 0, 73, 15, 1, 0, 0, 0, 74, 75, 5, 5, 0, 0, 75, 17, 1,
-		0, 0, 0, 76, 77, 5, 6, 0, 0, 77, 19, 1, 0, 0, 0, 11, 23, 30, 36, 41, 45,
-		49, 54, 59, 61, 66, 70,
+		4, 1, 14, 80, 2, 0, 7, 0, 2, 1, 7, 1, 2, 2, 7, 2, 2, 3, 7, 3, 2, 4, 7,
+		4, 2, 5, 7, 5, 2, 6, 7, 6, 2, 7, 7, 7, 2, 8, 7, 8, 2, 9, 7, 9, 2, 10, 7,
+		10, 1, 0, 5, 0, 24, 8, 0, 10, 0, 12, 0, 27, 9, 0, 1, 0, 1, 0, 1, 1, 1,
+		1, 1, 1, 3, 1, 34, 8, 1, 1, 1, 1, 1, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2,
+		1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 3, 2, 49, 8, 2, 1, 3, 1, 3, 1, 3, 1, 3, 1,
+		4, 1, 4, 1, 4, 3, 4, 58, 8, 4, 1, 5, 1, 5, 3, 5, 62, 8, 5, 1, 6, 1, 6,
+		1, 6, 3, 6, 67, 8, 6, 1, 7, 1, 7, 3, 7, 71, 8, 7, 1, 8, 1, 8, 1, 9, 1,
+		9, 1, 10, 1, 10, 1, 10, 1, 10, 0, 0, 11, 0, 2, 4, 6, 8, 10, 12, 14, 16,
+		18, 20, 0, 1, 1, 0, 9, 11, 78, 0, 25, 1, 0, 0, 0, 2, 33, 1, 0, 0, 0, 4,
+		48, 1, 0, 0, 0, 6, 50, 1, 0, 0, 0, 8, 54, 1, 0, 0, 0, 10, 59, 1, 0, 0,
+		0, 12, 63, 1, 0, 0, 0, 14, 70, 1, 0, 0, 0, 16, 72, 1, 0, 0, 0, 18, 74,
+		1, 0, 0, 0, 20, 76, 1, 0, 0, 0, 22, 24, 3, 2, 1, 0, 23, 22, 1, 0, 0, 0,
+		24, 27, 1, 0, 0, 0, 25, 23, 1, 0, 0, 0, 25, 26, 1, 0, 0, 0, 26, 28, 1,
+		0, 0, 0, 27, 25, 1, 0, 0, 0, 28, 29, 5, 0, 0, 1, 29, 1, 1, 0, 0, 0, 30,
+		34, 3, 10, 5, 0, 31, 34, 3, 4, 2, 0, 32, 34, 3, 20, 10, 0, 33, 30, 1, 0,
+		0, 0, 33, 31, 1, 0, 0, 0, 33, 32, 1, 0, 0, 0, 33, 34, 1, 0, 0, 0, 34, 35,
+		1, 0, 0, 0, 35, 36, 5, 13, 0, 0, 36, 3, 1, 0, 0, 0, 37, 38, 5, 7, 0, 0,
+		38, 49, 3, 14, 7, 0, 39, 40, 5, 6, 0, 0, 40, 41, 5, 1, 0, 0, 41, 42, 5,
+		13, 0, 0, 42, 43, 3, 8, 4, 0, 43, 44, 5, 13, 0, 0, 44, 45, 5, 2, 0, 0,
+		45, 49, 1, 0, 0, 0, 46, 47, 5, 6, 0, 0, 47, 49, 3, 6, 3, 0, 48, 37, 1,
+		0, 0, 0, 48, 39, 1, 0, 0, 0, 48, 46, 1, 0, 0, 0, 49, 5, 1, 0, 0, 0, 50,
+		51, 3, 18, 9, 0, 51, 52, 5, 3, 0, 0, 52, 53, 3, 14, 7, 0, 53, 7, 1, 0,
+		0, 0, 54, 57, 3, 6, 3, 0, 55, 56, 5, 13, 0, 0, 56, 58, 3, 8, 4, 0, 57,
+		55, 1, 0, 0, 0, 57, 58, 1, 0, 0, 0, 58, 9, 1, 0, 0, 0, 59, 61, 3, 18, 9,
+		0, 60, 62, 3, 12, 6, 0, 61, 60, 1, 0, 0, 0, 61, 62, 1, 0, 0, 0, 62, 11,
+		1, 0, 0, 0, 63, 66, 3, 14, 7, 0, 64, 65, 5, 4, 0, 0, 65, 67, 3, 12, 6,
+		0, 66, 64, 1, 0, 0, 0, 66, 67, 1, 0, 0, 0, 67, 13, 1, 0, 0, 0, 68, 71,
+		3, 16, 8, 0, 69, 71, 3, 18, 9, 0, 70, 68, 1, 0, 0, 0, 70, 69, 1, 0, 0,
+		0, 71, 15, 1, 0, 0, 0, 72, 73, 7, 0, 0, 0, 73, 17, 1, 0, 0, 0, 74, 75,
+		5, 8, 0, 0, 75, 19, 1, 0, 0, 0, 76, 77, 5, 8, 0, 0, 77, 78, 5, 5, 0, 0,
+		78, 21, 1, 0, 0, 0, 7, 25, 33, 48, 57, 61, 66, 70,
 	}
 	deserializer := antlr.NewATNDeserializer(nil)
 	staticData.atn = deserializer.Deserialize(staticData.serializedATN)
@@ -114,33 +113,36 @@ func NewDD8ASMParser(input antlr.TokenStream) *DD8ASMParser {
 
 // DD8ASMParser tokens.
 const (
-	DD8ASMParserEOF       = antlr.TokenEOF
-	DD8ASMParserT__0      = 1
-	DD8ASMParserT__1      = 2
-	DD8ASMParserT__2      = 3
-	DD8ASMParserT__3      = 4
-	DD8ASMParserNAME      = 5
-	DD8ASMParserPREP_NAME = 6
-	DD8ASMParserHEX_NUM   = 7
-	DD8ASMParserBIN_NUM   = 8
-	DD8ASMParserDEC_NUM   = 9
-	DD8ASMParserCOMMENT   = 10
-	DD8ASMParserEOL       = 11
-	DD8ASMParserWS        = 12
+	DD8ASMParserEOF     = antlr.TokenEOF
+	DD8ASMParserT__0    = 1
+	DD8ASMParserT__1    = 2
+	DD8ASMParserT__2    = 3
+	DD8ASMParserT__3    = 4
+	DD8ASMParserT__4    = 5
+	DD8ASMParserP_DEF   = 6
+	DD8ASMParserP_ORG   = 7
+	DD8ASMParserNAME    = 8
+	DD8ASMParserHEX_NUM = 9
+	DD8ASMParserBIN_NUM = 10
+	DD8ASMParserDEC_NUM = 11
+	DD8ASMParserCOMMENT = 12
+	DD8ASMParserEOL     = 13
+	DD8ASMParserWS      = 14
 )
 
 // DD8ASMParser rules.
 const (
-	DD8ASMParserRULE_prog             = 0
-	DD8ASMParserRULE_statement        = 1
-	DD8ASMParserRULE_prep_instruction = 2
-	DD8ASMParserRULE_instruction      = 3
-	DD8ASMParserRULE_prep_arglist     = 4
-	DD8ASMParserRULE_arglist          = 5
-	DD8ASMParserRULE_argument         = 6
-	DD8ASMParserRULE_num              = 7
-	DD8ASMParserRULE_name             = 8
-	DD8ASMParserRULE_prep_name        = 9
+	DD8ASMParserRULE_prog               = 0
+	DD8ASMParserRULE_statement          = 1
+	DD8ASMParserRULE_prep_instruction   = 2
+	DD8ASMParserRULE_prep_def_args      = 3
+	DD8ASMParserRULE_prep_def_arg_lines = 4
+	DD8ASMParserRULE_instruction        = 5
+	DD8ASMParserRULE_arglist            = 6
+	DD8ASMParserRULE_argument           = 7
+	DD8ASMParserRULE_num                = 8
+	DD8ASMParserRULE_name               = 9
+	DD8ASMParserRULE_label              = 10
 )
 
 // IProgContext is an interface to support dynamic dispatch.
@@ -260,20 +262,20 @@ func (p *DD8ASMParser) Prog() (localctx IProgContext) {
 	var _la int
 
 	p.EnterOuterAlt(localctx, 1)
-	p.SetState(23)
+	p.SetState(25)
 	p.GetErrorHandler().Sync(p)
 	if p.HasError() {
 		goto errorExit
 	}
 	_la = p.GetTokenStream().LA(1)
 
-	for (int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&2144) != 0 {
+	for (int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&8640) != 0 {
 		{
-			p.SetState(20)
+			p.SetState(22)
 			p.Statement()
 		}
 
-		p.SetState(25)
+		p.SetState(27)
 		p.GetErrorHandler().Sync(p)
 		if p.HasError() {
 			goto errorExit
@@ -281,7 +283,7 @@ func (p *DD8ASMParser) Prog() (localctx IProgContext) {
 		_la = p.GetTokenStream().LA(1)
 	}
 	{
-		p.SetState(26)
+		p.SetState(28)
 		p.Match(DD8ASMParserEOF)
 		if p.HasError() {
 			// Recognition error - abort rule
@@ -313,6 +315,7 @@ type IStatementContext interface {
 	EOL() antlr.TerminalNode
 	Instruction() IInstructionContext
 	Prep_instruction() IPrep_instructionContext
+	Label() ILabelContext
 
 	// IsStatementContext differentiates from other interfaces.
 	IsStatementContext()
@@ -386,6 +389,22 @@ func (s *StatementContext) Prep_instruction() IPrep_instructionContext {
 	return t.(IPrep_instructionContext)
 }
 
+func (s *StatementContext) Label() ILabelContext {
+	var t antlr.RuleContext
+	for _, ctx := range s.GetChildren() {
+		if _, ok := ctx.(ILabelContext); ok {
+			t = ctx.(antlr.RuleContext)
+			break
+		}
+	}
+
+	if t == nil {
+		return nil
+	}
+
+	return t.(ILabelContext)
+}
+
 func (s *StatementContext) GetRuleContext() antlr.RuleContext {
 	return s
 }
@@ -408,30 +427,36 @@ func (p *DD8ASMParser) Statement() (localctx IStatementContext) {
 	localctx = NewStatementContext(p, p.GetParserRuleContext(), p.GetState())
 	p.EnterRule(localctx, 2, DD8ASMParserRULE_statement)
 	p.EnterOuterAlt(localctx, 1)
-	p.SetState(30)
+	p.SetState(33)
 	p.GetErrorHandler().Sync(p)
-	if p.HasError() {
-		goto errorExit
-	}
-	switch p.GetTokenStream().LA(1) {
-	case DD8ASMParserNAME:
+
+	if p.GetInterpreter().AdaptivePredict(p.BaseParser, p.GetTokenStream(), 1, p.GetParserRuleContext()) == 1 {
 		{
-			p.SetState(28)
+			p.SetState(30)
 			p.Instruction()
 		}
 
-	case DD8ASMParserPREP_NAME:
+	} else if p.HasError() { // JIM
+		goto errorExit
+	} else if p.GetInterpreter().AdaptivePredict(p.BaseParser, p.GetTokenStream(), 1, p.GetParserRuleContext()) == 2 {
 		{
-			p.SetState(29)
+			p.SetState(31)
 			p.Prep_instruction()
 		}
 
-	case DD8ASMParserEOL:
+	} else if p.HasError() { // JIM
+		goto errorExit
+	} else if p.GetInterpreter().AdaptivePredict(p.BaseParser, p.GetTokenStream(), 1, p.GetParserRuleContext()) == 3 {
+		{
+			p.SetState(32)
+			p.Label()
+		}
 
-	default:
+	} else if p.HasError() { // JIM
+		goto errorExit
 	}
 	{
-		p.SetState(32)
+		p.SetState(35)
 		p.Match(DD8ASMParserEOL)
 		if p.HasError() {
 			// Recognition error - abort rule
@@ -460,8 +485,13 @@ type IPrep_instructionContext interface {
 	GetParser() antlr.Parser
 
 	// Getter signatures
-	Prep_name() IPrep_nameContext
-	Prep_arglist() IPrep_arglistContext
+	P_ORG() antlr.TerminalNode
+	Argument() IArgumentContext
+	P_DEF() antlr.TerminalNode
+	AllEOL() []antlr.TerminalNode
+	EOL(i int) antlr.TerminalNode
+	Prep_def_arg_lines() IPrep_def_arg_linesContext
+	Prep_def_args() IPrep_def_argsContext
 
 	// IsPrep_instructionContext differentiates from other interfaces.
 	IsPrep_instructionContext()
@@ -499,26 +529,14 @@ func NewPrep_instructionContext(parser antlr.Parser, parent antlr.ParserRuleCont
 
 func (s *Prep_instructionContext) GetParser() antlr.Parser { return s.parser }
 
-func (s *Prep_instructionContext) Prep_name() IPrep_nameContext {
-	var t antlr.RuleContext
-	for _, ctx := range s.GetChildren() {
-		if _, ok := ctx.(IPrep_nameContext); ok {
-			t = ctx.(antlr.RuleContext)
-			break
-		}
-	}
-
-	if t == nil {
-		return nil
-	}
-
-	return t.(IPrep_nameContext)
+func (s *Prep_instructionContext) P_ORG() antlr.TerminalNode {
+	return s.GetToken(DD8ASMParserP_ORG, 0)
 }
 
-func (s *Prep_instructionContext) Prep_arglist() IPrep_arglistContext {
+func (s *Prep_instructionContext) Argument() IArgumentContext {
 	var t antlr.RuleContext
 	for _, ctx := range s.GetChildren() {
-		if _, ok := ctx.(IPrep_arglistContext); ok {
+		if _, ok := ctx.(IArgumentContext); ok {
 			t = ctx.(antlr.RuleContext)
 			break
 		}
@@ -528,7 +546,51 @@ func (s *Prep_instructionContext) Prep_arglist() IPrep_arglistContext {
 		return nil
 	}
 
-	return t.(IPrep_arglistContext)
+	return t.(IArgumentContext)
+}
+
+func (s *Prep_instructionContext) P_DEF() antlr.TerminalNode {
+	return s.GetToken(DD8ASMParserP_DEF, 0)
+}
+
+func (s *Prep_instructionContext) AllEOL() []antlr.TerminalNode {
+	return s.GetTokens(DD8ASMParserEOL)
+}
+
+func (s *Prep_instructionContext) EOL(i int) antlr.TerminalNode {
+	return s.GetToken(DD8ASMParserEOL, i)
+}
+
+func (s *Prep_instructionContext) Prep_def_arg_lines() IPrep_def_arg_linesContext {
+	var t antlr.RuleContext
+	for _, ctx := range s.GetChildren() {
+		if _, ok := ctx.(IPrep_def_arg_linesContext); ok {
+			t = ctx.(antlr.RuleContext)
+			break
+		}
+	}
+
+	if t == nil {
+		return nil
+	}
+
+	return t.(IPrep_def_arg_linesContext)
+}
+
+func (s *Prep_instructionContext) Prep_def_args() IPrep_def_argsContext {
+	var t antlr.RuleContext
+	for _, ctx := range s.GetChildren() {
+		if _, ok := ctx.(IPrep_def_argsContext); ok {
+			t = ctx.(antlr.RuleContext)
+			break
+		}
+	}
+
+	if t == nil {
+		return nil
+	}
+
+	return t.(IPrep_def_argsContext)
 }
 
 func (s *Prep_instructionContext) GetRuleContext() antlr.RuleContext {
@@ -552,66 +614,68 @@ func (s *Prep_instructionContext) Accept(visitor antlr.ParseTreeVisitor) interfa
 func (p *DD8ASMParser) Prep_instruction() (localctx IPrep_instructionContext) {
 	localctx = NewPrep_instructionContext(p, p.GetParserRuleContext(), p.GetState())
 	p.EnterRule(localctx, 4, DD8ASMParserRULE_prep_instruction)
-	var _la int
-
-	p.SetState(45)
+	p.SetState(48)
 	p.GetErrorHandler().Sync(p)
 	if p.HasError() {
 		goto errorExit
 	}
 
-	switch p.GetInterpreter().AdaptivePredict(p.BaseParser, p.GetTokenStream(), 4, p.GetParserRuleContext()) {
+	switch p.GetInterpreter().AdaptivePredict(p.BaseParser, p.GetTokenStream(), 2, p.GetParserRuleContext()) {
 	case 1:
 		p.EnterOuterAlt(localctx, 1)
 		{
-			p.SetState(34)
-			p.Prep_name()
-		}
-		p.SetState(36)
-		p.GetErrorHandler().Sync(p)
-		if p.HasError() {
-			goto errorExit
-		}
-		_la = p.GetTokenStream().LA(1)
-
-		if (int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&928) != 0 {
-			{
-				p.SetState(35)
-				p.Prep_arglist()
+			p.SetState(37)
+			p.Match(DD8ASMParserP_ORG)
+			if p.HasError() {
+				// Recognition error - abort rule
+				goto errorExit
 			}
-
+		}
+		{
+			p.SetState(38)
+			p.Argument()
 		}
 
 	case 2:
 		p.EnterOuterAlt(localctx, 2)
 		{
-			p.SetState(38)
-			p.Prep_name()
+			p.SetState(39)
+			p.Match(DD8ASMParserP_DEF)
+			if p.HasError() {
+				// Recognition error - abort rule
+				goto errorExit
+			}
 		}
 		{
-			p.SetState(39)
+			p.SetState(40)
 			p.Match(DD8ASMParserT__0)
 			if p.HasError() {
 				// Recognition error - abort rule
 				goto errorExit
 			}
 		}
-		p.SetState(41)
-		p.GetErrorHandler().Sync(p)
-		if p.HasError() {
-			goto errorExit
-		}
-		_la = p.GetTokenStream().LA(1)
-
-		if (int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&928) != 0 {
-			{
-				p.SetState(40)
-				p.Prep_arglist()
+		{
+			p.SetState(41)
+			p.Match(DD8ASMParserEOL)
+			if p.HasError() {
+				// Recognition error - abort rule
+				goto errorExit
 			}
-
+		}
+		{
+			p.SetState(42)
+			p.Prep_def_arg_lines()
 		}
 		{
 			p.SetState(43)
+			p.Match(DD8ASMParserEOL)
+			if p.HasError() {
+				// Recognition error - abort rule
+				goto errorExit
+			}
+		}
+		{
+			p.SetState(44)
 			p.Match(DD8ASMParserT__1)
 			if p.HasError() {
 				// Recognition error - abort rule
@@ -619,7 +683,297 @@ func (p *DD8ASMParser) Prep_instruction() (localctx IPrep_instructionContext) {
 			}
 		}
 
+	case 3:
+		p.EnterOuterAlt(localctx, 3)
+		{
+			p.SetState(46)
+			p.Match(DD8ASMParserP_DEF)
+			if p.HasError() {
+				// Recognition error - abort rule
+				goto errorExit
+			}
+		}
+		{
+			p.SetState(47)
+			p.Prep_def_args()
+		}
+
 	case antlr.ATNInvalidAltNumber:
+		goto errorExit
+	}
+
+errorExit:
+	if p.HasError() {
+		v := p.GetError()
+		localctx.SetException(v)
+		p.GetErrorHandler().ReportError(p, v)
+		p.GetErrorHandler().Recover(p, v)
+		p.SetError(nil)
+	}
+	p.ExitRule()
+	return localctx
+	goto errorExit // Trick to prevent compiler error if the label is not used
+}
+
+// IPrep_def_argsContext is an interface to support dynamic dispatch.
+type IPrep_def_argsContext interface {
+	antlr.ParserRuleContext
+
+	// GetParser returns the parser.
+	GetParser() antlr.Parser
+
+	// Getter signatures
+	Name() INameContext
+	Argument() IArgumentContext
+
+	// IsPrep_def_argsContext differentiates from other interfaces.
+	IsPrep_def_argsContext()
+}
+
+type Prep_def_argsContext struct {
+	antlr.BaseParserRuleContext
+	parser antlr.Parser
+}
+
+func NewEmptyPrep_def_argsContext() *Prep_def_argsContext {
+	var p = new(Prep_def_argsContext)
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
+	p.RuleIndex = DD8ASMParserRULE_prep_def_args
+	return p
+}
+
+func InitEmptyPrep_def_argsContext(p *Prep_def_argsContext) {
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
+	p.RuleIndex = DD8ASMParserRULE_prep_def_args
+}
+
+func (*Prep_def_argsContext) IsPrep_def_argsContext() {}
+
+func NewPrep_def_argsContext(parser antlr.Parser, parent antlr.ParserRuleContext, invokingState int) *Prep_def_argsContext {
+	var p = new(Prep_def_argsContext)
+
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, parent, invokingState)
+
+	p.parser = parser
+	p.RuleIndex = DD8ASMParserRULE_prep_def_args
+
+	return p
+}
+
+func (s *Prep_def_argsContext) GetParser() antlr.Parser { return s.parser }
+
+func (s *Prep_def_argsContext) Name() INameContext {
+	var t antlr.RuleContext
+	for _, ctx := range s.GetChildren() {
+		if _, ok := ctx.(INameContext); ok {
+			t = ctx.(antlr.RuleContext)
+			break
+		}
+	}
+
+	if t == nil {
+		return nil
+	}
+
+	return t.(INameContext)
+}
+
+func (s *Prep_def_argsContext) Argument() IArgumentContext {
+	var t antlr.RuleContext
+	for _, ctx := range s.GetChildren() {
+		if _, ok := ctx.(IArgumentContext); ok {
+			t = ctx.(antlr.RuleContext)
+			break
+		}
+	}
+
+	if t == nil {
+		return nil
+	}
+
+	return t.(IArgumentContext)
+}
+
+func (s *Prep_def_argsContext) GetRuleContext() antlr.RuleContext {
+	return s
+}
+
+func (s *Prep_def_argsContext) ToStringTree(ruleNames []string, recog antlr.Recognizer) string {
+	return antlr.TreesStringTree(s, ruleNames, recog)
+}
+
+func (s *Prep_def_argsContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case DD8ASMVisitor:
+		return t.VisitPrep_def_args(s)
+
+	default:
+		return t.VisitChildren(s)
+	}
+}
+
+func (p *DD8ASMParser) Prep_def_args() (localctx IPrep_def_argsContext) {
+	localctx = NewPrep_def_argsContext(p, p.GetParserRuleContext(), p.GetState())
+	p.EnterRule(localctx, 6, DD8ASMParserRULE_prep_def_args)
+	p.EnterOuterAlt(localctx, 1)
+	{
+		p.SetState(50)
+		p.Name()
+	}
+	{
+		p.SetState(51)
+		p.Match(DD8ASMParserT__2)
+		if p.HasError() {
+			// Recognition error - abort rule
+			goto errorExit
+		}
+	}
+	{
+		p.SetState(52)
+		p.Argument()
+	}
+
+errorExit:
+	if p.HasError() {
+		v := p.GetError()
+		localctx.SetException(v)
+		p.GetErrorHandler().ReportError(p, v)
+		p.GetErrorHandler().Recover(p, v)
+		p.SetError(nil)
+	}
+	p.ExitRule()
+	return localctx
+	goto errorExit // Trick to prevent compiler error if the label is not used
+}
+
+// IPrep_def_arg_linesContext is an interface to support dynamic dispatch.
+type IPrep_def_arg_linesContext interface {
+	antlr.ParserRuleContext
+
+	// GetParser returns the parser.
+	GetParser() antlr.Parser
+
+	// Getter signatures
+	Prep_def_args() IPrep_def_argsContext
+	EOL() antlr.TerminalNode
+	Prep_def_arg_lines() IPrep_def_arg_linesContext
+
+	// IsPrep_def_arg_linesContext differentiates from other interfaces.
+	IsPrep_def_arg_linesContext()
+}
+
+type Prep_def_arg_linesContext struct {
+	antlr.BaseParserRuleContext
+	parser antlr.Parser
+}
+
+func NewEmptyPrep_def_arg_linesContext() *Prep_def_arg_linesContext {
+	var p = new(Prep_def_arg_linesContext)
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
+	p.RuleIndex = DD8ASMParserRULE_prep_def_arg_lines
+	return p
+}
+
+func InitEmptyPrep_def_arg_linesContext(p *Prep_def_arg_linesContext) {
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
+	p.RuleIndex = DD8ASMParserRULE_prep_def_arg_lines
+}
+
+func (*Prep_def_arg_linesContext) IsPrep_def_arg_linesContext() {}
+
+func NewPrep_def_arg_linesContext(parser antlr.Parser, parent antlr.ParserRuleContext, invokingState int) *Prep_def_arg_linesContext {
+	var p = new(Prep_def_arg_linesContext)
+
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, parent, invokingState)
+
+	p.parser = parser
+	p.RuleIndex = DD8ASMParserRULE_prep_def_arg_lines
+
+	return p
+}
+
+func (s *Prep_def_arg_linesContext) GetParser() antlr.Parser { return s.parser }
+
+func (s *Prep_def_arg_linesContext) Prep_def_args() IPrep_def_argsContext {
+	var t antlr.RuleContext
+	for _, ctx := range s.GetChildren() {
+		if _, ok := ctx.(IPrep_def_argsContext); ok {
+			t = ctx.(antlr.RuleContext)
+			break
+		}
+	}
+
+	if t == nil {
+		return nil
+	}
+
+	return t.(IPrep_def_argsContext)
+}
+
+func (s *Prep_def_arg_linesContext) EOL() antlr.TerminalNode {
+	return s.GetToken(DD8ASMParserEOL, 0)
+}
+
+func (s *Prep_def_arg_linesContext) Prep_def_arg_lines() IPrep_def_arg_linesContext {
+	var t antlr.RuleContext
+	for _, ctx := range s.GetChildren() {
+		if _, ok := ctx.(IPrep_def_arg_linesContext); ok {
+			t = ctx.(antlr.RuleContext)
+			break
+		}
+	}
+
+	if t == nil {
+		return nil
+	}
+
+	return t.(IPrep_def_arg_linesContext)
+}
+
+func (s *Prep_def_arg_linesContext) GetRuleContext() antlr.RuleContext {
+	return s
+}
+
+func (s *Prep_def_arg_linesContext) ToStringTree(ruleNames []string, recog antlr.Recognizer) string {
+	return antlr.TreesStringTree(s, ruleNames, recog)
+}
+
+func (s *Prep_def_arg_linesContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case DD8ASMVisitor:
+		return t.VisitPrep_def_arg_lines(s)
+
+	default:
+		return t.VisitChildren(s)
+	}
+}
+
+func (p *DD8ASMParser) Prep_def_arg_lines() (localctx IPrep_def_arg_linesContext) {
+	localctx = NewPrep_def_arg_linesContext(p, p.GetParserRuleContext(), p.GetState())
+	p.EnterRule(localctx, 8, DD8ASMParserRULE_prep_def_arg_lines)
+	p.EnterOuterAlt(localctx, 1)
+	{
+		p.SetState(54)
+		p.Prep_def_args()
+	}
+	p.SetState(57)
+	p.GetErrorHandler().Sync(p)
+
+	if p.GetInterpreter().AdaptivePredict(p.BaseParser, p.GetTokenStream(), 3, p.GetParserRuleContext()) == 1 {
+		{
+			p.SetState(55)
+			p.Match(DD8ASMParserEOL)
+			if p.HasError() {
+				// Recognition error - abort rule
+				goto errorExit
+			}
+		}
+		{
+			p.SetState(56)
+			p.Prep_def_arg_lines()
+		}
+
+	} else if p.HasError() { // JIM
 		goto errorExit
 	}
 
@@ -735,211 +1089,27 @@ func (s *InstructionContext) Accept(visitor antlr.ParseTreeVisitor) interface{} 
 
 func (p *DD8ASMParser) Instruction() (localctx IInstructionContext) {
 	localctx = NewInstructionContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 6, DD8ASMParserRULE_instruction)
+	p.EnterRule(localctx, 10, DD8ASMParserRULE_instruction)
 	var _la int
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(47)
+		p.SetState(59)
 		p.Name()
 	}
-	p.SetState(49)
+	p.SetState(61)
 	p.GetErrorHandler().Sync(p)
 	if p.HasError() {
 		goto errorExit
 	}
 	_la = p.GetTokenStream().LA(1)
 
-	if (int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&928) != 0 {
+	if (int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&3840) != 0 {
 		{
-			p.SetState(48)
+			p.SetState(60)
 			p.Arglist()
 		}
 
-	}
-
-errorExit:
-	if p.HasError() {
-		v := p.GetError()
-		localctx.SetException(v)
-		p.GetErrorHandler().ReportError(p, v)
-		p.GetErrorHandler().Recover(p, v)
-		p.SetError(nil)
-	}
-	p.ExitRule()
-	return localctx
-	goto errorExit // Trick to prevent compiler error if the label is not used
-}
-
-// IPrep_arglistContext is an interface to support dynamic dispatch.
-type IPrep_arglistContext interface {
-	antlr.ParserRuleContext
-
-	// GetParser returns the parser.
-	GetParser() antlr.Parser
-
-	// Getter signatures
-	Argument() IArgumentContext
-	Arglist() IArglistContext
-
-	// IsPrep_arglistContext differentiates from other interfaces.
-	IsPrep_arglistContext()
-}
-
-type Prep_arglistContext struct {
-	antlr.BaseParserRuleContext
-	parser antlr.Parser
-}
-
-func NewEmptyPrep_arglistContext() *Prep_arglistContext {
-	var p = new(Prep_arglistContext)
-	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
-	p.RuleIndex = DD8ASMParserRULE_prep_arglist
-	return p
-}
-
-func InitEmptyPrep_arglistContext(p *Prep_arglistContext) {
-	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
-	p.RuleIndex = DD8ASMParserRULE_prep_arglist
-}
-
-func (*Prep_arglistContext) IsPrep_arglistContext() {}
-
-func NewPrep_arglistContext(parser antlr.Parser, parent antlr.ParserRuleContext, invokingState int) *Prep_arglistContext {
-	var p = new(Prep_arglistContext)
-
-	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, parent, invokingState)
-
-	p.parser = parser
-	p.RuleIndex = DD8ASMParserRULE_prep_arglist
-
-	return p
-}
-
-func (s *Prep_arglistContext) GetParser() antlr.Parser { return s.parser }
-
-func (s *Prep_arglistContext) Argument() IArgumentContext {
-	var t antlr.RuleContext
-	for _, ctx := range s.GetChildren() {
-		if _, ok := ctx.(IArgumentContext); ok {
-			t = ctx.(antlr.RuleContext)
-			break
-		}
-	}
-
-	if t == nil {
-		return nil
-	}
-
-	return t.(IArgumentContext)
-}
-
-func (s *Prep_arglistContext) Arglist() IArglistContext {
-	var t antlr.RuleContext
-	for _, ctx := range s.GetChildren() {
-		if _, ok := ctx.(IArglistContext); ok {
-			t = ctx.(antlr.RuleContext)
-			break
-		}
-	}
-
-	if t == nil {
-		return nil
-	}
-
-	return t.(IArglistContext)
-}
-
-func (s *Prep_arglistContext) GetRuleContext() antlr.RuleContext {
-	return s
-}
-
-func (s *Prep_arglistContext) ToStringTree(ruleNames []string, recog antlr.Recognizer) string {
-	return antlr.TreesStringTree(s, ruleNames, recog)
-}
-
-func (s *Prep_arglistContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
-	switch t := visitor.(type) {
-	case DD8ASMVisitor:
-		return t.VisitPrep_arglist(s)
-
-	default:
-		return t.VisitChildren(s)
-	}
-}
-
-func (p *DD8ASMParser) Prep_arglist() (localctx IPrep_arglistContext) {
-	localctx = NewPrep_arglistContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 8, DD8ASMParserRULE_prep_arglist)
-	var _la int
-
-	p.SetState(61)
-	p.GetErrorHandler().Sync(p)
-	if p.HasError() {
-		goto errorExit
-	}
-
-	switch p.GetInterpreter().AdaptivePredict(p.BaseParser, p.GetTokenStream(), 8, p.GetParserRuleContext()) {
-	case 1:
-		p.EnterOuterAlt(localctx, 1)
-		{
-			p.SetState(51)
-			p.Argument()
-		}
-		p.SetState(54)
-		p.GetErrorHandler().Sync(p)
-		if p.HasError() {
-			goto errorExit
-		}
-		_la = p.GetTokenStream().LA(1)
-
-		if _la == DD8ASMParserT__2 {
-			{
-				p.SetState(52)
-				p.Match(DD8ASMParserT__2)
-				if p.HasError() {
-					// Recognition error - abort rule
-					goto errorExit
-				}
-			}
-			{
-				p.SetState(53)
-				p.Arglist()
-			}
-
-		}
-
-	case 2:
-		p.EnterOuterAlt(localctx, 2)
-		{
-			p.SetState(56)
-			p.Argument()
-		}
-		p.SetState(59)
-		p.GetErrorHandler().Sync(p)
-		if p.HasError() {
-			goto errorExit
-		}
-		_la = p.GetTokenStream().LA(1)
-
-		if _la == DD8ASMParserT__3 {
-			{
-				p.SetState(57)
-				p.Match(DD8ASMParserT__3)
-				if p.HasError() {
-					// Recognition error - abort rule
-					goto errorExit
-				}
-			}
-			{
-				p.SetState(58)
-				p.Arglist()
-			}
-
-		}
-
-	case antlr.ATNInvalidAltNumber:
-		goto errorExit
 	}
 
 errorExit:
@@ -1054,7 +1224,7 @@ func (s *ArglistContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 
 func (p *DD8ASMParser) Arglist() (localctx IArglistContext) {
 	localctx = NewArglistContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 10, DD8ASMParserRULE_arglist)
+	p.EnterRule(localctx, 12, DD8ASMParserRULE_arglist)
 	var _la int
 
 	p.EnterOuterAlt(localctx, 1)
@@ -1069,10 +1239,10 @@ func (p *DD8ASMParser) Arglist() (localctx IArglistContext) {
 	}
 	_la = p.GetTokenStream().LA(1)
 
-	if _la == DD8ASMParserT__2 {
+	if _la == DD8ASMParserT__3 {
 		{
 			p.SetState(64)
-			p.Match(DD8ASMParserT__2)
+			p.Match(DD8ASMParserT__3)
 			if p.HasError() {
 				// Recognition error - abort rule
 				goto errorExit
@@ -1197,7 +1367,7 @@ func (s *ArgumentContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 
 func (p *DD8ASMParser) Argument() (localctx IArgumentContext) {
 	localctx = NewArgumentContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 12, DD8ASMParserRULE_argument)
+	p.EnterRule(localctx, 14, DD8ASMParserRULE_argument)
 	p.EnterOuterAlt(localctx, 1)
 	p.SetState(70)
 	p.GetErrorHandler().Sync(p)
@@ -1316,7 +1486,7 @@ func (s *NumContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 
 func (p *DD8ASMParser) Num() (localctx INumContext) {
 	localctx = NewNumContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 14, DD8ASMParserRULE_num)
+	p.EnterRule(localctx, 16, DD8ASMParserRULE_num)
 	var _la int
 
 	p.EnterOuterAlt(localctx, 1)
@@ -1324,7 +1494,7 @@ func (p *DD8ASMParser) Num() (localctx INumContext) {
 		p.SetState(72)
 		_la = p.GetTokenStream().LA(1)
 
-		if !((int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&896) != 0) {
+		if !((int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&3584) != 0) {
 			p.GetErrorHandler().RecoverInline(p)
 		} else {
 			p.GetErrorHandler().ReportMatch(p)
@@ -1415,7 +1585,7 @@ func (s *NameContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 
 func (p *DD8ASMParser) Name() (localctx INameContext) {
 	localctx = NewNameContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 16, DD8ASMParserRULE_name)
+	p.EnterRule(localctx, 18, DD8ASMParserRULE_name)
 	p.EnterOuterAlt(localctx, 1)
 	{
 		p.SetState(74)
@@ -1439,81 +1609,89 @@ errorExit:
 	goto errorExit // Trick to prevent compiler error if the label is not used
 }
 
-// IPrep_nameContext is an interface to support dynamic dispatch.
-type IPrep_nameContext interface {
+// ILabelContext is an interface to support dynamic dispatch.
+type ILabelContext interface {
 	antlr.ParserRuleContext
 
 	// GetParser returns the parser.
 	GetParser() antlr.Parser
 
 	// Getter signatures
-	PREP_NAME() antlr.TerminalNode
+	NAME() antlr.TerminalNode
 
-	// IsPrep_nameContext differentiates from other interfaces.
-	IsPrep_nameContext()
+	// IsLabelContext differentiates from other interfaces.
+	IsLabelContext()
 }
 
-type Prep_nameContext struct {
+type LabelContext struct {
 	antlr.BaseParserRuleContext
 	parser antlr.Parser
 }
 
-func NewEmptyPrep_nameContext() *Prep_nameContext {
-	var p = new(Prep_nameContext)
+func NewEmptyLabelContext() *LabelContext {
+	var p = new(LabelContext)
 	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
-	p.RuleIndex = DD8ASMParserRULE_prep_name
+	p.RuleIndex = DD8ASMParserRULE_label
 	return p
 }
 
-func InitEmptyPrep_nameContext(p *Prep_nameContext) {
+func InitEmptyLabelContext(p *LabelContext) {
 	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
-	p.RuleIndex = DD8ASMParserRULE_prep_name
+	p.RuleIndex = DD8ASMParserRULE_label
 }
 
-func (*Prep_nameContext) IsPrep_nameContext() {}
+func (*LabelContext) IsLabelContext() {}
 
-func NewPrep_nameContext(parser antlr.Parser, parent antlr.ParserRuleContext, invokingState int) *Prep_nameContext {
-	var p = new(Prep_nameContext)
+func NewLabelContext(parser antlr.Parser, parent antlr.ParserRuleContext, invokingState int) *LabelContext {
+	var p = new(LabelContext)
 
 	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, parent, invokingState)
 
 	p.parser = parser
-	p.RuleIndex = DD8ASMParserRULE_prep_name
+	p.RuleIndex = DD8ASMParserRULE_label
 
 	return p
 }
 
-func (s *Prep_nameContext) GetParser() antlr.Parser { return s.parser }
+func (s *LabelContext) GetParser() antlr.Parser { return s.parser }
 
-func (s *Prep_nameContext) PREP_NAME() antlr.TerminalNode {
-	return s.GetToken(DD8ASMParserPREP_NAME, 0)
+func (s *LabelContext) NAME() antlr.TerminalNode {
+	return s.GetToken(DD8ASMParserNAME, 0)
 }
 
-func (s *Prep_nameContext) GetRuleContext() antlr.RuleContext {
+func (s *LabelContext) GetRuleContext() antlr.RuleContext {
 	return s
 }
 
-func (s *Prep_nameContext) ToStringTree(ruleNames []string, recog antlr.Recognizer) string {
+func (s *LabelContext) ToStringTree(ruleNames []string, recog antlr.Recognizer) string {
 	return antlr.TreesStringTree(s, ruleNames, recog)
 }
 
-func (s *Prep_nameContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+func (s *LabelContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
 	case DD8ASMVisitor:
-		return t.VisitPrep_name(s)
+		return t.VisitLabel(s)
 
 	default:
 		return t.VisitChildren(s)
 	}
 }
 
-func (p *DD8ASMParser) Prep_name() (localctx IPrep_nameContext) {
-	localctx = NewPrep_nameContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 18, DD8ASMParserRULE_prep_name)
+func (p *DD8ASMParser) Label() (localctx ILabelContext) {
+	localctx = NewLabelContext(p, p.GetParserRuleContext(), p.GetState())
+	p.EnterRule(localctx, 20, DD8ASMParserRULE_label)
 	p.EnterOuterAlt(localctx, 1)
 	{
 		p.SetState(76)
-		p.Match(DD8ASMParserPREP_NAME)
+		p.Match(DD8ASMParserNAME)
+		if p.HasError() {
+			// Recognition error - abort rule
+			goto errorExit
+		}
+	}
+	{
+		p.SetState(77)
+		p.Match(DD8ASMParserT__4)
 		if p.HasError() {
 			// Recognition error - abort rule
 			goto errorExit
