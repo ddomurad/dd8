@@ -9,8 +9,9 @@ import (
 	"github.com/ddomurad/dd8/tools/asm/internal/parser"
 )
 
-type ASTNumericOperand int64
-type ASTNameOperand string
+type ASTNumber int64
+type ASTRegister string
+type ASTName string
 type ASTStatement any
 
 type ASTLabel struct {
@@ -27,7 +28,7 @@ type ASTPrepDefine struct {
 }
 
 type ASTInstruction struct {
-	OpCode   string
+	OpCode   ASTName
 	Operands []any
 }
 
@@ -94,7 +95,7 @@ func (v *progVisitor) VisitInstruction(ctx *parser.InstructionContext) interface
 	children := ctx.GetChildren()
 	//todo: check for length ?
 	opcodeResp := v.Visit(children[0].(antlr.ParseTree))
-	opcodeStr, ok := opcodeResp.(string)
+	opcodeStr, ok := opcodeResp.(ASTName)
 	if !ok {
 		panic("lol 2") //todo: ??
 	}
@@ -146,17 +147,17 @@ func (v *progVisitor) VisitArgument(ctx *parser.ArgumentContext) interface{} {
 		panic("lol") //todo: ???
 	}
 	cr := v.Visit(children[0].(antlr.ParseTree))
-
-	switch tr := cr.(type) {
-	case string:
-		return ASTNameOperand(tr)
-	case int64:
-		return ASTNumericOperand(tr)
-	case interface{}:
-		return tr
-	default:
-		panic("lol") //todo: ??
-	}
+	return cr
+	// switch tr := cr.(type) {
+	// case string:
+	// 	return ASTNameOperand(tr)
+	// case int64:
+	// 	return ASTNumericOperand(tr)
+	// case interface{}:
+	// 	return tr
+	// default:
+	// 	panic("lol") //todo: ??
+	// }
 }
 
 func (v *progVisitor) VisitNum(ctx *parser.NumContext) interface{} {
@@ -188,11 +189,15 @@ func (v *progVisitor) VisitNum(ctx *parser.NumContext) interface{} {
 	if err != nil {
 		panic(err) //todo: ??
 	}
-	return num
+	return ASTNumber(num)
 }
 
 func (v *progVisitor) VisitName(ctx *parser.NameContext) interface{} {
-	return ctx.NAME().GetText()
+	return ASTName(ctx.NAME().GetText())
+}
+
+func (v *progVisitor) VisitReg(ctx *parser.RegContext) interface{} {
+	return ASTRegister(ctx.REG().GetText())
 }
 
 func (v *progVisitor) VisitLabel(ctx *parser.LabelContext) interface{} {
@@ -283,7 +288,7 @@ func (v *progVisitor) buildPrepDefine(children []antlr.Tree) interface{} {
 }
 
 func applyDefToOperand(operand any, defs map[string]any) (any, bool) {
-	nameOp, ok := operand.(ASTNameOperand)
+	nameOp, ok := operand.(ASTName)
 	if !ok {
 		return nil, false
 	}

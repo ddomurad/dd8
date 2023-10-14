@@ -51,11 +51,11 @@ func TestPreprocesor(t *testing.T) {
 		assertAST(t, &internal.AST{
 			Statements: []internal.ASTStatement{
 				internal.ASTInstruction{OpCode: "lda", Operands: []any{
-					internal.ASTNumericOperand(0x59),
-					internal.ASTNameOperand("x"),
+					internal.ASTNumber(0x59),
+					internal.ASTRegister("x"),
 				}},
-				internal.ASTOrigin{Address: internal.ASTNumericOperand(0x100)},
-				internal.ASTInstruction{OpCode: "ldai", Operands: []any{internal.ASTNumericOperand(100)}},
+				internal.ASTOrigin{Address: internal.ASTNumber(0x100)},
+				internal.ASTInstruction{OpCode: "ldai", Operands: []any{internal.ASTNumber(100)}},
 			},
 		}, ast)
 	})
@@ -85,9 +85,9 @@ func TestThatCanParseSource(t *testing.T) {
       `)
 		assertAST(t, &internal.AST{
 			Statements: []internal.ASTStatement{
-				internal.ASTInstruction{OpCode: "opcodea", Operands: []any{internal.ASTNumericOperand(10)}},
-				internal.ASTInstruction{OpCode: "opcodeb", Operands: []any{internal.ASTNumericOperand(0x1a)}},
-				internal.ASTInstruction{OpCode: "opcodec", Operands: []any{internal.ASTNumericOperand(0xb)}},
+				internal.ASTInstruction{OpCode: "opcodea", Operands: []any{internal.ASTNumber(10)}},
+				internal.ASTInstruction{OpCode: "opcodeb", Operands: []any{internal.ASTNumber(0x1a)}},
+				internal.ASTInstruction{OpCode: "opcodec", Operands: []any{internal.ASTNumber(0xb)}},
 			},
 		}, ast)
 	})
@@ -99,8 +99,8 @@ func TestThatCanParseSource(t *testing.T) {
 		assertAST(t, &internal.AST{
 			Statements: []internal.ASTStatement{
 				internal.ASTInstruction{OpCode: "opcodea", Operands: []any{
-					internal.ASTNumericOperand(10),
-					internal.ASTNameOperand("x"),
+					internal.ASTNumber(10),
+					internal.ASTRegister("x"),
 				}},
 			},
 		}, ast)
@@ -114,9 +114,9 @@ func TestThatCanParseSource(t *testing.T) {
       `)
 		assertAST(t, &internal.AST{
 			Statements: []internal.ASTStatement{
-				internal.ASTInstruction{OpCode: "opca", Operands: []any{internal.ASTNumericOperand(0x10)}},
+				internal.ASTInstruction{OpCode: "opca", Operands: []any{internal.ASTNumber(0x10)}},
 				internal.ASTLabel{Name: "test_label"},
-				internal.ASTInstruction{OpCode: "opcb", Operands: []any{internal.ASTNumericOperand(0x20)}},
+				internal.ASTInstruction{OpCode: "opcb", Operands: []any{internal.ASTNumber(0x20)}},
 			},
 		}, ast)
 	})
@@ -127,7 +127,7 @@ func TestThatCanParseSource(t *testing.T) {
       `)
 		assertAST(t, &internal.AST{
 			Statements: []internal.ASTStatement{
-				internal.ASTOrigin{Address: internal.ASTNumericOperand(0x10)},
+				internal.ASTOrigin{Address: internal.ASTNumber(0x10)},
 			},
 		}, ast)
 	})
@@ -139,8 +139,8 @@ func TestThatCanParseSource(t *testing.T) {
       `)
 		assertAST(t, &internal.AST{
 			Statements: []internal.ASTStatement{
-				internal.ASTPrepDefine{Name: "TEST", Value: internal.ASTNumericOperand(10)},
-				internal.ASTPrepDefine{Name: "TEST-100", Value: internal.ASTNumericOperand(0b1001_1100)},
+				internal.ASTPrepDefine{Name: "TEST", Value: internal.ASTNumber(10)},
+				internal.ASTPrepDefine{Name: "TEST-100", Value: internal.ASTNumber(0b1001_1100)},
 			},
 		}, ast)
 	})
@@ -154,8 +154,8 @@ func TestThatCanParseSource(t *testing.T) {
       `)
 		assertAST(t, &internal.AST{
 			Statements: []internal.ASTStatement{
-				internal.ASTPrepDefine{Name: "TEST", Value: internal.ASTNumericOperand(10)},
-				internal.ASTPrepDefine{Name: "TEST-100", Value: internal.ASTNumericOperand(0b1001_1100)},
+				internal.ASTPrepDefine{Name: "TEST", Value: internal.ASTNumber(10)},
+				internal.ASTPrepDefine{Name: "TEST-100", Value: internal.ASTNumber(0b1001_1100)},
 			},
 		}, ast)
 	})

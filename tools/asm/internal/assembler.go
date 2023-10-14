@@ -47,13 +47,13 @@ type OpcodeAssembler func(inst ASTInstruction) ([]byte, error)
 
 func substituteLabel(inst *ASTInstruction, labels map[string]int) {
 	for i, op := range inst.Operands {
-		strVal, ok := op.(ASTNameOperand)
+		strVal, ok := op.(ASTName)
 		if !ok {
 			continue
 		}
 		lblAddr, ok := labels[string(strVal)]
 		if ok {
-			inst.Operands[i] = ASTNumericOperand(lblAddr)
+			inst.Operands[i] = ASTNumber(lblAddr)
 		}
 	}
 }

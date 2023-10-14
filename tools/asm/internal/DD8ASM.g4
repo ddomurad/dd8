@@ -33,11 +33,15 @@ arglist
   ;
 
 argument
-  : (num | name)
+  : (num | reg | name)
   ;
 
 num
   : (DEC_NUM | HEX_NUM | BIN_NUM)
+  ;
+
+reg
+  : REG
   ;
 
 name
@@ -51,8 +55,12 @@ label
 P_DEF: '.def';
 P_ORG: '.org';
 
+REG
+  : [A-Z]
+  ;
+
 NAME
-  : [A-Z_-]+[A-Z_0-9-]*
+  : [A-Z_-]+[A-Z_0-9-]+
   ;
 
 HEX_NUM

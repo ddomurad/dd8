@@ -8,14 +8,13 @@ import (
 	"github.com/ddomurad/dd8/tools/asm/internal"
 )
 
-func eStr(operands []any, index int) (string, error) {
+func eRegister(operands []any, index int) (string, error) {
 	if len(operands) <= index {
 		return "", fmt.Errorf("lolA") //todo: ??
 	}
 
-	sv, ok := operands[index].(internal.ASTNameOperand)
+	sv, ok := operands[index].(internal.ASTRegister)
 	if !ok {
-
 		return "", fmt.Errorf("lolA") //todo: ??
 	}
 
@@ -29,7 +28,7 @@ func e16bit(operands []any, index int) (uint16, error) {
 
 	v := operands[index]
 	switch tv := v.(type) {
-	case internal.ASTNumericOperand:
+	case internal.ASTNumber:
 		if tv > 0xffff || tv < 0 {
 			return 0, fmt.Errorf("expected 16bit value, got: %x (hex)", tv)
 		}
@@ -46,7 +45,7 @@ func e8bit(operands []any, index int) (uint8, error) {
 
 	v := operands[index]
 	switch tv := v.(type) {
-	case internal.ASTNumericOperand:
+	case internal.ASTNumber:
 		if tv > 0xff || tv < 0 {
 			return 0, fmt.Errorf("expected 8bit value, got: %x (hex)", tv)
 		}
@@ -87,7 +86,7 @@ func OpcodeAssemblerW65C02S(inst internal.ASTInstruction) ([]byte, error) {
 		}
 		// absolute indexed, absolute indexed zero_page
 		if len(inst.Operands) == 2 {
-			p1, err := eStr(inst.Operands, 1)
+			p1, err := eRegister(inst.Operands, 1)
 			if err != nil {
 				return nil, err
 			}
