@@ -1,0 +1,15 @@
+ PROCESSOR 65C02
+
+  php
+  php ; some test comment
+
+  lda #$10         ; load 16
+  lda #16           ; load 16
+  lda #100       ; load 16
+  lda #$10   ; load 16
+  lda #$10  ; load 16
+
+  lda $55   ; zerop page load 
+  lda $1111 ; absolute loade 
+  lda $41,x 
+  lda $4100,x 

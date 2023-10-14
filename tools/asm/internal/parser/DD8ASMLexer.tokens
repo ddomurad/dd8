@@ -1,0 +1,16 @@
+T__0=1
+T__1=2
+T__2=3
+T__3=4
+NAME=5
+PREP_NAME=6
+HEX_NUM=7
+BIN_NUM=8
+DEC_NUM=9
+COMMENT=10
+EOL=11
+WS=12
+'('=1
+')'=2
+','=3
+'='=4
