@@ -1,7 +1,7 @@
 package assemblers
 
 import (
-	"errors"
+	"fmt"
 
 	"github.com/ddomurad/dd8/tools/asm/internal"
 )
@@ -10,10 +10,18 @@ func OpcodeAssemblerW65C02S(inst internal.ASTInstruction) ([]byte, error) {
 	switch inst.OpCode {
 	case "brk":
 		return []byte{0x00}, nil
+	case "bpl":
+		return []byte{0x10}, nil
 	case "nop":
 		return []byte{0xea}, nil
 	case "php":
 		return []byte{0x08}, nil
+	case "jsr":
+		p0, err := internal.Ens16bit(inst.Operands, 0)
+		if err != nil {
+			return nil, err
+		}
+		return []byte{0x20, byte(p0), byte(p0 >> 8)}, nil
 	case "ldai":
 		p0, err := internal.Ens8bit(inst.Operands, 0)
 		if err != nil {
@@ -55,5 +63,5 @@ func OpcodeAssemblerW65C02S(inst internal.ASTInstruction) ([]byte, error) {
 		}
 	}
 
-	return nil, errors.New("unsupported instruction") //todo: ??
+	return nil, fmt.Errorf("unsupported instruction: '%s' '%v'", inst.OpCode, inst.Operands) //todo: make a src error with file name and line pointer
 }

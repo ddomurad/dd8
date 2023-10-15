@@ -38,7 +38,7 @@ func assertAST(t *testing.T, expected, actual *internal.AST) {
 
 func TestPreprocesor(t *testing.T) {
 	t.Run("apply_defaults", func(t *testing.T) {
-		ast := internal.ParseSrc(`
+		ast := internal.ParseSrc("", `
       .def TEST_VAL := 0x59
       .def OTHER_VAL := 100
       .def TEST_ORG := 0x100
@@ -46,8 +46,9 @@ func TestPreprocesor(t *testing.T) {
       .org TEST_ORG
       ldai OTHER_VAL
       `)
-		err := internal.PreprocessDefinitions(ast)
-		require.NoError(t, err)
+		require.False(t, ast.Errors.HasErrors())
+		internal.PreprocessDefinitions(ast)
+		require.False(t, ast.Errors.HasErrors())
 		assertAST(t, &internal.AST{
 			Statements: []internal.ASTStatement{
 				internal.ASTInstruction{OpCode: "lda", Operands: []any{
@@ -63,11 +64,12 @@ func TestPreprocesor(t *testing.T) {
 
 func TestThatCanParseSource(t *testing.T) {
 	t.Run("simple_opcodes", func(tt *testing.T) {
-		ast := internal.ParseSrc(`
+		ast := internal.ParseSrc("", `
       opcodea
       opcodeb
       opcodec
       `)
+		require.False(t, ast.Errors.HasErrors())
 		assertAST(t, &internal.AST{
 			Statements: []internal.ASTStatement{
 				internal.ASTInstruction{OpCode: "opcodea", Operands: []any{}},
@@ -78,11 +80,12 @@ func TestThatCanParseSource(t *testing.T) {
 	})
 
 	t.Run("opcodes_with_single_num_param", func(tt *testing.T) {
-		ast := internal.ParseSrc(`
+		ast := internal.ParseSrc("", `
       opcodea 10
       opcodeb 0x1_a
       opcodec 0b10_1_1
       `)
+		require.False(t, ast.Errors.HasErrors())
 		assertAST(t, &internal.AST{
 			Statements: []internal.ASTStatement{
 				internal.ASTInstruction{OpCode: "opcodea", Operands: []any{internal.ASTNumber(10)}},
@@ -93,9 +96,10 @@ func TestThatCanParseSource(t *testing.T) {
 	})
 
 	t.Run("opcodes_with_single_param_and_reg", func(tt *testing.T) {
-		ast := internal.ParseSrc(`
+		ast := internal.ParseSrc("", `
 			     opcodea 10, x
       `)
+		require.False(t, ast.Errors.HasErrors())
 		assertAST(t, &internal.AST{
 			Statements: []internal.ASTStatement{
 				internal.ASTInstruction{OpCode: "opcodea", Operands: []any{
@@ -107,11 +111,12 @@ func TestThatCanParseSource(t *testing.T) {
 	})
 
 	t.Run("label", func(t *testing.T) {
-		ast := internal.ParseSrc(`
+		ast := internal.ParseSrc("", `
         opca 0x10
       test_label:
         opcb 0x20
       `)
+		require.False(t, ast.Errors.HasErrors())
 		assertAST(t, &internal.AST{
 			Statements: []internal.ASTStatement{
 				internal.ASTInstruction{OpCode: "opca", Operands: []any{internal.ASTNumber(0x10)}},
@@ -122,9 +127,10 @@ func TestThatCanParseSource(t *testing.T) {
 	})
 
 	t.Run(".org", func(t *testing.T) {
-		ast := internal.ParseSrc(`
+		ast := internal.ParseSrc("", `
       .org 0x10
       `)
+		require.False(t, ast.Errors.HasErrors())
 		assertAST(t, &internal.AST{
 			Statements: []internal.ASTStatement{
 				internal.ASTOrigin{Address: internal.ASTNumber(0x10)},
@@ -133,10 +139,11 @@ func TestThatCanParseSource(t *testing.T) {
 	})
 
 	t.Run("prep_ol_def", func(t *testing.T) {
-		ast := internal.ParseSrc(`
+		ast := internal.ParseSrc("", `
       .def TEST := 10
       .def TEST-100 := 0b1001_1100
       `)
+		require.False(t, ast.Errors.HasErrors())
 		assertAST(t, &internal.AST{
 			Statements: []internal.ASTStatement{
 				internal.ASTPrepDefine{Name: "TEST", Value: internal.ASTNumber(10)},
@@ -146,12 +153,13 @@ func TestThatCanParseSource(t *testing.T) {
 	})
 
 	t.Run("prep_ml_def", func(t *testing.T) {
-		ast := internal.ParseSrc(`
+		ast := internal.ParseSrc("", `
       .def (
         TEST := 10
         TEST-100 := 0b1001_1100
       )
       `)
+		require.False(t, ast.Errors.HasErrors())
 		assertAST(t, &internal.AST{
 			Statements: []internal.ASTStatement{
 				internal.ASTPrepDefine{Name: "TEST", Value: internal.ASTNumber(10)},

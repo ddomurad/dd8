@@ -14,9 +14,10 @@ func assertByteCodeWithArray(t *testing.T, expected []byte, acctual internal.Byt
 
 func assertAssembler(t *testing.T, src string, expected []byte) {
 	src += "\n"
-	ast := internal.ParseSrc(src)
-	err := internal.PreprocessAST(ast)
-	require.NoError(t, err)
+	ast := internal.ParseSrc("test.asm", src)
+	require.False(t, ast.Errors.HasErrors())
+	internal.PreprocessAST(ast)
+	require.False(t, ast.Errors.HasErrors())
 	bcode, err := internal.Assemble(ast, assemblers.OpcodeAssemblerW65C02S)
 	require.NoError(t, err)
 	assertByteCodeWithArray(t, expected, bcode)
@@ -26,11 +27,17 @@ func TestThatCanBuildBinaryCode(t *testing.T) {
 	t.Run("brk", func(t *testing.T) {
 		assertAssembler(t, "brk", []byte{0x00})
 	})
+	t.Run("bpl", func(t *testing.T) {
+		assertAssembler(t, "bpl", []byte{0x10})
+	})
 	t.Run("nop", func(t *testing.T) {
 		assertAssembler(t, "nop", []byte{0xea})
 	})
 	t.Run("php", func(t *testing.T) {
 		assertAssembler(t, "php", []byte{0x08})
+	})
+	t.Run("jsr_a", func(t *testing.T) {
+		assertAssembler(t, "jsr 0xab99", []byte{0x20, 0x99, 0xab})
 	})
 	t.Run("ldai", func(t *testing.T) {
 		assertAssembler(t, "ldai 0xab", []byte{0xa9, 0xab})
@@ -47,6 +54,9 @@ func TestThatCanBuildBinaryCode(t *testing.T) {
 	})
 	t.Run("lda_ax_zp", func(t *testing.T) {
 		assertAssembler(t, "lda 0x3b, x", []byte{0xb5, 0x3b})
+	})
+	t.Run("lda_ax_zp_ind", func(t *testing.T) {
+		assertAssembler(t, "lda (0x3b, x)", []byte{0xa2, 0x3b})
 	})
 	t.Run("lda_ax", func(t *testing.T) {
 		assertAssembler(t, "lda 0x113b, x", []byte{0xbd, 0x3b, 0x11})

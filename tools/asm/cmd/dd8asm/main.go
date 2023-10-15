@@ -16,7 +16,7 @@ func main() {
 	flag.Parse()
 	tail := flag.Args()
 	if len(tail) != 1 {
-		panic("lol") //todo: ??
+		panic("exaclt one input file required") //todo: ensure a proper helm message is rendered
 	}
 
 	if *outFile == "" {
@@ -31,18 +31,21 @@ func main() {
 	reader := internal.NewFileSourceReader("./" + worksparceDir)
 	ast, err := internal.CompileAST(intpuFile, reader)
 	if err != nil {
-		panic(err)
+		os.Stderr.WriteString(err.Error())
+		os.Exit(1)
 	}
 
 	byteCode, err := internal.Assemble(ast, assemblers.OpcodeAssemblerW65C02S)
 	if err != nil {
-		panic(err)
+		os.Stderr.WriteString(err.Error())
+		os.Exit(1)
 	}
 
 	hexOutput := output.GetIntelHEX(byteCode)
 	err = os.WriteFile(*outFile, hexOutput, 0644)
 	if err != nil {
-		panic(err)
+		os.Stderr.WriteString(err.Error())
+		os.Exit(1)
 	}
 
 	os.Exit(0)

@@ -61,12 +61,12 @@ func substituteLabel(inst *ASTInstruction, labels map[string]int) {
 
 func EnsRegister(operands []any, index int) (string, error) {
 	if len(operands) <= index {
-		return "", fmt.Errorf("lolA") //todo: ??
+		return "", fmt.Errorf("missing opperand: ind: %d, len: %d", index, len(operands))
 	}
 
 	sv, ok := operands[index].(ASTRegister)
 	if !ok {
-		return "", fmt.Errorf("lolA") //todo: ??
+		return "", fmt.Errorf("expected a register oprand, go: '%s'", reflect.TypeOf(operands[index]).String())
 	}
 
 	return string(sv), nil
@@ -74,7 +74,7 @@ func EnsRegister(operands []any, index int) (string, error) {
 
 func Ens16bit(operands []any, index int) (uint16, error) {
 	if len(operands) <= index {
-		return 0, fmt.Errorf("lolA") //todo: ??
+		return 0, fmt.Errorf("missing opperand: ind: %d, len: %d", index, len(operands))
 	}
 
 	v := operands[index]
@@ -91,7 +91,7 @@ func Ens16bit(operands []any, index int) (uint16, error) {
 
 func Ens8bit(operands []any, index int) (uint8, error) {
 	if len(operands) <= index {
-		return 0, fmt.Errorf("lolA") //todo: ??
+		return 0, fmt.Errorf("missing opperand: ind: %d, len: %d", index, len(operands))
 	}
 
 	v := operands[index]
@@ -103,7 +103,7 @@ func Ens8bit(operands []any, index int) (uint8, error) {
 		return uint8(tv), nil
 	}
 
-	return 0, fmt.Errorf("unexpected value type, expected int64 got %v", reflect.TypeOf(v))
+	return 0, fmt.Errorf("unexpected value type, expected int64 got %v", reflect.TypeOf(v).Name())
 }
 func Assemble(ast *AST, opcodeAssembler OpcodeAssembler) (ByteCode, error) {
 	programCounter := 0x00
@@ -129,17 +129,17 @@ func Assemble(ast *AST, opcodeAssembler OpcodeAssembler) (ByteCode, error) {
 
 		inst, ok := s.(ASTInstruction)
 		if !ok {
-			panic("elo !") //todo: ??
+			return nil, fmt.Errorf("unexpected statement: %v", reflect.TypeOf(inst).String())
 		}
 
 		substituteLabel(&inst, labels)
 		opBytes, err := opcodeAssembler(inst)
 		if err != nil {
-			panic(err) //todo: ??
+			return nil, err
 		}
 		err = byteCode.SetBytes(programCounter, opBytes)
 		if err != nil {
-			panic(err) //todo: ??
+			return nil, err
 		}
 		programCounter += len(opBytes)
 	}
@@ -152,9 +152,11 @@ func AssembleSrc(srcName string, reader SourceReader, opcoOpcodeAssembler Opcode
 	if err != nil {
 		return nil, err
 	}
-	err = PreprocessAST(ast)
-	if err != nil {
-		return nil, err
+
+	PreprocessAST(ast)
+	if ast.Errors.HasErrors() {
+		return nil, ast.Errors
 	}
+
 	return Assemble(ast, opcoOpcodeAssembler)
 }

@@ -1,7 +1,7 @@
 package internal
 
 import (
-	"errors"
+	"fmt"
 	"strconv"
 	"strings"
 
@@ -34,14 +34,18 @@ type ASTInstruction struct {
 
 type AST struct {
 	Statements []ASTStatement
+	Errors     AssemblerError
 }
 
 type progVisitor struct {
 	parser.BaseDD8ASMVisitor
+	errorListener *ErrorListener
 }
 
-func newProgVisitor() *progVisitor {
-	return &progVisitor{}
+func newProgVisitor(errorListener *ErrorListener) *progVisitor {
+	return &progVisitor{
+		errorListener: errorListener,
+	}
 }
 
 func (v *progVisitor) Visit(tree antlr.ParseTree) interface{} { return tree.Accept(v) }
@@ -53,7 +57,7 @@ func (v *progVisitor) VisitChildren(ctx antlr.RuleNode) interface{} {
 	return children
 }
 
-func (v *progVisitor) VisitTerminal(_ antlr.TerminalNode) interface{} {
+func (v *progVisitor) VisitTerminal(ctx antlr.TerminalNode) interface{} {
 	return nil
 }
 
@@ -85,7 +89,8 @@ func (v *progVisitor) VisitProg(ctx *parser.ProgContext) interface{} {
 func (v *progVisitor) VisitStatement(ctx *parser.StatementContext) interface{} {
 	children := ctx.GetChildren()
 	if len(children) != 1 && len(children) != 2 {
-		panic("lol !") //todo: ??
+		v.statementStructureError(ctx.GetStart().GetLine())
+		return nil
 	}
 
 	return v.Visit(children[0].(antlr.ParseTree))
@@ -93,11 +98,15 @@ func (v *progVisitor) VisitStatement(ctx *parser.StatementContext) interface{} {
 
 func (v *progVisitor) VisitInstruction(ctx *parser.InstructionContext) interface{} {
 	children := ctx.GetChildren()
-	//todo: check for length ?
+	if len(children) == 0 {
+		v.statementStructureError(ctx.GetStart().GetLine())
+		return nil
+	}
 	opcodeResp := v.Visit(children[0].(antlr.ParseTree))
 	opcodeStr, ok := opcodeResp.(ASTName)
 	if !ok {
-		panic("lol 2") //todo: ??
+		v.statementStructureError(ctx.GetStart().GetLine())
+		return nil
 	}
 
 	inst := ASTInstruction{
@@ -106,14 +115,15 @@ func (v *progVisitor) VisitInstruction(ctx *parser.InstructionContext) interface
 	}
 
 	if len(children) > 2 {
-		panic("lol") //todo: ??
+		v.statementStructureError(ctx.GetStart().GetLine())
+		return nil
 	}
+
 	if len(children) == 2 {
-		x := v.Visit(children[1].(antlr.ParseTree))
-		_ = x //todo: clean up pls ?
 		inst.Operands, ok = v.Visit(children[1].(antlr.ParseTree)).([]interface{})
 		if !ok {
-			panic("lol") //todo: ??
+			v.statementStructureError(ctx.GetStart().GetLine())
+			return nil
 		}
 	}
 
@@ -134,7 +144,8 @@ func (v *progVisitor) VisitArglist(ctx *parser.ArglistContext) interface{} {
 		case interface{}:
 			args = append(args, tr)
 		default:
-			panic("lol") //todo: ??
+			v.statementStructureError(ctx.GetStart().GetLine())
+			return nil
 		}
 	}
 
@@ -144,30 +155,23 @@ func (v *progVisitor) VisitArglist(ctx *parser.ArglistContext) interface{} {
 func (v *progVisitor) VisitArgument(ctx *parser.ArgumentContext) interface{} {
 	children := ctx.GetChildren()
 	if len(children) != 1 {
-		panic("lol") //todo: ???
+		v.statementStructureError(ctx.GetStart().GetLine())
+		return nil
 	}
 	cr := v.Visit(children[0].(antlr.ParseTree))
 	return cr
-	// switch tr := cr.(type) {
-	// case string:
-	// 	return ASTNameOperand(tr)
-	// case int64:
-	// 	return ASTNumericOperand(tr)
-	// case interface{}:
-	// 	return tr
-	// default:
-	// 	panic("lol") //todo: ??
-	// }
 }
 
 func (v *progVisitor) VisitNum(ctx *parser.NumContext) interface{} {
 	children := ctx.GetChildren()
 	if len(children) != 1 {
-		panic("lol") //todo: ??
+		v.statementStructureError(ctx.GetStart().GetLine())
+		return nil
 	}
 	terminalNode, ok := children[0].(antlr.TerminalNode)
 	if !ok {
-		panic("lol") //todo: ??
+		v.statementStructureError(ctx.GetStart().GetLine())
+		return nil
 	}
 
 	nodeStr := terminalNode.GetText()
@@ -187,7 +191,8 @@ func (v *progVisitor) VisitNum(ctx *parser.NumContext) interface{} {
 	nodeStr = strings.ReplaceAll(nodeStr, "_", "")
 	num, err := strconv.ParseInt(nodeStr, numBytes, 64)
 	if err != nil {
-		panic(err) //todo: ??
+		v.statementStructureError(ctx.GetStart().GetLine())
+		return nil
 	}
 	return ASTNumber(num)
 }
@@ -207,30 +212,35 @@ func (v *progVisitor) VisitLabel(ctx *parser.LabelContext) interface{} {
 func (v *progVisitor) VisitPrep_instruction(ctx *parser.Prep_instructionContext) interface{} {
 	children := ctx.GetChildren()
 	if len(children) == 0 {
-		panic("elo 123") //todo: ??
+		v.statementStructureError(ctx.GetStart().GetLine())
+		return nil
 	}
 
 	insType, ok := children[0].(antlr.TerminalNode)
 	if !ok {
-		panic("elo ppp") //todo: ??
+		v.statementStructureError(ctx.GetStart().GetLine())
+		return nil
 	}
 
 	prepInst := insType.GetText()
 	switch prepInst {
 	case ".org":
-		return v.buildPrepOrigin(children[1:])
+		return v.buildPrepOrigin(ctx, children[1:])
 	case ".def":
-		return v.buildPrepDefine(children[1:])
+		return v.buildPrepDefine(ctx, children[1:])
 	}
 
-	panic("lul") //todo: ??
+	v.statementStructureError(ctx.GetStart().GetLine())
+	return nil
 }
 
 func (v *progVisitor) VisitPrep_def_args(ctx *parser.Prep_def_argsContext) interface{} {
 	argCtx, ok := ctx.Argument().(*parser.ArgumentContext)
 	if !ok {
-		panic("lol") //todo: lol
+		v.errorListener.ProgramError(ctx.GetStart().GetLine(), "preprocessor argument missing")
+		return nil
 	}
+
 	return []interface{}{
 		ASTPrepDefine{
 			Name:  ctx.Name().GetText(),
@@ -253,38 +263,45 @@ func (v *progVisitor) VisitPrep_def_arg_lines(ctx *parser.Prep_def_arg_linesCont
 		case ASTPrepDefine:
 			defs = append(defs, tc)
 		default:
-			panic("ulala") //todo:: ??
+			v.statementStructureError(ctx.GetStart().GetLine())
+			return nil
 		}
 	}
 
 	return defs
 }
 
-func (v *progVisitor) buildPrepOrigin(children []antlr.Tree) interface{} {
+func (v *progVisitor) buildPrepOrigin(ctx *parser.Prep_instructionContext, children []antlr.Tree) interface{} {
 	if len(children) != 1 {
-		panic("wolo wolo") //todo: ??
+		v.errorListener.ProgramError(ctx.GetStart().GetLine(), "preprocessor argument missing")
 	}
 
 	vc := v.Visit(children[0].(antlr.ParseTree))
 	return ASTOrigin{Address: vc}
 }
 
-func (v *progVisitor) buildPrepDefine(children []antlr.Tree) interface{} {
+func (v *progVisitor) buildPrepDefine(ctx *parser.Prep_instructionContext, children []antlr.Tree) interface{} {
 	defs := make([]interface{}, 0, len(children))
 	for _, c := range children {
 		vc := v.Visit(c.(antlr.ParseTree))
 		if vc == nil {
 			continue
 		}
+
 		switch tv := vc.(type) {
 		case []interface{}:
 			defs = append(defs, tv...)
 		default:
-			panic("lol 00-") //todo: ??
+			v.statementStructureError(ctx.GetStart().GetLine())
+			return nil
 		}
 	}
 
 	return defs
+}
+
+func (v *progVisitor) statementStructureError(line int) {
+	v.errorListener.ProgramError(line, "unexpected statement structure")
 }
 
 func applyDefsToOperand(operand any, defs map[string]any) (any, bool) {
@@ -332,7 +349,54 @@ func applyDefinitions(ast *AST, defs map[string]any) bool {
 	return rok
 }
 
-func PreprocessDefinitions(ast *AST) error {
+type ErrorListener struct {
+	srcName string
+	errors  AssemblerError
+}
+
+func NewErrorListener(srcName string) *ErrorListener {
+	return &ErrorListener{
+		srcName: srcName,
+		errors:  NewAssemblerError(),
+	}
+}
+
+// ReportAmbiguity implements antlr.ErrorListener.
+func (*ErrorListener) ReportAmbiguity(recognizer antlr.Parser, dfa *antlr.DFA, startIndex int, stopIndex int, exact bool, ambigAlts *antlr.BitSet, configs *antlr.ATNConfigSet) {
+	panic("unimplemented")
+}
+
+// ReportAttemptingFullContext implements antlr.ErrorListener.
+func (*ErrorListener) ReportAttemptingFullContext(recognizer antlr.Parser, dfa *antlr.DFA, startIndex int, stopIndex int, conflictingAlts *antlr.BitSet, configs *antlr.ATNConfigSet) {
+	panic("unimplemented")
+}
+
+// ReportContextSensitivity implements antlr.ErrorListener.
+func (*ErrorListener) ReportContextSensitivity(recognizer antlr.Parser, dfa *antlr.DFA, startIndex int, stopIndex int, prediction int, configs *antlr.ATNConfigSet) {
+	panic("unimplemented")
+}
+
+// SyntaxError implements antlr.ErrorListener.
+func (l *ErrorListener) SyntaxError(recognizer antlr.Recognizer, offendingSymbol interface{}, line int, col int, msg string, e antlr.RecognitionException) {
+	l.errors.Append(SourceError{
+		Type:    SourceErrorTypeSyntaxError,
+		SrcName: l.srcName,
+		Line:    line,
+		Col:     col,
+		Msg:     msg,
+	})
+}
+
+func (l *ErrorListener) ProgramError(line int, msg string) {
+	l.errors.Append(SourceError{
+		Type:    SourceErrorTypeUnexpectedStructureError,
+		SrcName: l.srcName,
+		Line:    line,
+		Msg:     msg,
+	})
+}
+
+func PreprocessDefinitions(ast *AST) {
 	filtSts := make([]ASTStatement, 0, len(ast.Statements))
 	defs := map[string]any{}
 	for _, st := range ast.Statements {
@@ -343,7 +407,10 @@ func PreprocessDefinitions(ast *AST) error {
 		}
 		_, ok = defs[def.Name]
 		if ok {
-			return errors.New("00000A ") //todo: ??
+			ast.Errors.Append(SourceError{
+				Type: SourceErrorTypeProgramError,
+				Msg:  fmt.Sprintf("label redefinition: '%s'", def.Name),
+			})
 		}
 
 		defs[def.Name] = def.Value
@@ -352,22 +419,25 @@ func PreprocessDefinitions(ast *AST) error {
 	ast.Statements = filtSts
 	for applyDefinitions(ast, defs) {
 	}
-
-	return nil
 }
 
-func PreprocessAST(ast *AST) error {
-	return PreprocessDefinitions(ast)
+func PreprocessAST(ast *AST) {
+	PreprocessDefinitions(ast)
 }
 
-func ParseSrc(src string) *AST {
+func ParseSrc(srcName string, src string) *AST {
+	errorListener := NewErrorListener(srcName)
 	input := antlr.NewInputStream(src)
 	lexer := parser.NewDD8ASMLexer(input)
+	lexer.AddErrorListener(errorListener)
 	stream := antlr.NewCommonTokenStream(lexer, 0)
 	parser := parser.NewDD8ASMParser(stream)
+	parser.AddErrorListener(errorListener)
 	tree := parser.Prog()
 
-	return newProgVisitor().Visit(tree).(*AST)
+	ast := newProgVisitor(errorListener).Visit(tree).(*AST)
+	ast.Errors = errorListener.errors
+	return ast
 }
 
 func CompileAST(srcName string, reader SourceReader) (*AST, error) {
@@ -376,5 +446,10 @@ func CompileAST(srcName string, reader SourceReader) (*AST, error) {
 		return nil, err
 	}
 
-	return ParseSrc(src), nil
+	ast := ParseSrc(srcName, src)
+	if ast.Errors.HasErrors() {
+		return ast, ast.Errors
+	}
+
+	return ast, nil
 }
