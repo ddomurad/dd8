@@ -25,7 +25,14 @@ prep_def_arg_lines
   ;
 
 instruction
-  : name arglist?
+  : name 
+  | name arglist_p 
+  | name arglist 
+  | name arglist_p ',' arglist
+  ;
+
+arglist_p
+  : '[' arglist ']'
   ;
 
 arglist

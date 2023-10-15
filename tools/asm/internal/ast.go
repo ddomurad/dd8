@@ -12,6 +12,7 @@ import (
 type ASTNumber int64
 type ASTRegister string
 type ASTName string
+type ASTParentheses []any
 type ASTStatement any
 
 type ASTLabel struct {
@@ -114,20 +115,44 @@ func (v *progVisitor) VisitInstruction(ctx *parser.InstructionContext) interface
 		Operands: []any{},
 	}
 
-	if len(children) > 2 {
-		v.statementStructureError(ctx.GetStart().GetLine())
-		return nil
-	}
-
-	if len(children) == 2 {
-		inst.Operands, ok = v.Visit(children[1].(antlr.ParseTree)).([]interface{})
+	for _, child := range children[1:] {
+		visited := v.Visit(child.(antlr.ParseTree))
+		if visited == nil {
+			continue
+		}
+		operands, ok := visited.([]interface{})
 		if !ok {
 			v.statementStructureError(ctx.GetStart().GetLine())
 			return nil
 		}
+		inst.Operands = append(inst.Operands, operands...)
 	}
 
+	// if len(children) > 2 {
+	// 	v.statementStructureError(ctx.GetStart().GetLine())
+	// 	return nil
+	// }
+	//
+	// if len(children) == 2 {
+	// 	inst.Operands, ok = v.Visit(children[1].(antlr.ParseTree)).([]interface{})
+	// 	if !ok {
+	// 		v.statementStructureError(ctx.GetStart().GetLine())
+	// 		return nil
+	// 	}
+	// }
+
 	return inst
+}
+
+func (v *progVisitor) VisitArglist_p(ctx *parser.Arglist_pContext) interface{} {
+	args, ok := v.Visit(ctx.Arglist().(*parser.ArglistContext)).([]interface{})
+	if !ok {
+		v.statementStructureError(ctx.GetStart().GetLine())
+		return nil
+	}
+	pargs := make(ASTParentheses, len(args))
+	copy(pargs, args)
+	return []interface{}{pargs}
 }
 
 func (v *progVisitor) VisitArglist(ctx *parser.ArglistContext) interface{} {

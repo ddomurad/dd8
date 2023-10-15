@@ -89,22 +89,24 @@ func Ens16bit(operands []any, index int) (uint16, error) {
 	return 0, fmt.Errorf("unexpected value type, expected int64 got %v", reflect.TypeOf(v))
 }
 
-func Ens8bit(operands []any, index int) (uint8, error) {
+func TryGetTypedOperand[T any](operands []any, index int) (T, bool) {
+	var def T
 	if len(operands) <= index {
-		return 0, fmt.Errorf("missing opperand: ind: %d, len: %d", index, len(operands))
+		return def, false
 	}
 
-	v := operands[index]
-	switch tv := v.(type) {
-	case ASTNumber:
-		if tv > 0xff || tv < 0 {
-			return 0, fmt.Errorf("expected 8bit value, got: %x (hex)", tv)
-		}
-		return uint8(tv), nil
-	}
-
-	return 0, fmt.Errorf("unexpected value type, expected int64 got %v", reflect.TypeOf(v).Name())
+	v, ok := operands[index].(T)
+	return v, ok
 }
+
+func Ens8bit(num ASTNumber) (uint8, error) {
+	if num > 0xff || num < 0 {
+		return 0, fmt.Errorf("expected 8bit value, got: %x (hex)", num)
+	}
+
+	return uint8(num), nil
+}
+
 func Assemble(ast *AST, opcodeAssembler OpcodeAssembler) (ByteCode, error) {
 	programCounter := 0x00
 	byteCode := make(ByteCode)

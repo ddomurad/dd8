@@ -110,6 +110,56 @@ func TestThatCanParseSource(t *testing.T) {
 		}, ast)
 	})
 
+	t.Run("opcodes_with_agrs_in_par", func(tt *testing.T) {
+		ast := internal.ParseSrc("", `
+			     opcodea [10, x]
+      `)
+		require.False(t, ast.Errors.HasErrors())
+		assertAST(t, &internal.AST{
+			Statements: []internal.ASTStatement{
+				internal.ASTInstruction{OpCode: "opcodea", Operands: []any{
+					internal.ASTParentheses{
+						internal.ASTNumber(10),
+						internal.ASTRegister("x"),
+					},
+				}},
+			},
+		}, ast)
+	})
+
+	t.Run("opcodes_with_agrs_in_first_par", func(tt *testing.T) {
+		ast := internal.ParseSrc("", `
+			     opcodea [10], x
+      `)
+		require.False(t, ast.Errors.HasErrors())
+		assertAST(t, &internal.AST{
+			Statements: []internal.ASTStatement{
+				internal.ASTInstruction{OpCode: "opcodea", Operands: []any{
+					internal.ASTParentheses{
+						internal.ASTNumber(10),
+					},
+					internal.ASTRegister("x"),
+				}},
+			},
+		}, ast)
+	})
+
+	t.Run("opcodes_with_one_par", func(tt *testing.T) {
+		ast := internal.ParseSrc("", `
+			     opcodea [10]
+      `)
+		require.False(t, ast.Errors.HasErrors())
+		assertAST(t, &internal.AST{
+			Statements: []internal.ASTStatement{
+				internal.ASTInstruction{OpCode: "opcodea", Operands: []any{
+					internal.ASTParentheses{
+						internal.ASTNumber(10),
+					},
+				}},
+			},
+		}, ast)
+	})
+
 	t.Run("label", func(t *testing.T) {
 		ast := internal.ParseSrc("", `
         opca 0x10

@@ -26,6 +26,9 @@ type DD8ASMVisitor interface {
 	// Visit a parse tree produced by DD8ASMParser#instruction.
 	VisitInstruction(ctx *InstructionContext) interface{}
 
+	// Visit a parse tree produced by DD8ASMParser#arglist_p.
+	VisitArglist_p(ctx *Arglist_pContext) interface{}
+
 	// Visit a parse tree produced by DD8ASMParser#arglist.
 	VisitArglist(ctx *ArglistContext) interface{}
 

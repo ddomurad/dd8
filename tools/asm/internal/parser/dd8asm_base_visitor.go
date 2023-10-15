@@ -32,6 +32,10 @@ func (v *BaseDD8ASMVisitor) VisitInstruction(ctx *InstructionContext) interface{
 	return v.VisitChildren(ctx)
 }
 
+func (v *BaseDD8ASMVisitor) VisitArglist_p(ctx *Arglist_pContext) interface{} {
+	return v.VisitChildren(ctx)
+}
+
 func (v *BaseDD8ASMVisitor) VisitArglist(ctx *ArglistContext) interface{} {
 	return v.VisitChildren(ctx)
 }
