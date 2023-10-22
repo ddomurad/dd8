@@ -237,7 +237,7 @@ var (
 )
 
 func prepInstruction(inst internal.ASTInstruction) (indirect bool, opcode string, arg1u *uint16, arg1r *byte, arg2u *uint16, arg2r *byte, opcnt int, err error) {
-	indirect = false
+	indirect = inst.Operands.Indirect(0) || inst.Operands.Indirect(1)
 	opcode = string(inst.OpCode)
 
 	arg1u = nil
@@ -250,29 +250,14 @@ func prepInstruction(inst internal.ASTInstruction) (indirect bool, opcode string
 	operands := inst.Operands
 	opLen := len(operands)
 
-	pv, ok := internal.TryGetTypedOperand[internal.ASTParentheses](operands, 0)
-	if ok {
-		if opLen == 1 {
-			operands = pv
-			opLen = len(operands)
-			indirect = true
-		} else {
-			if len(pv) != 1 {
-				err = fmt.Errorf("expected only one operand in parentheses")
-				return
-			}
-			operands[0] = pv[0]
-			indirect = true
-		}
-	}
 	if opLen >= 1 {
 		opcnt = 1
-		v1r, ok := internal.TryGetTypedOperand[internal.ASTRegister](operands, 0)
+		v1r, ok := operands.Register(0)
 		if ok {
 			v1rb := v1r[0]
 			arg1r = &v1rb
 		} else {
-			v1, ok := internal.TryGetTypedOperand[internal.ASTNumber](operands, 0)
+			v1, ok := operands.Number(0)
 			if !ok {
 				err = fmt.Errorf("first operand expected to be a number, got instead: '%v'", operands[0])
 				return
@@ -288,13 +273,13 @@ func prepInstruction(inst internal.ASTInstruction) (indirect bool, opcode string
 
 	if opLen == 2 {
 		opcnt = 2
-		v2n, ok := internal.TryGetTypedOperand[internal.ASTNumber](operands, 1)
+		v2n, ok := operands.Number(1)
 		if ok {
 			v2u16 := uint16(v2n)
 			arg2u = &v2u16
 			return
 		}
-		v2, ok := internal.TryGetTypedOperand[internal.ASTRegister](operands, 1)
+		v2, ok := operands.Register(1)
 		if !ok {
 			err = fmt.Errorf("first operand expected to be a register, got instead: '%v'", operands[1])
 			return
@@ -309,22 +294,6 @@ func prepInstruction(inst internal.ASTInstruction) (indirect bool, opcode string
 	}
 
 	return
-}
-
-func ens4bit(num uint16) (uint8, error) {
-	if num > 0x0f || num < 0 {
-		return 0, fmt.Errorf("expected 4bit value, got: %x (hex)", num)
-	}
-
-	return uint8(num), nil
-}
-
-func ens8bit(num uint16) (uint8, error) {
-	if num > 0xff || num < 0 {
-		return 0, fmt.Errorf("expected 8bit value, got: %x (hex)", num)
-	}
-
-	return uint8(num), nil
 }
 
 func cmpPtr[T comparable](p *T, v T) bool {

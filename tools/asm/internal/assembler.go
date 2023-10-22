@@ -48,13 +48,13 @@ type OpcodeAssembler func(pcc int, inst ASTInstruction) ([]byte, error)
 
 func substituteLabel(inst *ASTInstruction, labels map[string]int) {
 	for i, op := range inst.Operands {
-		strVal, ok := op.(ASTName)
+		strVal, ok := op.Name()
 		if !ok {
 			continue
 		}
 		lblAddr, ok := labels[string(strVal)]
 		if ok {
-			inst.Operands[i] = ASTNumber(lblAddr)
+			inst.Operands[i].Value = ASTNumber(lblAddr)
 		}
 	}
 }
@@ -72,21 +72,13 @@ func EnsRegister(operands []any, index int) (string, error) {
 	return string(sv), nil
 }
 
-func Ens16bit(operands []any, index int) (uint16, error) {
-	if len(operands) <= index {
-		return 0, fmt.Errorf("missing opperand: ind: %d, len: %d", index, len(operands))
+func Ens16bit(operand ASTOperand, index int) (uint16, error) {
+	v, ok := operand.Number()
+	if !ok || v > 0xffff || v < 0 {
+		return 0, fmt.Errorf("expected 16bit value, got: %x (hex)", v)
 	}
 
-	v := operands[index]
-	switch tv := v.(type) {
-	case ASTNumber:
-		if tv > 0xffff || tv < 0 {
-			return 0, fmt.Errorf("expected 16bit value, got: %x (hex)", tv)
-		}
-		return uint16(tv), nil
-	}
-
-	return 0, fmt.Errorf("unexpected value type, expected int64 got %v", reflect.TypeOf(v))
+	return uint16(v), nil
 }
 
 func TryGetTypedOperand[T any](operands []any, index int) (T, bool) {
@@ -121,7 +113,7 @@ func Assemble(ast *AST, opcodeAssembler OpcodeAssembler) (ByteCode, error) {
 
 		org, ok := s.(ASTOrigin)
 		if ok {
-			p0, err := Ens16bit([]any{org.Address}, 0)
+			p0, err := Ens16bit(org.Address, 0)
 			if err != nil {
 				return byteCode, err
 			}

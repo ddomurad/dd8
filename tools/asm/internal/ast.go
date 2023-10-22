@@ -12,8 +12,76 @@ import (
 type ASTNumber int64
 type ASTRegister string
 type ASTName string
-type ASTParentheses []any
+
 type ASTStatement any
+
+type ASTOperand struct {
+	Value    any
+	Indirect bool
+}
+
+type ASTOperands []ASTOperand
+
+func (o ASTOperand) IsNumber() bool {
+	_, ok := o.Value.(ASTNumber)
+	return ok
+}
+
+func (o ASTOperand) IsRegister() bool {
+	_, ok := o.Value.(ASTRegister)
+	return ok
+}
+
+func (o ASTOperand) IsName() bool {
+	_, ok := o.Value.(ASTName)
+	return ok
+}
+
+func (o ASTOperand) Number() (ASTNumber, bool) {
+	v, ok := o.Value.(ASTNumber)
+	return v, ok
+}
+
+func (o ASTOperand) Register() (ASTRegister, bool) {
+	v, ok := o.Value.(ASTRegister)
+	return v, ok
+}
+
+func (o ASTOperand) Name() (ASTName, bool) {
+	v, ok := o.Value.(ASTName)
+	return v, ok
+}
+
+func (ol ASTOperands) Number(index int) (ASTNumber, bool) {
+	if len(ol) <= index {
+		return ASTNumber(0), false
+	}
+	v, ok := ol[index].Value.(ASTNumber)
+	return v, ok
+}
+
+func (ol ASTOperands) Register(index int) (ASTRegister, bool) {
+	if len(ol) <= index {
+		return ASTRegister('0'), false
+	}
+	v, ok := ol[index].Value.(ASTRegister)
+	return v, ok
+}
+
+func (ol ASTOperands) Name(index int) (ASTName, bool) {
+	if len(ol) <= index {
+		return ASTName(""), false
+	}
+	v, ok := ol[index].Value.(ASTName)
+	return v, ok
+}
+
+func (ol ASTOperands) Indirect(index int) bool {
+	if len(ol) <= index {
+		return false
+	}
+	return ol[index].Indirect
+}
 
 type SrcPointer struct {
 	Name string
@@ -29,17 +97,17 @@ type ASTLabel struct {
 }
 
 type ASTOrigin struct {
-	Address any
+	Address ASTOperand
 }
 
 type ASTPrepDefine struct {
 	Name  string
-	Value any
+	Value ASTOperand
 }
 
 type ASTInstruction struct {
 	OpCode   ASTName
-	Operands []any
+	Operands ASTOperands
 
 	SrcPointer SrcPointer
 }
@@ -126,7 +194,7 @@ func (v *progVisitor) VisitInstruction(ctx *parser.InstructionContext) interface
 
 	inst := ASTInstruction{
 		OpCode:   opcodeStr,
-		Operands: []any{},
+		Operands: ASTOperands{},
 		SrcPointer: SrcPointer{
 			Name: v.srcName,
 			Line: ctx.GetStart().GetLine(),
@@ -138,7 +206,7 @@ func (v *progVisitor) VisitInstruction(ctx *parser.InstructionContext) interface
 		if visited == nil {
 			continue
 		}
-		operands, ok := visited.([]interface{})
+		operands, ok := visited.(ASTOperands)
 		if !ok {
 			v.statementStructureError(ctx.GetStart().GetLine())
 			return nil
@@ -163,28 +231,29 @@ func (v *progVisitor) VisitInstruction(ctx *parser.InstructionContext) interface
 }
 
 func (v *progVisitor) VisitArglist_p(ctx *parser.Arglist_pContext) interface{} {
-	args, ok := v.Visit(ctx.Arglist().(*parser.ArglistContext)).([]interface{})
+	args, ok := v.Visit(ctx.Arglist().(*parser.ArglistContext)).(ASTOperands)
 	if !ok {
 		v.statementStructureError(ctx.GetStart().GetLine())
 		return nil
 	}
-	pargs := make(ASTParentheses, len(args))
-	copy(pargs, args)
-	return []interface{}{pargs}
+	for i := range args {
+		args[i].Indirect = true
+	}
+	return args
 }
 
 func (v *progVisitor) VisitArglist(ctx *parser.ArglistContext) interface{} {
-	childrenRes := v.VisitChildren(ctx).([]interface{})
-	args := []interface{}{}
-
-	for _, cr := range childrenRes {
+	args := ASTOperands{}
+	for _, ch := range ctx.GetChildren() {
+		cr := v.Visit(ch.(antlr.ParseTree))
 		if cr == nil {
 			continue
 		}
+
 		switch tr := cr.(type) {
-		case []interface{}:
+		case ASTOperands:
 			args = append(args, tr...)
-		case interface{}:
+		case ASTOperand:
 			args = append(args, tr)
 		default:
 			v.statementStructureError(ctx.GetStart().GetLine())
@@ -202,7 +271,7 @@ func (v *progVisitor) VisitArgument(ctx *parser.ArgumentContext) interface{} {
 		return nil
 	}
 	cr := v.Visit(children[0].(antlr.ParseTree))
-	return cr
+	return ASTOperand{Value: cr}
 }
 
 func (v *progVisitor) VisitNum(ctx *parser.NumContext) interface{} {
@@ -237,6 +306,7 @@ func (v *progVisitor) VisitNum(ctx *parser.NumContext) interface{} {
 		v.statementStructureError(ctx.GetStart().GetLine())
 		return nil
 	}
+
 	return ASTNumber(num)
 }
 
@@ -287,7 +357,7 @@ func (v *progVisitor) VisitPrep_def_args(ctx *parser.Prep_def_argsContext) inter
 	return []interface{}{
 		ASTPrepDefine{
 			Name:  ctx.Name().GetText(),
-			Value: v.VisitArgument(argCtx),
+			Value: v.VisitArgument(argCtx).(ASTOperand),
 		}}
 }
 
@@ -320,7 +390,12 @@ func (v *progVisitor) buildPrepOrigin(ctx *parser.Prep_instructionContext, child
 	}
 
 	vc := v.Visit(children[0].(antlr.ParseTree))
-	return ASTOrigin{Address: vc}
+	op, ok := vc.(ASTOperand)
+	if !ok {
+		v.statementStructureError(ctx.GetStart().GetLine())
+		return nil
+	}
+	return ASTOrigin{Address: op}
 }
 
 func (v *progVisitor) buildPrepDefine(ctx *parser.Prep_instructionContext, children []antlr.Tree) interface{} {
@@ -347,17 +422,17 @@ func (v *progVisitor) statementStructureError(line int) {
 	v.errorListener.ProgramError(line, "unexpected statement structure")
 }
 
-func applyDefsToOperand(operand any, defs map[string]any) (any, bool) {
-	nameOp, ok := operand.(ASTName)
+func applyDefsToOperand(operand ASTOperand, defs map[string]ASTOperand) (ASTOperand, bool) {
+	nameOp, ok := operand.Name()
 	if !ok {
-		return nil, false
+		return ASTOperand{}, false
 	}
 
 	nv, ok := defs[string(nameOp)]
 	return nv, ok
 }
 
-func applyDefsToOperands(operands []any, defs map[string]any) bool {
+func applyDefsToOperands(operands ASTOperands, defs map[string]ASTOperand) bool {
 	rok := false
 	for i, op := range operands {
 		nv, ok := applyDefsToOperand(op, defs)
@@ -370,7 +445,7 @@ func applyDefsToOperands(operands []any, defs map[string]any) bool {
 	return rok
 }
 
-func applyDefinitions(ast *AST, defs map[string]any) bool {
+func applyDefinitions(ast *AST, defs map[string]ASTOperand) bool {
 	rok := false
 	for i, st := range ast.Statements {
 		switch tst := st.(type) {
@@ -441,7 +516,7 @@ func (l *ErrorListener) ProgramError(line int, msg string) {
 
 func PreprocessDefinitions(ast *AST) {
 	filtSts := make([]ASTStatement, 0, len(ast.Statements))
-	defs := map[string]any{}
+	defs := map[string]ASTOperand{}
 	for _, st := range ast.Statements {
 		def, ok := st.(ASTPrepDefine)
 		if !ok {

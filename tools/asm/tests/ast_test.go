@@ -38,6 +38,26 @@ func assertAST(t *testing.T, expected, actual *internal.AST) {
 	}
 }
 
+func operand(v any) internal.ASTOperand {
+	switch tv := v.(type) {
+	case int:
+		return internal.ASTOperand{Value: internal.ASTNumber(tv)}
+	case string:
+		if len(tv) == 1 {
+			return internal.ASTOperand{Value: internal.ASTRegister(tv)}
+		}
+		return internal.ASTOperand{Value: internal.ASTName(tv)}
+	}
+
+	panic("unsuported operand in test")
+}
+
+func poperand(v any) internal.ASTOperand {
+	op := operand(v)
+	op.Indirect = true
+	return op
+}
+
 func TestPreprocesor(t *testing.T) {
 	t.Run("apply_defaults", func(t *testing.T) {
 		ast := internal.ParseSrc("", `
@@ -53,12 +73,11 @@ func TestPreprocesor(t *testing.T) {
 		require.False(t, ast.Errors.HasErrors())
 		assertAST(t, &internal.AST{
 			Statements: []internal.ASTStatement{
-				internal.ASTInstruction{OpCode: "lda", Operands: []any{
-					internal.ASTNumber(0x59),
-					internal.ASTRegister("x"),
+				internal.ASTInstruction{OpCode: "lda", Operands: internal.ASTOperands{
+					operand(0x59), operand("x"),
 				}},
-				internal.ASTOrigin{Address: internal.ASTNumber(0x100)},
-				internal.ASTInstruction{OpCode: "ldai", Operands: []any{internal.ASTNumber(100)}},
+				internal.ASTOrigin{Address: operand(0x100)},
+				internal.ASTInstruction{OpCode: "ldai", Operands: internal.ASTOperands{operand(100)}},
 			},
 		}, ast)
 	})
@@ -74,9 +93,9 @@ func TestThatCanParseSource(t *testing.T) {
 		require.False(t, ast.Errors.HasErrors())
 		assertAST(t, &internal.AST{
 			Statements: []internal.ASTStatement{
-				internal.ASTInstruction{OpCode: "opcodea", Operands: []any{}},
-				internal.ASTInstruction{OpCode: "opcodeb", Operands: []any{}},
-				internal.ASTInstruction{OpCode: "opcodec", Operands: []any{}},
+				internal.ASTInstruction{OpCode: "opcodea", Operands: []internal.ASTOperand{}},
+				internal.ASTInstruction{OpCode: "opcodeb", Operands: []internal.ASTOperand{}},
+				internal.ASTInstruction{OpCode: "opcodec", Operands: []internal.ASTOperand{}},
 			},
 		}, ast)
 	})
@@ -90,9 +109,9 @@ func TestThatCanParseSource(t *testing.T) {
 		require.False(t, ast.Errors.HasErrors())
 		assertAST(t, &internal.AST{
 			Statements: []internal.ASTStatement{
-				internal.ASTInstruction{OpCode: "opcodea", Operands: []any{internal.ASTNumber(10)}},
-				internal.ASTInstruction{OpCode: "opcodeb", Operands: []any{internal.ASTNumber(0x1a)}},
-				internal.ASTInstruction{OpCode: "opcodec", Operands: []any{internal.ASTNumber(0xb)}},
+				internal.ASTInstruction{OpCode: "opcodea", Operands: []internal.ASTOperand{operand(10)}},
+				internal.ASTInstruction{OpCode: "opcodeb", Operands: []internal.ASTOperand{operand(0x1a)}},
+				internal.ASTInstruction{OpCode: "opcodec", Operands: []internal.ASTOperand{operand(0xb)}},
 			},
 		}, ast)
 	})
@@ -104,9 +123,9 @@ func TestThatCanParseSource(t *testing.T) {
 		require.False(t, ast.Errors.HasErrors())
 		assertAST(t, &internal.AST{
 			Statements: []internal.ASTStatement{
-				internal.ASTInstruction{OpCode: "opcodea", Operands: []any{
-					internal.ASTNumber(10),
-					internal.ASTRegister("x"),
+				internal.ASTInstruction{OpCode: "opcodea", Operands: []internal.ASTOperand{
+					operand(10),
+					operand("x"),
 				}},
 			},
 		}, ast)
@@ -119,11 +138,9 @@ func TestThatCanParseSource(t *testing.T) {
 		require.False(t, ast.Errors.HasErrors())
 		assertAST(t, &internal.AST{
 			Statements: []internal.ASTStatement{
-				internal.ASTInstruction{OpCode: "opcodea", Operands: []any{
-					internal.ASTParentheses{
-						internal.ASTNumber(10),
-						internal.ASTRegister("x"),
-					},
+				internal.ASTInstruction{OpCode: "opcodea", Operands: []internal.ASTOperand{
+					poperand(10),
+					poperand("x"),
 				}},
 			},
 		}, ast)
@@ -136,11 +153,9 @@ func TestThatCanParseSource(t *testing.T) {
 		require.False(t, ast.Errors.HasErrors())
 		assertAST(t, &internal.AST{
 			Statements: []internal.ASTStatement{
-				internal.ASTInstruction{OpCode: "opcodea", Operands: []any{
-					internal.ASTParentheses{
-						internal.ASTNumber(10),
-					},
-					internal.ASTRegister("x"),
+				internal.ASTInstruction{OpCode: "opcodea", Operands: []internal.ASTOperand{
+					poperand(10),
+					operand("x"),
 				}},
 			},
 		}, ast)
@@ -153,10 +168,8 @@ func TestThatCanParseSource(t *testing.T) {
 		require.False(t, ast.Errors.HasErrors())
 		assertAST(t, &internal.AST{
 			Statements: []internal.ASTStatement{
-				internal.ASTInstruction{OpCode: "opcodea", Operands: []any{
-					internal.ASTParentheses{
-						internal.ASTNumber(10),
-					},
+				internal.ASTInstruction{OpCode: "opcodea", Operands: []internal.ASTOperand{
+					poperand(10),
 				}},
 			},
 		}, ast)
@@ -171,9 +184,9 @@ func TestThatCanParseSource(t *testing.T) {
 		require.False(t, ast.Errors.HasErrors())
 		assertAST(t, &internal.AST{
 			Statements: []internal.ASTStatement{
-				internal.ASTInstruction{OpCode: "opca", Operands: []any{internal.ASTNumber(0x10)}},
+				internal.ASTInstruction{OpCode: "opca", Operands: []internal.ASTOperand{operand(0x10)}},
 				internal.ASTLabel{Name: "test_label"},
-				internal.ASTInstruction{OpCode: "opcb", Operands: []any{internal.ASTNumber(0x20)}},
+				internal.ASTInstruction{OpCode: "opcb", Operands: []internal.ASTOperand{operand(0x20)}},
 			},
 		}, ast)
 	})
@@ -185,7 +198,7 @@ func TestThatCanParseSource(t *testing.T) {
 		require.False(t, ast.Errors.HasErrors())
 		assertAST(t, &internal.AST{
 			Statements: []internal.ASTStatement{
-				internal.ASTOrigin{Address: internal.ASTNumber(0x10)},
+				internal.ASTOrigin{Address: operand(0x10)},
 			},
 		}, ast)
 	})
@@ -198,8 +211,8 @@ func TestThatCanParseSource(t *testing.T) {
 		require.False(t, ast.Errors.HasErrors())
 		assertAST(t, &internal.AST{
 			Statements: []internal.ASTStatement{
-				internal.ASTPrepDefine{Name: "TEST", Value: internal.ASTNumber(10)},
-				internal.ASTPrepDefine{Name: "TEST-100", Value: internal.ASTNumber(0b1001_1100)},
+				internal.ASTPrepDefine{Name: "TEST", Value: operand(10)},
+				internal.ASTPrepDefine{Name: "TEST-100", Value: operand(0b1001_1100)},
 			},
 		}, ast)
 	})
@@ -214,8 +227,8 @@ func TestThatCanParseSource(t *testing.T) {
 		require.False(t, ast.Errors.HasErrors())
 		assertAST(t, &internal.AST{
 			Statements: []internal.ASTStatement{
-				internal.ASTPrepDefine{Name: "TEST", Value: internal.ASTNumber(10)},
-				internal.ASTPrepDefine{Name: "TEST-100", Value: internal.ASTNumber(0b1001_1100)},
+				internal.ASTPrepDefine{Name: "TEST", Value: operand(10)},
+				internal.ASTPrepDefine{Name: "TEST-100", Value: operand(0b1001_1100)},
 			},
 		}, ast)
 	})
