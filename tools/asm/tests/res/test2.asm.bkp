@@ -4,6 +4,8 @@
   php
   php ; some test comment
 
+  asl A
+
   .org $2077
   lda #$00
   lda #$ff   

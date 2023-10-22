@@ -1,0 +1,23 @@
+                          ; this is an nonsense asm program
+                          ; used only for testing the final binary output
+
+0000  08                  php
+0001  08                  php ; some test comment
+
+0002  0A                  asl A
+
+2077                      .org $2077
+2077  A9 00               lda #$00
+2079  A9 FF               lda #$ff
+207B  A9 01               lda #$01
+
+1077                      .org $1077
+1077  AD 1111             lda $1111
+107A                    test_label_1:
+107A  B5 41               lda $41,x
+107C  BD 7710             lda $1077,x
+107F  AD 7A10             lda test_label_1
+
+00000 Total Error(s)
+
+TEST_LABEL_1       107A

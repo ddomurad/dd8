@@ -1,0 +1,19 @@
+0000                     PROCESSOR 65C02
+
+0000  08                  php
+0001  08                  php ; some test comment
+
+0002  A9 10               lda #$10         ; load 16
+0004  A9 10               lda #16           ; load 16
+0006  A9 64               lda #100       ; load 16
+0008  A9 10               lda #$10   ; load 16
+000A  A9 10               lda #$10  ; load 16
+
+000C  A5 55               lda $55   ; zerop page load
+000E  AD 1111             lda $1111 ; absolute loade
+0011  B5 41               lda $41,x
+0013  BD 0041             lda $4100,x
+0016  B9 3311             lda $1133, y
+
+00000 Total Error(s)
+

@@ -13,3 +13,4 @@
   lda $1111 ; absolute loade 
   lda $41,x 
   lda $4100,x 
+  lda $1133, y

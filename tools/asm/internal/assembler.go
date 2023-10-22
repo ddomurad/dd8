@@ -44,7 +44,7 @@ func (c ByteCode) GetAddresses() []int {
 	return addr
 }
 
-type OpcodeAssembler func(inst ASTInstruction) ([]byte, error)
+type OpcodeAssembler func(pcc int, inst ASTInstruction) ([]byte, error)
 
 func substituteLabel(inst *ASTInstruction, labels map[string]int) {
 	for i, op := range inst.Operands {
@@ -135,7 +135,7 @@ func Assemble(ast *AST, opcodeAssembler OpcodeAssembler) (ByteCode, error) {
 		}
 
 		substituteLabel(&inst, labels)
-		opBytes, err := opcodeAssembler(inst)
+		opBytes, err := opcodeAssembler(programCounter, inst)
 		if err != nil {
 			return nil, err
 		}

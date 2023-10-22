@@ -14,4 +14,5 @@ lda 0x55   ; zerop page load
 lda 0x1111 ; absolute loade 
 lda 0x41, x 
 lda 0x4100, x 
+lda 0x1133, y
 

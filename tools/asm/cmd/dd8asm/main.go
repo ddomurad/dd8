@@ -16,7 +16,7 @@ func main() {
 	flag.Parse()
 	tail := flag.Args()
 	if len(tail) != 1 {
-		panic("exaclt one input file required") //todo: ensure a proper helm message is rendered
+		panic("exact one input file required") //todo: ensure a proper help message is rendered
 	}
 
 	if *outFile == "" {
@@ -32,12 +32,14 @@ func main() {
 	ast, err := internal.CompileAST(intpuFile, reader)
 	if err != nil {
 		os.Stderr.WriteString(err.Error())
+		os.Stderr.WriteString("\n")
 		os.Exit(1)
 	}
 
 	byteCode, err := internal.Assemble(ast, assemblers.OpcodeAssemblerW65C02S)
 	if err != nil {
 		os.Stderr.WriteString(err.Error())
+		os.Stderr.WriteString("\n")
 		os.Exit(1)
 	}
 
@@ -45,6 +47,7 @@ func main() {
 	err = os.WriteFile(*outFile, hexOutput, 0644)
 	if err != nil {
 		os.Stderr.WriteString(err.Error())
+		os.Stderr.WriteString("\n")
 		os.Exit(1)
 	}
 

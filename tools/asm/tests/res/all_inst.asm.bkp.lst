@@ -1,0 +1,252 @@
+0000                     PROCESSOR 65C02
+
+                          ; row 0
+0000  00                  brk
+0001  01 01               ora ($01,x)
+0003  04 02               tsb $02
+0005  05 03               ora $03
+0007  06 04               asl $04
+0009  0A                  asl a
+000A  0C 0105             tsb $0501
+000D  0D 0206             ora $0602
+0010  0E 0306             asl $0603
+
+                          ; row 1
+0013  10 4F               bpl 100
+0015  11 07               ora ($07),y
+0017  12 08               ora ($08)
+0019  14 09               trb $09
+001B  15 0A               ora $0a,x
+001D  16 0B               asl $0b,x
+001F  18                  clc
+0020  19 010C             ora $0c01, y
+0023  1A                  inc a
+0024  1C 020D             trb $0d02
+0027  1D 030E             ora $0e03, x
+002A  1E 040F             asl $0f04, x
+
+                          ; row 2
+002D  20 0010             jsr $1000
+0030  21 11               and ($11,x)
+0032  24 12               bit $12
+0034  25 13               and $13
+0036  26 14               rol $14
+0038  28                  plp
+0039  29 15               and #$15
+003B  2A                  rol a
+003C  2C 0115             bit $1501
+003F  2D 0215             and $1502
+0042  2E 0315             rol $1503
+
+                          ; row 3
+0045  30 1D               bmi 100
+0047  31 16               and ($16), y
+0049  32 17               and ($17)
+004B  34 18               bit $18, x
+004D  35 19               and $19, x
+004F  36 1A               rol $1a, x
+0051  38                  sec
+0052  39 011A             and $1a01,y
+0055  3A                  dec a
+0056  3C 021A             bit $1a02, x
+0059  3D 031A             and $1a03, x
+005C  3E 041A             rol $1a04, x
+
+                          ; row 4
+005F  40                  rti
+0060  41 1B               eor ($1b, x)
+0062  45 1C               eor $1c
+0064  46 1D               lsr $1d
+0066  48                  pha
+0067  45 1E               eor $1e
+0069  4A                  lsr a
+006A  4C 011E             jmp $1e01
+006D  4D 021E             eor $1e02
+0070  4E 031E             lsr $1e03
+
+                          ; row 5
+0073  50 EF               bvc 100
+0075  51 1F               eor ($1f), y
+0077  52 20               eor ($20)
+0079  55 21               eor $21, x
+007B  56 22               lsr $22, x
+007D  58                  cli
+007E  59 0122             eor $2201, y
+0081  5A                  phy
+0082  5D 0222             eor $2202, x
+0085  5E 0322             lsr $2203, x
+
+                          ; row 6
+0088  60                  rts
+0089  61 23               adc ($23, x)
+008B  64 24               stz $24
+008D  65 25               adc $25
+008F  66 26               ror $26
+0091  68                  pla
+0092  69 27               adc #$27
+0094  6A                  ror a
+0095  6C 0127             jmp ($2701)
+0098  6D 0227             adc $2702
+009B  6E 0327             ror $2703
+
+                          ; row 7
+009E  70 C4               bvs 100
+00A0  71 28               adc ($28), y
+00A2  72 29               adc ($29)
+00A4  74 2A               stz $2a, x
+00A6  75 2B               adc $2b, x
+00A8  76 2C               ror $2c, x
+00AA  78                  sei
+00AB  79 012C             adc $2c01, y
+00AE  7A                  ply
+00AF  7C 022C             jmp ($2c02, x)
+00B2  7D 032C             adc $2c03, x
+00B5  7E 042C             ror $2c04, x
+
+                          ; row 8
+00B8  80 AA               bra 100
+00BA  81 2E               sta ($2e, x)
+00BC  84 2F               sty $2f
+00BE  85 30               sta $30
+00C0  86 31               stx $31
+00C2  88                  dey
+00C3  89 32               bit #$32
+00C5  8A                  txa
+00C6  8C 0132             sty $3201
+00C9  8D 0232             sta $3202
+00CC  8E 0332             stx $3203
+
+                          ; row 9
+00CF  90 93               bcc 100
+00D1  91 33               sta ($33), y
+00D3  92 34               sta ($34)
+00D5  94 35               sty $35, x
+00D7  95 36               sta $36, x
+00D9  96 37               stx $37, y ; <<<<<<<<
+00DB  98                  tya
+00DC  99 0137             sta $3701, y
+00DF  9A                  txs
+00E0  9C 0237             stz $3702
+00E3  9D 0337             sta $3703, x
+00E6  9E 0437             stz $3704, x
+
+                          ; row a
+00E9  A0 38               ldy #$38
+00EB  A1 39               lda ($39, x)
+00ED  A2 3A               ldx #$3a
+00EF  A4 3B               ldy $3b
+00F1  A5 3C               lda $3c
+00F3  A6 3D               ldx $3d
+00F5  A8                  tay
+00F6  A9 3E               lda #$3e
+00F8  AA                  tax
+00F9  AC 013E             ldy $3e01
+00FC  AD 023E             lda $3e02
+00FF  AE 033E             ldx $3e03
+
+                          ; row b
+0102  B0 C4               bcs 200
+0104  B1 3F               lda ($3f), y
+0106  B2 40               lda ($40)
+0108  B4 41               ldy $41, x
+010A  B5 42               lda $42, x
+010C  B6 43               ldx $43, y
+010E  B8                  clv
+010F  B9 0143             lda $4301, y
+0112  BA                  tsx
+0113  BC 0243             ldy $4302, x
+0116  BD 0343             lda $4303, x
+0119  BE 0443             ldx $4304, y
+
+                          ; row c
+011C  C0 44               cpy #$44
+011E  C1 45               cmp ($45, x)
+0120  C4 46               cpy $46
+0122  C5 47               cmp $47
+0124  C6 48               dec $48
+0126  C8                  iny
+0127  C9 49               cmp #$49
+0129  CA                  dex
+                          ; wai
+012A  CC 0149             cpy $4901
+012D  CD 0249             cmp $4902
+0130  CE 0349             dec $4903
+
+                          ; row d
+0133  D0 93               bne 200
+0135  D1 4A               cmp ($4a), y
+0137  D2 4B               cmp ($4b)
+0139  D5 4C               cmp $4c,x
+013B  D6 4D               dec $4d,x
+013D  D8                  cld
+013E  D9 014D             cmp $4d01, y
+0141  DA                  phx
+                          ;stp
+0142  DD 024D             cmp $4d02, x
+0145  DE 034D             dec $4d03, x
+
+                          ; row e
+0148  E0 4E               cpx #$4e
+014A  E1 4F               sbc ($4f, x)
+014C  E4 50               cpx $50
+014E  E5 51               sbc $51
+0150  E6 52               inc $52
+0152  E8                  inx
+0153  E9 53               sbc #$53
+0155  EA                  nop
+0156  EC 0153             cpx $5301
+0159  ED 0253             sbc $5302
+015C  EE 0353             inc $5303
+
+                          ; row f
+015F  F0 CB               beq 300
+0161  F1 54               sbc ($54), y
+0163  F2 55               sbc ($55)
+0165  F5 56               sbc $56, x
+0167  F6 57               inc $57, x
+0169  F8                  sed
+016A  F9 0157             sbc $5701, y
+016D  FA                  plx
+016E  FD 0257             sbc $5702, x
+0171  FE 0357             inc $5703, x
+
+
+                          ;bbr0 400
+                          ;bbr1 400
+                          ;bbr2 400
+                          ;bbr3 400
+                          ;bbr4 400
+                          ;bbr5 400
+                          ;bbr6 400
+                          ;bbr7 400
+
+                          ;bbs0
+                          ;bbs1
+                          ;bbs2
+                          ;bbs3
+                          ;bbs4
+                          ;bbs5
+                          ;bbs6
+                          ;bbs7
+
+                          ;rmb0 $05
+                          ;rmb1 $05
+                          ;rmb2 $05
+                          ;rmb3 $05
+                          ;rmb4 $05
+                          ;rmb5 $05
+                          ;rmb6 $05
+                          ;rmb7 $05
+
+
+                          ;smb0 $15
+                          ;smb1 $15
+                          ;smb2 $15
+                          ;smb3 $15
+                          ;smb4 $15
+                          ;smb5 $15
+                          ;smb6 $15
+                          ;smb7 $15
+
+00000 Total Error(s)
+

@@ -14,6 +14,8 @@ func assertASTStatement(t *testing.T, expected, actual internal.ASTStatement) {
 	switch et := expected.(type) {
 	case internal.ASTInstruction:
 		at := actual.(internal.ASTInstruction)
+		et.SrcPointer = internal.SrcPointer{}
+		at.SrcPointer = internal.SrcPointer{}
 		require.Equal(t, et, at, "instruction")
 	case internal.ASTLabel:
 		at := actual.(internal.ASTLabel)

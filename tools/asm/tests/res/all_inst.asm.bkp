@@ -1,0 +1,249 @@
+ PROCESSOR 65C02
+
+  ; row 0 
+  brk
+  ora ($01,x)
+  tsb $02
+  ora $03
+  asl $04
+  asl a
+  tsb $0501
+  ora $0602
+  asl $0603
+
+  ; row 1 
+  bpl 100
+  ora ($07),y
+  ora ($08)
+  trb $09
+  ora $0a,x 
+  asl $0b,x 
+  clc 
+  ora $0c01, y
+  inc a
+  trb $0d02
+  ora $0e03, x 
+  asl $0f04, x 
+
+  ; row 2 
+  jsr $1000 
+  and ($11,x)
+  bit $12 
+  and $13 
+  rol $14 
+  plp 
+  and #$15 
+  rol a
+  bit $1501 
+  and $1502 
+  rol $1503 
+
+  ; row 3 
+  bmi 100
+  and ($16), y
+  and ($17)
+  bit $18, x 
+  and $19, x 
+  rol $1a, x 
+  sec 
+  and $1a01,y
+  dec a
+  bit $1a02, x
+  and $1a03, x
+  rol $1a04, x
+
+  ; row 4 
+  rti 
+  eor ($1b, x)
+  eor $1c 
+  lsr $1d 
+  pha 
+  eor $1e 
+  lsr a 
+  jmp $1e01 
+  eor $1e02
+  lsr $1e03
+
+  ; row 5 
+  bvc 100
+  eor ($1f), y
+  eor ($20)
+  eor $21, x 
+  lsr $22, x 
+  cli 
+  eor $2201, y 
+  phy 
+  eor $2202, x 
+  lsr $2203, x 
+
+  ; row 6 
+  rts 
+  adc ($23, x)
+  stz $24
+  adc $25 
+  ror $26 
+  pla 
+  adc #$27 
+  ror a 
+  jmp ($2701)
+  adc $2702 
+  ror $2703 
+
+  ; row 7 
+  bvs 100
+  adc ($28), y 
+  adc ($29)
+  stz $2a, x 
+  adc $2b, x 
+  ror $2c, x 
+  sei 
+  adc $2c01, y 
+  ply
+  jmp ($2c02, x)
+  adc $2c03, x 
+  ror $2c04, x 
+
+  ; row 8 
+  bra 100 
+  sta ($2e, x)
+  sty $2f
+  sta $30
+  stx $31 
+  dey 
+  bit #$32 
+  txa 
+  sty $3201
+  sta $3202
+  stx $3203
+
+  ; row 9 
+  bcc 100
+  sta ($33), y 
+  sta ($34)
+  sty $35, x 
+  sta $36, x 
+  stx $37, y 
+  tya 
+  sta $3701, y 
+  txs 
+  stz $3702 
+  sta $3703, x 
+  stz $3704, x 
+
+  ; row a 
+  ldy #$38 
+  lda ($39, x)
+  ldx #$3a
+  ldy $3b 
+  lda $3c 
+  ldx $3d 
+  tay 
+  lda #$3e 
+  tax 
+  ldy $3e01
+  lda $3e02
+  ldx $3e03
+
+  ; row b 
+  bcs 200
+  lda ($3f), y 
+  lda ($40)
+  ldy $41, x
+  lda $42, x
+  ldx $43, y
+  clv 
+  lda $4301, y 
+  tsx 
+  ldy $4302, x
+  lda $4303, x
+  ldx $4304, y
+
+  ; row c 
+  cpy #$44 
+  cmp ($45, x)
+  cpy $46 
+  cmp $47 
+  dec $48 
+  iny 
+  cmp #$49 
+  dex 
+  ; wai 
+  cpy $4901 
+  cmp $4902 
+  dec $4903 
+
+  ; row d 
+  bne 200
+  cmp ($4a), y 
+  cmp ($4b)
+  cmp $4c,x
+  dec $4d,x
+  cld 
+  cmp $4d01, y 
+  phx 
+  ;stp 
+  cmp $4d02, x
+  dec $4d03, x
+
+  ; row e 
+  cpx #$4e 
+  sbc ($4f, x)
+  cpx $50 
+  sbc $51 
+  inc $52 
+  inx 
+  sbc #$53 
+  nop 
+  cpx $5301 
+  sbc $5302 
+  inc $5303 
+
+  ; row f 
+  beq 300
+  sbc ($54), y 
+  sbc ($55)
+  sbc $56, x 
+  inc $57, x 
+  sed 
+  sbc $5701, y 
+  plx 
+  sbc $5702, x
+  inc $5703, x
+
+
+  ;bbr0 400
+  ;bbr1 400
+  ;bbr2 400
+  ;bbr3 400
+  ;bbr4 400
+  ;bbr5 400
+  ;bbr6 400
+  ;bbr7 400
+
+  ;bbs0
+  ;bbs1
+  ;bbs2
+  ;bbs3
+  ;bbs4
+  ;bbs5
+  ;bbs6
+  ;bbs7
+
+  ;rmb0 $05
+  ;rmb1 $05
+  ;rmb2 $05
+  ;rmb3 $05
+  ;rmb4 $05
+  ;rmb5 $05
+  ;rmb6 $05
+  ;rmb7 $05
+
+
+  ;smb0 $15
+  ;smb1 $15
+  ;smb2 $15
+  ;smb3 $15
+  ;smb4 $15
+  ;smb5 $15
+  ;smb6 $15
+  ;smb7 $15

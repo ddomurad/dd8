@@ -34,7 +34,7 @@ func GetIntelHEX(byteCode internal.ByteCode) []byte {
 	startAddr := addrs[0]
 
 	for _, addr := range addrs {
-		if lastAddr+1 != addr || len(dataLine) >= 0xff {
+		if lastAddr+1 != addr || len(dataLine) >= 0x20 {
 			output += getHEXLine(startAddr, dataLine)
 			startAddr = addr
 			dataLine = []byte{}

@@ -15,6 +15,15 @@ type ASTName string
 type ASTParentheses []any
 type ASTStatement any
 
+type SrcPointer struct {
+	Name string
+	Line int
+}
+
+func (p SrcPointer) String() string {
+	return fmt.Sprintf("%s:%d", p.Name, p.Line)
+}
+
 type ASTLabel struct {
 	Name string
 }
@@ -31,6 +40,8 @@ type ASTPrepDefine struct {
 type ASTInstruction struct {
 	OpCode   ASTName
 	Operands []any
+
+	SrcPointer SrcPointer
 }
 
 type AST struct {
@@ -40,11 +51,14 @@ type AST struct {
 
 type progVisitor struct {
 	parser.BaseDD8ASMVisitor
+
+	srcName       string
 	errorListener *ErrorListener
 }
 
-func newProgVisitor(errorListener *ErrorListener) *progVisitor {
+func newProgVisitor(srcName string, errorListener *ErrorListener) *progVisitor {
 	return &progVisitor{
+		srcName:       srcName,
 		errorListener: errorListener,
 	}
 }
@@ -113,6 +127,10 @@ func (v *progVisitor) VisitInstruction(ctx *parser.InstructionContext) interface
 	inst := ASTInstruction{
 		OpCode:   opcodeStr,
 		Operands: []any{},
+		SrcPointer: SrcPointer{
+			Name: v.srcName,
+			Line: ctx.GetStart().GetLine(),
+		},
 	}
 
 	for _, child := range children[1:] {
@@ -460,7 +478,7 @@ func ParseSrc(srcName string, src string) *AST {
 	parser.AddErrorListener(errorListener)
 	tree := parser.Prog()
 
-	ast := newProgVisitor(errorListener).Visit(tree).(*AST)
+	ast := newProgVisitor(srcName, errorListener).Visit(tree).(*AST)
 	ast.Errors = errorListener.errors
 	return ast
 }
