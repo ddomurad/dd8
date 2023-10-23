@@ -19,11 +19,22 @@ func assertAssembler(t *testing.T, src string, expected []byte) {
 	src += "\n"
 	ast := internal.ParseSrc("test.asm", src)
 	require.False(t, ast.Errors.HasErrors())
-	internal.PreprocessAST(ast)
+	internal.PreprocessAST(ast, nil)
 	require.False(t, ast.Errors.HasErrors())
 	bcode, err := internal.Assemble(ast, assemblers.OpcodeAssemblerW65C02S)
 	require.NoError(t, err)
 	assertByteCodeWithArray(t, expected, bcode)
+}
+
+func assertAssemblerBC(t *testing.T, src string, expected internal.ByteCode) {
+	src += "\n"
+	ast := internal.ParseSrc("test.asm", src)
+	require.False(t, ast.Errors.HasErrors())
+	internal.PreprocessAST(ast, nil)
+	require.False(t, ast.Errors.HasErrors())
+	bcode, err := internal.Assemble(ast, assemblers.OpcodeAssemblerW65C02S)
+	require.NoError(t, err)
+	require.Equal(t, expected, bcode)
 }
 
 func TestThatCanBuildBinaryCode(t *testing.T) {
@@ -408,16 +419,6 @@ func TestThatCanBuildBinaryCode(t *testing.T) {
 	t.Run("inx", func(t *testing.T) {
 		assertAssembler(t, "inx", []byte{0xe8})
 	})
-	t.Run("label_test", func(t *testing.T) {
-		assertAssembler(t, `
-      nop
-      test_label:
-      nop
-      nop
-      lda test_label `,
-			[]byte{0xea, 0xea, 0xea, 0xa5, 0x01},
-		)
-	})
 	t.Run("origin", func(t *testing.T) {
 		assertAssembler(t, `
       .org 0x02
@@ -440,6 +441,102 @@ func TestThatCanBuildBinaryCode(t *testing.T) {
       .org 0x00
       ldai VAR3`,
 			[]byte{0xa9, 0x20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xea},
+		)
+	})
+	t.Run("label_test", func(t *testing.T) {
+		assertAssembler(t, `
+      nop
+      test_label:
+      nop
+      nop
+      lda test_label `,
+			[]byte{0xea, 0xea, 0xea, 0xa5, 0x01},
+		)
+	})
+	t.Run("reverse_label_test", func(t *testing.T) {
+		assertAssembler(t, `
+	     nop
+	     lda test_label
+	     nop
+	     nop
+	     test_label:
+	     nop
+	     nop
+	     `,
+			[]byte{0xea, 0xa5, 0x05, 0xea, 0xea, 0xea, 0xea},
+		)
+	})
+	t.Run("reverse_label_test_page_change", func(t *testing.T) {
+		eb := internal.ByteCode{}
+		_ = eb.SetBytes(0x00, []byte{0xea, 0xad, 0xff, 0x01, 0xea, 0xea})
+		_ = eb.SetBytes(0x01ff, []byte{0xea, 0xea})
+		assertAssemblerBC(t, `
+      nop
+      lda test_label
+      nop
+      nop
+      .org 0x01ff
+      test_label:
+      nop
+      nop
+	     `,
+			eb,
+		)
+	})
+	t.Run("reverse_label_test_page_change2", func(t *testing.T) {
+		eb := internal.ByteCode{}
+		_ = eb.SetBytes(0x00, []byte{0x10, 0x04, 0xad, 0xff, 0x01, 0xea, 0xea})
+		_ = eb.SetBytes(0x01ff, []byte{0xea, 0xea})
+		assertAssemblerBC(t, `
+      bpl im_label
+      lda test_label
+      nop
+      im_label:
+      nop
+      .org 0x01ff
+      test_label:
+      nop
+      nop
+	     `,
+			eb,
+		)
+	})
+	t.Run("reverse_label_test_page_change3", func(t *testing.T) {
+		eb := internal.ByteCode{}
+		_ = eb.SetBytes(0xf9, []byte{0x10, 0x06, 0xad, 0xff, 0x01, 0xad, 0x01, 0x01, 0xea})
+		_ = eb.SetBytes(0x01ff, []byte{0xea, 0xea})
+		assertAssemblerBC(t, `
+      .org 0xf9
+      bpl im_label
+      lda test_label
+      lda  im_label
+      im_label:
+      nop
+      .org 0x01ff
+      test_label:
+      nop
+      nop
+	     `,
+			eb,
+		)
+	})
+	t.Run("reverse_label_test_page_change4", func(t *testing.T) {
+		eb := internal.ByteCode{}
+		_ = eb.SetBytes(0xf8, []byte{0x10, 0x05, 0xad, 0xff, 0x01, 0xa5, 0xff, 0xea})
+		_ = eb.SetBytes(0x01ff, []byte{0xea, 0xea})
+		assertAssemblerBC(t, `
+      .org 0xf8
+      bpl im_label
+      lda test_label
+      lda  im_label
+      im_label:
+      nop
+      .org 0x01ff
+      test_label:
+      nop
+      nop
+	     `,
+			eb,
 		)
 	})
 }

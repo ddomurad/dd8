@@ -12,6 +12,7 @@ statement
 
 prep_instruction
   : P_ORG argument
+  | P_INC str
   | P_DEF '(' EOL prep_def_arg_lines EOL ')'
   | P_DEF prep_def_args
   ;
@@ -40,7 +41,11 @@ arglist
   ;
 
 argument
-  : (num | reg | name)
+  : (num | reg | name | str)
+  ;
+
+str 
+  : STR
   ;
 
 num
@@ -61,9 +66,14 @@ label
 
 P_DEF: '.def';
 P_ORG: '.org';
+P_INC: '.inc';
 
 REG
   : [A-Z]
+  ;
+
+STR 
+  : '"' ( '""' | ~["\r\n] )* '"'
   ;
 
 NAME

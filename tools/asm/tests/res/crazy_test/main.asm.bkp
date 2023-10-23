@@ -1,0 +1,16 @@
+ PROCESSOR 65C02
+
+ .ORG 0x0f00
+simple_add:
+  lda $00 
+  adc $01 
+  sta $02
+  rts
+
+ .ORG 0x1000
+  lda #$72 
+  sta $00
+  lda #$1c
+  sta $01
+  jsr simple_add
+  

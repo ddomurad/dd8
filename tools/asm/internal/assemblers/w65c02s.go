@@ -236,7 +236,7 @@ var (
 	}
 )
 
-func prepInstruction(inst internal.ASTInstruction) (indirect bool, opcode string, arg1u *uint16, arg1r *byte, arg2u *uint16, arg2r *byte, opcnt int, err error) {
+func prepInstruction(inst internal.ASTStatement) (indirect bool, opcode string, arg1u *uint16, arg1r *byte, arg2u *uint16, arg2r *byte, opcnt int, err error) {
 	indirect = inst.Operands.Indirect(0) || inst.Operands.Indirect(1)
 	opcode = string(inst.OpCode)
 
@@ -290,7 +290,6 @@ func prepInstruction(inst internal.ASTInstruction) (indirect bool, opcode string
 		}
 		v2b := v2[0]
 		arg2r = &v2b
-
 	}
 
 	return
@@ -312,7 +311,7 @@ func is8bit(num *uint16) bool {
 	return num != nil && *num <= 0xff
 }
 
-func OpcodeAssemblerW65C02S(pc int, inst internal.ASTInstruction) ([]byte, error) {
+func OpcodeAssemblerW65C02S(pc int, inst internal.ASTStatement, ignoreRelJmp bool) ([]byte, error) {
 	indirect, opcode, arg1, arg1r, arg2, arg2r, opcnt, err := prepInstruction(inst)
 	if err != nil {
 		return nil, err
@@ -335,7 +334,9 @@ func OpcodeAssemblerW65C02S(pc int, inst internal.ASTInstruction) ([]byte, error
 		if ok {
 			rj := (int(*arg1) - pc) - 0x02
 			if rj > 127 || rj < -128 {
-				return nil, fmt.Errorf("relative jump to large at %s", inst.SrcPointer.String())
+				if !ignoreRelJmp {
+					return nil, fmt.Errorf("relative jump to large at %s", inst.SrcPointer.String())
+				}
 			}
 			return []byte{bc, byte(rj)}, nil
 		}

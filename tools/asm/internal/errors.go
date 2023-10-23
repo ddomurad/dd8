@@ -7,7 +7,7 @@ type SourceErrorType string
 const (
 	SourceErrorTypeSyntaxError              SourceErrorType = "syntax_err"
 	SourceErrorTypeUnexpectedStructureError SourceErrorType = "struc_err"
-	SourceErrorTypeProgramError             SourceErrorType = "prog_err"
+	SourceErrorTypeEvalError                SourceErrorType = "eval_err"
 )
 
 type SourceError struct {
@@ -19,8 +19,8 @@ type SourceError struct {
 }
 
 func (r SourceError) Error() string {
-	if r.Type == SourceErrorTypeProgramError {
-		return fmt.Sprintf("[%s] %s %s", r.Type, r.SrcName, r.Msg)
+	if r.Type == SourceErrorTypeEvalError {
+		return fmt.Sprintf("[%s] %s:%d %s", r.Type, r.SrcName, r.Line, r.Msg)
 	}
 
 	if r.Type == SourceErrorTypeUnexpectedStructureError {

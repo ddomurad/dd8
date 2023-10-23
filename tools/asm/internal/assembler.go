@@ -44,9 +44,9 @@ func (c ByteCode) GetAddresses() []int {
 	return addr
 }
 
-type OpcodeAssembler func(pcc int, inst ASTInstruction) ([]byte, error)
+type OpcodeAssembler func(pcc int, inst ASTStatement, ignoreRelJmp bool) ([]byte, error)
 
-func substituteLabel(inst *ASTInstruction, labels map[string]int) {
+func substituteLabel(ast *AST, inst ASTStatement, labels map[string]int) ASTStatement {
 	for i, op := range inst.Operands {
 		strVal, ok := op.Name()
 		if !ok {
@@ -55,8 +55,11 @@ func substituteLabel(inst *ASTInstruction, labels map[string]int) {
 		lblAddr, ok := labels[string(strVal)]
 		if ok {
 			inst.Operands[i].Value = ASTNumber(lblAddr)
+		} else if ast.HasLabel(string(strVal)) {
+			inst.Operands[i].Value = ASTNumber(0x00) //note: temp. replace future label with 0x00
 		}
 	}
+	return inst
 }
 
 func EnsRegister(operands []any, index int) (string, error) {
@@ -72,8 +75,12 @@ func EnsRegister(operands []any, index int) (string, error) {
 	return string(sv), nil
 }
 
-func Ens16bit(operand ASTOperand, index int) (uint16, error) {
-	v, ok := operand.Number()
+func Ens16bit(operands []ASTOperand, index int) (uint16, error) {
+	if len(operands) <= index {
+		return 0, fmt.Errorf("expected at least %d operands", index)
+	}
+
+	v, ok := operands[0].Number()
 	if !ok || v > 0xffff || v < 0 {
 		return 0, fmt.Errorf("expected 16bit value, got: %x (hex)", v)
 	}
@@ -99,46 +106,53 @@ func Ens8bit(num ASTNumber) (uint8, error) {
 	return uint8(num), nil
 }
 
-func Assemble(ast *AST, opcodeAssembler OpcodeAssembler) (ByteCode, error) {
-	programCounter := 0x00
-	byteCode := make(ByteCode)
+func Assemble(oast *AST, opcodeAssembler OpcodeAssembler) (ByteCode, error) {
 	labels := map[string]int{}
+	prevByteCode := make(ByteCode)
+	passCnt := 0
 
-	for _, s := range ast.Statements {
-		lbl, ok := s.(ASTLabel)
-		if ok {
-			labels[lbl.Name] = programCounter
-			continue
-		}
-
-		org, ok := s.(ASTOrigin)
-		if ok {
-			p0, err := Ens16bit(org.Address, 0)
-			if err != nil {
-				return byteCode, err
+	for {
+		programCounter := 0x00
+		byteCode := make(ByteCode)
+		astc := oast.Copy()
+		for _, s := range astc.Statements {
+			if s.Type == ASTStatementTypeLabel {
+				labels[s.Name] = programCounter
+				continue
 			}
-			programCounter = int(p0)
-			continue
+
+			if s.Type == ASTStatementTypeOrigin {
+				p0, ok := s.Operands.Number(0)
+				if !ok {
+					return byteCode, fmt.Errorf("expected exaclty 1 operand")
+				}
+				programCounter = int(p0)
+				continue
+			}
+
+			if s.Type != ASTStatementTypeInstruction {
+				return nil, fmt.Errorf("unexpected statement: %v", s.Type)
+			}
+
+			s = substituteLabel(astc, s, labels)
+			opBytes, err := opcodeAssembler(programCounter, s, passCnt == 0)
+			if err != nil {
+				return nil, err
+			}
+			err = byteCode.SetBytes(programCounter, opBytes)
+			if err != nil {
+				return nil, err
+			}
+			programCounter += len(opBytes)
 		}
 
-		inst, ok := s.(ASTInstruction)
-		if !ok {
-			return nil, fmt.Errorf("unexpected statement: %v", reflect.TypeOf(inst).String())
+		if reflect.DeepEqual(prevByteCode, byteCode) {
+			return byteCode, nil
 		}
 
-		substituteLabel(&inst, labels)
-		opBytes, err := opcodeAssembler(programCounter, inst)
-		if err != nil {
-			return nil, err
-		}
-		err = byteCode.SetBytes(programCounter, opBytes)
-		if err != nil {
-			return nil, err
-		}
-		programCounter += len(opBytes)
+		prevByteCode = byteCode
+		passCnt++
 	}
-
-	return byteCode, nil
 }
 
 func AssembleSrc(srcName string, reader SourceReader, opcoOpcodeAssembler OpcodeAssembler) (ByteCode, error) {
@@ -147,7 +161,7 @@ func AssembleSrc(srcName string, reader SourceReader, opcoOpcodeAssembler Opcode
 		return nil, err
 	}
 
-	PreprocessAST(ast)
+	PreprocessAST(ast, reader)
 	if ast.Errors.HasErrors() {
 		return nil, ast.Errors
 	}

@@ -1,0 +1,20 @@
+0000                     PROCESSOR 65C02
+
+0F00                     .ORG 0x0f00
+0F00                    simple_add:
+0F00  A5 00               lda $00
+0F02  65 01               adc $01
+0F04  85 02               sta $02
+0F06  60                  rts
+
+1000                     .ORG 0x1000
+1000  A9 72               lda #$72
+1002  85 00               sta $00
+1004  A9 1C               lda #$1c
+1006  85 01               sta $01
+1008  20 000F             jsr simple_add
+
+
+00000 Total Error(s)
+
+SIMPLE_ADD         0F00

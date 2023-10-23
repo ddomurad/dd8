@@ -2,6 +2,7 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"os"
 	"path"
 
@@ -15,11 +16,19 @@ func main() {
 
 	flag.Parse()
 	tail := flag.Args()
-	if len(tail) != 1 {
-		panic("exact one input file required") //todo: ensure a proper help message is rendered
+	if len(tail) == 0 {
+		os.Stderr.WriteString("command line error: missing source file")
+		os.Stderr.WriteString("\n")
+		os.Exit(1)
+	}
+	if len(tail) > 1 {
+		os.Stderr.WriteString(fmt.Sprintf("command line error: unexpected argument '%s'\n", tail[len(tail)-1]))
+		os.Exit(1)
 	}
 
 	if *outFile == "" {
+		os.Stderr.WriteString("command line error: missing output file")
+		os.Stderr.WriteString("\n")
 		flag.PrintDefaults()
 		os.Exit(1)
 		return
@@ -29,14 +38,8 @@ func main() {
 	intpuFile := path.Base(tail[0])
 
 	reader := internal.NewFileSourceReader("./" + worksparceDir)
-	ast, err := internal.CompileAST(intpuFile, reader)
-	if err != nil {
-		os.Stderr.WriteString(err.Error())
-		os.Stderr.WriteString("\n")
-		os.Exit(1)
-	}
+	byteCode, err := internal.AssembleSrc(intpuFile, reader, assemblers.OpcodeAssemblerW65C02S)
 
-	byteCode, err := internal.Assemble(ast, assemblers.OpcodeAssemblerW65C02S)
 	if err != nil {
 		os.Stderr.WriteString(err.Error())
 		os.Stderr.WriteString("\n")

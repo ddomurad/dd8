@@ -11,9 +11,8 @@ import (
 
 type ASTNumber int64
 type ASTRegister string
+type ASTString string
 type ASTName string
-
-type ASTStatement any
 
 type ASTOperand struct {
 	Value    any
@@ -76,6 +75,14 @@ func (ol ASTOperands) Name(index int) (ASTName, bool) {
 	return v, ok
 }
 
+func (ol ASTOperands) String(index int) (ASTString, bool) {
+	if len(ol) <= index {
+		return ASTString(""), false
+	}
+	v, ok := ol[index].Value.(ASTString)
+	return v, ok
+}
+
 func (ol ASTOperands) Indirect(index int) bool {
 	if len(ol) <= index {
 		return false
@@ -92,29 +99,59 @@ func (p SrcPointer) String() string {
 	return fmt.Sprintf("%s:%d", p.Name, p.Line)
 }
 
-type ASTLabel struct {
-	Name string
-}
+type ASTStatementType string
 
-type ASTOrigin struct {
-	Address ASTOperand
-}
+const (
+	ASTStatementTypeInstruction ASTStatementType = "instr"
+	ASTStatementTypeOrigin      ASTStatementType = ".org"
+	ASTStatementTypePrepDefine  ASTStatementType = ".def"
+	ASTStatementTypeInclude     ASTStatementType = ".inc"
+	ASTStatementTypeLabel       ASTStatementType = "label"
+)
 
-type ASTPrepDefine struct {
-	Name  string
-	Value ASTOperand
-}
+type ASTStatement struct {
+	Type ASTStatementType
 
-type ASTInstruction struct {
+	Name     string
 	OpCode   ASTName
 	Operands ASTOperands
 
 	SrcPointer SrcPointer
 }
 
+func (s ASTStatement) Copy() ASTStatement {
+	to := s.Operands
+	s.Operands = make(ASTOperands, len(s.Operands))
+	copy(s.Operands, to)
+	return s
+}
+
 type AST struct {
 	Statements []ASTStatement
 	Errors     AssemblerError
+}
+
+func (ast *AST) HasLabel(name string) bool {
+	for _, s := range ast.Statements {
+		if s.Type == ASTStatementTypeLabel {
+			if s.Name == name {
+				return true
+			}
+		}
+	}
+	return false
+}
+
+func (t *AST) Copy() *AST {
+	newAst := AST{
+		Statements: make([]ASTStatement, len(t.Statements)),
+	}
+
+	for i, s := range t.Statements {
+		newAst.Statements[i] = s.Copy()
+	}
+
+	return &newAst
 }
 
 type progVisitor struct {
@@ -157,12 +194,15 @@ func (v *progVisitor) VisitProg(ctx *parser.ProgContext) interface{} {
 		}
 
 		switch tres := result.(type) {
-		case []interface{}:
+		case []ASTStatement:
 			for _, st := range tres {
 				ast.Statements = append(ast.Statements, st)
 			}
-		case interface{}:
+		case ASTStatement:
 			ast.Statements = append(ast.Statements, tres)
+		default:
+			v.statementStructureError(ctx.GetStart().GetLine())
+			return nil
 		}
 	}
 
@@ -192,7 +232,8 @@ func (v *progVisitor) VisitInstruction(ctx *parser.InstructionContext) interface
 		return nil
 	}
 
-	inst := ASTInstruction{
+	inst := ASTStatement{
+		Type:     ASTStatementTypeInstruction,
 		OpCode:   opcodeStr,
 		Operands: ASTOperands{},
 		SrcPointer: SrcPointer{
@@ -213,20 +254,6 @@ func (v *progVisitor) VisitInstruction(ctx *parser.InstructionContext) interface
 		}
 		inst.Operands = append(inst.Operands, operands...)
 	}
-
-	// if len(children) > 2 {
-	// 	v.statementStructureError(ctx.GetStart().GetLine())
-	// 	return nil
-	// }
-	//
-	// if len(children) == 2 {
-	// 	inst.Operands, ok = v.Visit(children[1].(antlr.ParseTree)).([]interface{})
-	// 	if !ok {
-	// 		v.statementStructureError(ctx.GetStart().GetLine())
-	// 		return nil
-	// 	}
-	// }
-
 	return inst
 }
 
@@ -274,6 +301,12 @@ func (v *progVisitor) VisitArgument(ctx *parser.ArgumentContext) interface{} {
 	return ASTOperand{Value: cr}
 }
 
+func (v *progVisitor) VisitStr(ctx *parser.StrContext) interface{} {
+	str := ctx.STR().GetText()
+	str = strings.ReplaceAll(str, "\"", "")
+	return ASTString(str)
+}
+
 func (v *progVisitor) VisitNum(ctx *parser.NumContext) interface{} {
 	children := ctx.GetChildren()
 	if len(children) != 1 {
@@ -319,7 +352,14 @@ func (v *progVisitor) VisitReg(ctx *parser.RegContext) interface{} {
 }
 
 func (v *progVisitor) VisitLabel(ctx *parser.LabelContext) interface{} {
-	return ASTLabel{Name: ctx.NAME().GetText()}
+	return ASTStatement{
+		Type: ASTStatementTypeLabel,
+		Name: ctx.NAME().GetText(),
+		SrcPointer: SrcPointer{
+			Name: v.srcName,
+			Line: ctx.GetStart().GetLine(),
+		},
+	}
 }
 
 func (v *progVisitor) VisitPrep_instruction(ctx *parser.Prep_instructionContext) interface{} {
@@ -337,6 +377,8 @@ func (v *progVisitor) VisitPrep_instruction(ctx *parser.Prep_instructionContext)
 
 	prepInst := insType.GetText()
 	switch prepInst {
+	case ".inc":
+		return v.buildPrepInc(ctx, children[1:])
 	case ".org":
 		return v.buildPrepOrigin(ctx, children[1:])
 	case ".def":
@@ -354,16 +396,21 @@ func (v *progVisitor) VisitPrep_def_args(ctx *parser.Prep_def_argsContext) inter
 		return nil
 	}
 
-	return []interface{}{
-		ASTPrepDefine{
-			Name:  ctx.Name().GetText(),
-			Value: v.VisitArgument(argCtx).(ASTOperand),
+	return []ASTStatement{
+		{
+			Type:     ASTStatementTypePrepDefine,
+			Name:     ctx.Name().GetText(),
+			Operands: ASTOperands{v.VisitArgument(argCtx).(ASTOperand)},
+			SrcPointer: SrcPointer{
+				Name: v.srcName,
+				Line: ctx.GetStart().GetLine(),
+			},
 		}}
 }
 
 func (v *progVisitor) VisitPrep_def_arg_lines(ctx *parser.Prep_def_arg_linesContext) interface{} {
 	children := ctx.GetChildren()
-	defs := []interface{}{}
+	defs := []ASTStatement{}
 
 	for _, child := range children {
 		vc := v.Visit(child.(antlr.ParseTree))
@@ -371,9 +418,9 @@ func (v *progVisitor) VisitPrep_def_arg_lines(ctx *parser.Prep_def_arg_linesCont
 			continue
 		}
 		switch tc := vc.(type) {
-		case []interface{}:
+		case []ASTStatement:
 			defs = append(defs, tc...)
-		case ASTPrepDefine:
+		case ASTStatement:
 			defs = append(defs, tc)
 		default:
 			v.statementStructureError(ctx.GetStart().GetLine())
@@ -395,11 +442,18 @@ func (v *progVisitor) buildPrepOrigin(ctx *parser.Prep_instructionContext, child
 		v.statementStructureError(ctx.GetStart().GetLine())
 		return nil
 	}
-	return ASTOrigin{Address: op}
+	return ASTStatement{
+		Type:     ASTStatementTypeOrigin,
+		Operands: ASTOperands{op},
+		SrcPointer: SrcPointer{
+			Name: v.srcName,
+			Line: ctx.GetStart().GetLine(),
+		},
+	}
 }
 
 func (v *progVisitor) buildPrepDefine(ctx *parser.Prep_instructionContext, children []antlr.Tree) interface{} {
-	defs := make([]interface{}, 0, len(children))
+	defs := make([]ASTStatement, 0, len(children))
 	for _, c := range children {
 		vc := v.Visit(c.(antlr.ParseTree))
 		if vc == nil {
@@ -407,7 +461,7 @@ func (v *progVisitor) buildPrepDefine(ctx *parser.Prep_instructionContext, child
 		}
 
 		switch tv := vc.(type) {
-		case []interface{}:
+		case []ASTStatement:
 			defs = append(defs, tv...)
 		default:
 			v.statementStructureError(ctx.GetStart().GetLine())
@@ -416,6 +470,28 @@ func (v *progVisitor) buildPrepDefine(ctx *parser.Prep_instructionContext, child
 	}
 
 	return defs
+}
+
+func (v *progVisitor) buildPrepInc(ctx *parser.Prep_instructionContext, children []antlr.Tree) interface{} {
+	if len(children) != 1 {
+		v.statementStructureError(ctx.GetStart().GetLine())
+		return nil
+	}
+
+	vc := v.Visit(children[0].(antlr.ParseTree))
+	if vc == nil {
+		v.statementStructureError(ctx.GetStart().GetLine())
+		return nil
+	}
+
+	return []ASTStatement{{
+		Type:     ASTStatementTypeInclude,
+		Operands: []ASTOperand{{Value: vc}},
+		SrcPointer: SrcPointer{
+			Name: v.srcName,
+			Line: ctx.GetStart().GetLine(),
+		}},
+	}
 }
 
 func (v *progVisitor) statementStructureError(line int) {
@@ -448,20 +524,8 @@ func applyDefsToOperands(operands ASTOperands, defs map[string]ASTOperand) bool 
 func applyDefinitions(ast *AST, defs map[string]ASTOperand) bool {
 	rok := false
 	for i, st := range ast.Statements {
-		switch tst := st.(type) {
-		case ASTOrigin:
-			nv, ok := applyDefsToOperand(tst.Address, defs)
-			if ok {
-				tst.Address = nv
-				ast.Statements[i] = tst
-				rok = ok
-			}
-		case ASTInstruction:
-			rok = rok || applyDefsToOperands(tst.Operands, defs)
-			ast.Statements[i] = tst
-		default:
-			continue
-		}
+		rok = rok || applyDefsToOperands(st.Operands, defs)
+		ast.Statements[i] = st
 	}
 
 	return rok
@@ -518,20 +582,22 @@ func PreprocessDefinitions(ast *AST) {
 	filtSts := make([]ASTStatement, 0, len(ast.Statements))
 	defs := map[string]ASTOperand{}
 	for _, st := range ast.Statements {
-		def, ok := st.(ASTPrepDefine)
-		if !ok {
+
+		if st.Type != ASTStatementTypePrepDefine {
 			filtSts = append(filtSts, st)
 			continue
 		}
-		_, ok = defs[def.Name]
+		_, ok := defs[st.Name]
 		if ok {
 			ast.Errors.Append(SourceError{
-				Type: SourceErrorTypeProgramError,
-				Msg:  fmt.Sprintf("label redefinition: '%s'", def.Name),
+				Type:    SourceErrorTypeEvalError,
+				SrcName: st.SrcPointer.Name,
+				Line:    st.SrcPointer.Line,
+				Msg:     fmt.Sprintf("label redefinition: '%s'", st.Name),
 			})
 		}
 
-		defs[def.Name] = def.Value
+		defs[st.Name] = st.Operands[0]
 	}
 
 	ast.Statements = filtSts
@@ -539,7 +605,45 @@ func PreprocessDefinitions(ast *AST) {
 	}
 }
 
-func PreprocessAST(ast *AST) {
+func PreprocessIncludes(ast *AST, reader SourceReader) bool {
+	updated := false
+	statements := make([]ASTStatement, 0, len(ast.Statements))
+	for _, s := range ast.Statements {
+		if s.Type == ASTStatementTypeInclude {
+			updated = true
+			srcName, ok := s.Operands.String(0)
+			if !ok {
+				ast.Errors.Append(SourceError{
+					Type:    SourceErrorTypeEvalError,
+					SrcName: s.SrcPointer.Name,
+					Line:    s.SrcPointer.Line,
+					Msg:     "include source name expected to be a string",
+				})
+			}
+			incAst, err := CompileAST(string(srcName), reader)
+			if err != nil {
+				ast.Errors.Append(SourceError{
+					Type:    SourceErrorTypeEvalError,
+					SrcName: s.SrcPointer.Name,
+					Line:    s.SrcPointer.Line,
+					Msg:     fmt.Sprintf("failed to include src '%s'. err: %v", srcName, err),
+				})
+				return false
+			}
+			statements = append(statements, incAst.Statements...)
+		} else {
+			statements = append(statements, s)
+		}
+	}
+
+	ast.Statements = statements
+	return updated
+}
+
+func PreprocessAST(ast *AST, reader SourceReader) {
+	for PreprocessIncludes(ast, reader) {
+	}
+
 	PreprocessDefinitions(ast)
 }
 

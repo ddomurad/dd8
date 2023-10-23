@@ -29,7 +29,7 @@ func TestASTErrorHandling(t *testing.T) {
       ldai 0x10,x,
       `)
 		require.Len(t, ast.Errors.Errors, 3)
-		require.Equal(t, "[syntax_err] test.asm:2:18 extraneous input '\\n' expecting {REG, NAME, HEX_NUM, BIN_NUM, DEC_NUM}", ast.Errors.Errors[0].Error())
+		require.Equal(t, "[syntax_err] test.asm:2:18 extraneous input '\\n' expecting {REG, STR, NAME, HEX_NUM, BIN_NUM, DEC_NUM}", ast.Errors.Errors[0].Error())
 		require.Equal(t, "[syntax_err] test.asm:3:11 mismatched input '0x10' expecting EOL", ast.Errors.Errors[1].Error())
 		require.Equal(t, "[struc_err] test.asm:2 unexpected statement structure", ast.Errors.Errors[2].Error())
 	})
