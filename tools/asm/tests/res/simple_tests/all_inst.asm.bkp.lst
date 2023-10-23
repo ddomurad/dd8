@@ -122,7 +122,7 @@
 00D3  92 34               sta ($34)
 00D5  94 35               sty $35, x
 00D7  95 36               sta $36, x
-00D9  96 37               stx $37, y ; <<<<<<<<
+00D9  96 37               stx $37, y
 00DB  98                  tya
 00DC  99 0137             sta $3701, y
 00DF  9A                  txs
@@ -210,43 +210,43 @@
 016E  FD 0257             sbc $5702, x
 0171  FE 0357             inc $5703, x
 
+0174                    label_1:
+0174  0F 28 FD            bbr0 40, label_1
+0177  1F 28 FA            bbr1 40, label_1
+017A  2F 28 F7            bbr2 40, label_1
+017D  3F 28 F4            bbr3 40, label_1
+0180  4F 28 F1            bbr4 40, label_1
+0183  5F 28 EE            bbr5 40, label_1
+0186  6F 28 EB            bbr6 40, label_1
+0189  7F 28 E8            bbr7 40, label_1
 
-                          ;bbr0 400
-                          ;bbr1 400
-                          ;bbr2 400
-                          ;bbr3 400
-                          ;bbr4 400
-                          ;bbr5 400
-                          ;bbr6 400
-                          ;bbr7 400
+018C  8F 01 E5            bbs0 0x01, label_1
+018F  9F 02 E2            bbs1 0x02, label_1
+0192  AF 03 DF            bbs2 0x03, label_1
+0195  BF 04 DC            bbs3 0x04, label_1
+0198  CF 05 D9            bbs4 0x05, label_1
+019B  DF 06 D6            bbs5 0x06, label_1
+019E  EF 07 D3            bbs6 0x07, label_1
+01A1  FF 08 D0            bbs7 0x08, label_1
 
-                          ;bbs0
-                          ;bbs1
-                          ;bbs2
-                          ;bbs3
-                          ;bbs4
-                          ;bbs5
-                          ;bbs6
-                          ;bbs7
+01A4  07 01               rmb0 $01
+01A6  17 02               rmb1 $02
+01A8  27 03               rmb2 $03
+01AA  37 04               rmb3 $04
+01AC  47 05               rmb4 $05
+01AE  57 06               rmb5 $06
+01B0  67 07               rmb6 $07
+01B2  77 08               rmb7 $08
 
-                          ;rmb0 $05
-                          ;rmb1 $05
-                          ;rmb2 $05
-                          ;rmb3 $05
-                          ;rmb4 $05
-                          ;rmb5 $05
-                          ;rmb6 $05
-                          ;rmb7 $05
-
-
-                          ;smb0 $15
-                          ;smb1 $15
-                          ;smb2 $15
-                          ;smb3 $15
-                          ;smb4 $15
-                          ;smb5 $15
-                          ;smb6 $15
-                          ;smb7 $15
+01B4  87 11               smb0 $11
+01B6  97 12               smb1 $12
+01B8  A7 13               smb2 $13
+01BA  B7 14               smb3 $14
+01BC  C7 15               smb4 $15
+01BE  D7 16               smb5 $16
+01C0  E7 17               smb6 $17
+01C2  F7 18               smb7 $18
 
 00000 Total Error(s)
 
+LABEL_1            0174

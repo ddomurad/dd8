@@ -237,21 +237,18 @@ var (
 )
 
 func prepInstruction(inst internal.ASTStatement) (indirect bool, opcode string, arg1u *uint16, arg1r *byte, arg2u *uint16, arg2r *byte, opcnt int, err error) {
+	operands := inst.Operands
+
 	indirect = inst.Operands.Indirect(0) || inst.Operands.Indirect(1)
 	opcode = string(inst.OpCode)
-
 	arg1u = nil
 	arg1r = nil
 	arg2u = nil
 	arg2r = nil
-	opcnt = 0
+	opcnt = len(operands)
 	err = nil
 
-	operands := inst.Operands
-	opLen := len(operands)
-
-	if opLen >= 1 {
-		opcnt = 1
+	if opcnt >= 1 {
 		v1r, ok := operands.Register(0)
 		if ok {
 			v1rb := v1r[0]
@@ -270,9 +267,7 @@ func prepInstruction(inst internal.ASTStatement) (indirect bool, opcode string, 
 			arg1u = &v1u16
 		}
 	}
-
-	if opLen == 2 {
-		opcnt = 2
+	if opcnt >= 2 {
 		v2n, ok := operands.Number(1)
 		if ok {
 			v2u16 := uint16(v2n)
@@ -405,23 +400,27 @@ func OpcodeAssemblerW65C02S(pc int, inst internal.ASTStatement, ignoreRelJmp boo
 		if ok {
 			return []byte{bc}, nil
 		}
-	} else if !indirect && arg1 != nil && is4bit(arg2) { // rmb, smb
-		if is8bit(arg1) {
-			bc, ok := zpBitInstructions[opcode]
-			if ok {
-				return []byte{bc + byte(*arg2)<<4, byte(*arg1)}, nil
-			}
-		}
-
-		bc, ok := relativeBitInstructions[opcode]
+	} else if !indirect && is4bit(arg1) && is8bit(arg2) && opcnt == 2 { // rmb, smb
+		bc, ok := zpBitInstructions[opcode]
 		if ok {
-
-			rj := (int(*arg1) - pc) - 0x02
-			if rj > 127 || rj < -128 {
-				return nil, fmt.Errorf("relative jump to large at %s", inst.SrcPointer.String())
+			return []byte{bc + byte(*arg1)<<4, byte(*arg2)}, nil
+		}
+	} else if !indirect && arg1 != nil && arg2 != nil && opcnt == 3 {
+		arg3, arg3isNum := inst.Operands.Number(2)
+		relative := !inst.Operands.Indirect(2)
+		if arg3isNum && is4bit(arg1) && is8bit(arg2) {
+			bc, ok := relativeBitInstructions[opcode]
+			if ok {
+				rj := int(arg3)
+				if relative {
+					rj -= pc + 0x03
+				}
+				if rj > 127 || rj < -128 {
+					return nil, fmt.Errorf("relative jump to large at %s", inst.SrcPointer.String())
+				}
+				return []byte{bc + byte(*arg1)<<4, byte(*arg2), byte(rj)}, nil
+				// return []byte{bc + byte(*arg1)<<4}, nil
 			}
-			return []byte{bc + byte(*arg2)<<4, byte(rj)}, nil
-			// return []byte{bc + byte(*arg1)<<4}, nil
 		}
 	}
 

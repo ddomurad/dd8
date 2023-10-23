@@ -30,6 +30,7 @@ instruction
   | name arglist_p 
   | name arglist 
   | name arglist_p ',' arglist
+  | name arglist ',' arglist_p
   ;
 
 arglist_p
@@ -76,10 +77,6 @@ STR
   : '"' ( '""' | ~["\r\n] )* '"'
   ;
 
-NAME
-  : [A-Z_-]+[A-Z_0-9-]+
-  ;
-
 HEX_NUM
   : '0x'[0-9abcdef_]+
   ;
@@ -90,6 +87,10 @@ BIN_NUM
 
 DEC_NUM
   : '-'?[0-9_]+
+  ;
+
+NAME
+  : [A-Z_-]+[A-Z_0-9-]+
   ;
 
 COMMENT

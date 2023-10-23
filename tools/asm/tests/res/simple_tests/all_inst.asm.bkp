@@ -210,40 +210,39 @@
   sbc $5702, x
   inc $5703, x
 
+label_1:
+  bbr0 40, label_1
+  bbr1 40, label_1
+  bbr2 40, label_1
+  bbr3 40, label_1
+  bbr4 40, label_1
+  bbr5 40, label_1
+  bbr6 40, label_1
+  bbr7 40, label_1
 
-  ;bbr0 400
-  ;bbr1 400
-  ;bbr2 400
-  ;bbr3 400
-  ;bbr4 400
-  ;bbr5 400
-  ;bbr6 400
-  ;bbr7 400
+  bbs0 0x01, label_1
+  bbs1 0x02, label_1
+  bbs2 0x03, label_1
+  bbs3 0x04, label_1
+  bbs4 0x05, label_1
+  bbs5 0x06, label_1
+  bbs6 0x07, label_1
+  bbs7 0x08, label_1
 
-  ;bbs0
-  ;bbs1
-  ;bbs2
-  ;bbs3
-  ;bbs4
-  ;bbs5
-  ;bbs6
-  ;bbs7
+  rmb0 $01
+  rmb1 $02
+  rmb2 $03
+  rmb3 $04
+  rmb4 $05
+  rmb5 $06
+  rmb6 $07
+  rmb7 $08
 
-  ;rmb0 $05
-  ;rmb1 $05
-  ;rmb2 $05
-  ;rmb3 $05
-  ;rmb4 $05
-  ;rmb5 $05
-  ;rmb6 $05
-  ;rmb7 $05
-
-
-  ;smb0 $15
-  ;smb1 $15
-  ;smb2 $15
-  ;smb3 $15
-  ;smb4 $15
-  ;smb5 $15
-  ;smb6 $15
-  ;smb7 $15
+  smb0 $11
+  smb1 $12
+  smb2 $13
+  smb3 $14
+  smb4 $15
+  smb5 $16
+  smb6 $17
+  smb7 $18

@@ -1,0 +1,289 @@
+	PROCESSOR 65C02
+
+        BRK
+        ORA ($FF,X)
+        TSB $FF
+        ORA $FF
+        ASL $FF
+        RMB0 $FF
+
+        PHP
+        ORA #$FF
+        ASL A
+
+        TSB $FFFF
+        ORA $FFFF
+        ASL $FFFF
+        BBR0 $FF,*
+
+        BPL *
+        ORA ($FF),Y
+        ORA ($FF)
+
+        TRB $FF
+        ORA $FF,X
+        ASL $FF,X
+        RMB1 $FF
+
+        CLC
+        ORA $FFFF,Y
+        INA
+
+        TRB $FFFF
+        ORA $FFFF,X
+        ASL $FFFF,X
+        BBR1 $FF,*
+
+        JSR $FFFF
+        AND ($FF,X)
+
+
+        BIT $FF
+        AND $FF
+        ROL $FF
+        RMB2 $FF
+
+        PLP
+        AND #$FF
+        ROL A
+
+        BIT $FFFF
+        AND $FFFF
+        ROL $FFFF
+        BBR2 $FF,*
+
+        BMI *
+        AND ($FF),Y
+        AND ($FF)
+
+        BIT $FF,X
+        AND $FF,X
+        ROL $FF,X
+        RMB3 $FF
+
+        SEC
+        AND $FFFF,Y
+        DEA
+
+        BIT $FFFF,X
+        AND $FFFF,X
+        ROL $FFFF,X
+        BBR3 $FF,*
+
+        RTI
+        EOR ($FF,X)
+
+
+
+        EOR $FF
+        LSR $FF
+        RMB4 $FF
+
+        PHA
+        EOR #$FF
+        LSR A
+
+        JMP $FFFF
+        EOR $FFFF
+        LSR $FFFF
+        BBR4 $FF,*
+
+        BVC *
+        EOR ($FF),Y
+        EOR ($FF)
+
+
+        EOR $FF,X
+        LSR $FF,X
+        RMB5 $FF
+
+        CLI
+        EOR $FFFF,Y
+        PHY
+
+
+        EOR $FFFF,X
+        LSR $FFFF,X
+        BBR5 $FF,*
+
+        RTS
+        ADC ($FF,X)
+
+
+        STZ $FF
+        ADC $FF
+        ROR $FF
+        RMB6 $FF
+
+        PLA
+        ADC #$FF
+        ROR A
+
+        JMP ($FFFF)
+        ADC $FFFF
+        ROR $FFFF
+        BBR6 $FF,*
+
+        BVS *
+        ADC ($FF),Y
+        ADC ($FF)
+
+        STZ $FF,X
+        ADC $FF,X
+        ROR $FF,X
+        RMB7 $FF
+
+        SEI
+        ADC $FFFF,Y
+        PLY
+
+        JMP ($FFFF,X)
+        ADC $FFFF,X
+        ROR $FFFF,X
+        BBR7 $FF,*
+
+        BRA *
+        STA ($FF,X)
+
+
+        STY $FF
+        STA $FF
+        STX $FF
+        SMB0 $FF
+
+        DEY
+        BIT #$FF
+        TXA
+
+        STY $FFFF
+        STA $FFFF
+        STX $FFFF
+        BBS0 $FF,*
+
+        BCC *
+        STA ($FF),Y
+        STA ($FF)
+
+        STY $FF,X
+        STA $FF,X
+        STX $FF,Y
+        SMB1 $FF
+
+        TYA
+        STA $FFFF,Y
+        TXS
+
+        STZ $FFFF
+        STA $FFFF,X
+        STZ $FFFF,X
+        BBS1 $FF,*
+
+        LDY #$FF
+        LDA ($FF,X)
+        LDX #$FF
+
+        LDY $FF
+        LDA $FF
+        LDX $FF
+        SMB2 $FF
+
+        TAY
+        LDA #$FF
+        TAX
+
+        LDY $FFFF
+        LDA $FFFF
+        LDX $FFFF
+        BBS2 $FF,*
+
+        BCS *
+        LDA ($FF),Y
+        LDA ($FF)
+
+        LDY $FF,X
+        LDA $FF,X
+        LDX $FF,Y
+        SMB3 $FF
+
+        CLV
+        LDA $FFFF,Y
+        TSX
+
+        LDY $FFFF,X
+        LDA $FFFF,X
+        LDX $FFFF,Y
+        BBS3 $FF,*
+
+        CPY #$FF
+        CMP ($FF,X)
+
+
+        CPY $FF
+        CMP $FF
+        DEC $FF
+        SMB4 $FF
+
+        INY
+        CMP #$FF
+        DEX
+
+        CPY $FFFF
+        CMP $FFFF
+        DEC $FFFF
+        BBS4 $FF,*
+
+        BNE *
+        CMP ($FF),Y
+        CMP ($FF)
+
+
+        CMP $FF,X
+        DEC $FF,X
+        SMB5 $FF
+
+        CLD
+        CMP $FFFF,Y
+        PHX
+
+
+        CMP $FFFF,X
+        DEC $FFFF,X
+        BBS5 $FF,*
+
+        CPX #$FF
+        SBC ($FF,X)
+
+
+        CPX $FF
+        SBC $FF
+        INC $FF
+        SMB6 $FF
+
+        INX
+        SBC #$FF
+        NOP
+
+        CPX $FFFF
+        SBC $FFFF
+        INC $FFFF
+        BBS6 $FF,*
+
+        BEQ *
+        SBC ($FF),Y
+        SBC ($FF)
+
+
+        SBC $FF,X
+        INC $FF,X
+        SMB7 $FF
+
+        SED
+        SBC $FFFF,Y
+        PLX
+
+
+        SBC $FFFF,X
+        INC $FFFF,X
+        BBS7 $FF,*
+
+        END

@@ -170,6 +170,24 @@ func TestThatCanParseSource(t *testing.T) {
 		}, ast)
 	})
 
+	t.Run("opcodes_with_three_operands", func(t *testing.T) {
+		ast := internal.ParseSrc("", `
+			     opcodea 3, 10, 35 
+      `)
+		require.False(t, ast.Errors.HasErrors())
+		assertAST(t, &internal.AST{
+			Statements: []internal.ASTStatement{
+				{
+					Type:   internal.ASTStatementTypeInstruction,
+					OpCode: "opcodea", Operands: []internal.ASTOperand{
+						operand(3),
+						operand(10),
+						operand(35),
+					}},
+			},
+		}, ast)
+	})
+
 	t.Run("label", func(t *testing.T) {
 		ast := internal.ParseSrc("", `
         opca 0x10

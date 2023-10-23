@@ -210,40 +210,40 @@ plx
 sbc 0x5702, x
 inc 0x5703, x
 
+label_1:
+bbr 0, 40, label_1
+bbr 1, 40, label_1
+bbr 2, 40, label_1
+bbr 3, 40, label_1
+bbr 4, 40, label_1
+bbr 5, 40, label_1
+bbr 6, 40, label_1
+bbr 7, 40, label_1
 
-; bbr 400,0
-; bbr 400,1
-; bbr 400,2
-; bbr 400,3
-; bbr 400,4
-; bbr 400,5
-; bbr 400,6
-; bbr 400,7
-;
-; bbs 400, 0
-; bbs 400, 1
-; bbs 400, 2
-; bbs 400, 3
-; bbs 400, 4
-; bbs 400, 5
-; bbs 400, 6
-; bbs 400, 7
-;
-; rmb 0x05,0
-; rmb 0x05,1
-; rmb 0x05,2
-; rmb 0x05,3
-; rmb 0x05,4
-; rmb 0x05,5
-; rmb 0x05,6
-; rmb 0x05,7
-;
-;
-; smb 0x15,0
-; smb 0x15,1
-; smb 0x15,2
-; smb 0x15,3
-; smb 0x15,4
-; smb 0x15,5
-; smb 0x15,6
-; smb 0x15,7
+bbs 0, 0x01, label_1
+bbs 1, 0x02, label_1
+bbs 2, 0x03, label_1
+bbs 3, 0x04, label_1
+bbs 4, 0x05, label_1
+bbs 5, 0x06, label_1
+bbs 6, 0x07, label_1
+bbs 7, 0x08, label_1
+
+rmb 0, 0x01
+rmb 1, 0x02
+rmb 2, 0x03
+rmb 3, 0x04
+rmb 4, 0x05
+rmb 5, 0x06
+rmb 6, 0x07
+rmb 7, 0x08
+
+smb 0, 0x11
+smb 1, 0x12
+smb 2, 0x13
+smb 3, 0x14
+smb 4, 0x15
+smb 5, 0x16
+smb 6, 0x17
+smb 7, 0x18
+
