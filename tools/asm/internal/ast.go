@@ -41,6 +41,11 @@ func (o ASTOperand) Number() (ASTNumber, bool) {
 	return v, ok
 }
 
+func (o ASTOperand) String() (ASTString, bool) {
+	v, ok := o.Value.(ASTString)
+	return v, ok
+}
+
 func (o ASTOperand) Register() (ASTRegister, bool) {
 	v, ok := o.Value.(ASTRegister)
 	return v, ok
@@ -106,6 +111,8 @@ const (
 	ASTStatementTypeOrigin      ASTStatementType = ".org"
 	ASTStatementTypePrepDefine  ASTStatementType = ".def"
 	ASTStatementTypeInclude     ASTStatementType = ".inc"
+	ASTStatementTypeDataByte    ASTStatementType = ".db"
+	ASTStatementTypeDataWord    ASTStatementType = ".dw"
 	ASTStatementTypeLabel       ASTStatementType = "label"
 )
 
@@ -383,6 +390,10 @@ func (v *progVisitor) VisitPrep_instruction(ctx *parser.Prep_instructionContext)
 		return v.buildPrepOrigin(ctx, children[1:])
 	case ".def":
 		return v.buildPrepDefine(ctx, children[1:])
+	case ".db":
+		return v.buildPrepByte(ctx, 1, children[1:])
+	case ".dw":
+		return v.buildPrepByte(ctx, 2, children[1:])
 	}
 
 	v.statementStructureError(ctx.GetStart().GetLine())
@@ -470,6 +481,34 @@ func (v *progVisitor) buildPrepDefine(ctx *parser.Prep_instructionContext, child
 	}
 
 	return defs
+}
+
+func (v *progVisitor) buildPrepByte(ctx *parser.Prep_instructionContext, size int, children []antlr.Tree) interface{} {
+	if len(children) != 1 {
+		v.statementStructureError(ctx.GetStart().GetLine())
+		return nil
+	}
+
+	vc := v.Visit(children[0].(antlr.ParseTree))
+	operands, ok := vc.(ASTOperands)
+	if !ok {
+		v.statementStructureError(ctx.GetStart().GetLine())
+		return nil
+	}
+
+	defType := ASTStatementTypeDataByte
+	if size == 2 {
+		defType = ASTStatementTypeDataWord
+	}
+
+	return ASTStatement{
+		Type:     defType,
+		Operands: operands,
+		SrcPointer: SrcPointer{
+			Name: v.srcName,
+			Line: ctx.GetStart().GetLine(),
+		},
+	}
 }
 
 func (v *progVisitor) buildPrepInc(ctx *parser.Prep_instructionContext, children []antlr.Tree) interface{} {

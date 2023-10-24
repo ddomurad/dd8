@@ -2,6 +2,8 @@
 
         BRK
         ORA ($FF,X)
+        DB  $02
+        DB  $03
         TSB $FF
         ORA $FF
         ASL $FF
@@ -10,7 +12,7 @@
         PHP
         ORA #$FF
         ASL A
-
+        DB  $0B
         TSB $FFFF
         ORA $FFFF
         ASL $FFFF
@@ -19,7 +21,7 @@
         BPL *
         ORA ($FF),Y
         ORA ($FF)
-
+        DB  $13
         TRB $FF
         ORA $FF,X
         ASL $FF,X
@@ -28,7 +30,7 @@
         CLC
         ORA $FFFF,Y
         INA
-
+        DB  $1B
         TRB $FFFF
         ORA $FFFF,X
         ASL $FFFF,X
@@ -36,8 +38,8 @@
 
         JSR $FFFF
         AND ($FF,X)
-
-
+        DB  $22
+        DB  $23
         BIT $FF
         AND $FF
         ROL $FF
@@ -46,7 +48,7 @@
         PLP
         AND #$FF
         ROL A
-
+        DB  $2B
         BIT $FFFF
         AND $FFFF
         ROL $FFFF
@@ -55,7 +57,7 @@
         BMI *
         AND ($FF),Y
         AND ($FF)
-
+        DB  $33
         BIT $FF,X
         AND $FF,X
         ROL $FF,X
@@ -64,7 +66,7 @@
         SEC
         AND $FFFF,Y
         DEA
-
+        DB  $3B
         BIT $FFFF,X
         AND $FFFF,X
         ROL $FFFF,X
@@ -72,9 +74,9 @@
 
         RTI
         EOR ($FF,X)
-
-
-
+        DB  $42
+        DB  $43
+        DB  $44
         EOR $FF
         LSR $FF
         RMB4 $FF
@@ -82,7 +84,7 @@
         PHA
         EOR #$FF
         LSR A
-
+        DB  $4B
         JMP $FFFF
         EOR $FFFF
         LSR $FFFF
@@ -91,8 +93,8 @@
         BVC *
         EOR ($FF),Y
         EOR ($FF)
-
-
+        DB  $53
+        DB  $54
         EOR $FF,X
         LSR $FF,X
         RMB5 $FF
@@ -100,16 +102,16 @@
         CLI
         EOR $FFFF,Y
         PHY
-
-
+        DB  $5B
+        DB  $5C
         EOR $FFFF,X
         LSR $FFFF,X
         BBR5 $FF,*
 
         RTS
         ADC ($FF,X)
-
-
+        DB  $62
+        DB  $63
         STZ $FF
         ADC $FF
         ROR $FF
@@ -118,7 +120,7 @@
         PLA
         ADC #$FF
         ROR A
-
+        DB  $6B
         JMP ($FFFF)
         ADC $FFFF
         ROR $FFFF
@@ -127,7 +129,7 @@
         BVS *
         ADC ($FF),Y
         ADC ($FF)
-
+        DB  $73
         STZ $FF,X
         ADC $FF,X
         ROR $FF,X
@@ -136,7 +138,7 @@
         SEI
         ADC $FFFF,Y
         PLY
-
+        DB  $7B
         JMP ($FFFF,X)
         ADC $FFFF,X
         ROR $FFFF,X
@@ -144,8 +146,8 @@
 
         BRA *
         STA ($FF,X)
-
-
+        DB  $82
+        DB  $83
         STY $FF
         STA $FF
         STX $FF
@@ -154,7 +156,7 @@
         DEY
         BIT #$FF
         TXA
-
+        DB  $8B
         STY $FFFF
         STA $FFFF
         STX $FFFF
@@ -163,7 +165,7 @@
         BCC *
         STA ($FF),Y
         STA ($FF)
-
+        DB  $93
         STY $FF,X
         STA $FF,X
         STX $FF,Y
@@ -172,7 +174,7 @@
         TYA
         STA $FFFF,Y
         TXS
-
+        DB  $9B
         STZ $FFFF
         STA $FFFF,X
         STZ $FFFF,X
@@ -181,7 +183,7 @@
         LDY #$FF
         LDA ($FF,X)
         LDX #$FF
-
+        DB  $A3
         LDY $FF
         LDA $FF
         LDX $FF
@@ -190,7 +192,7 @@
         TAY
         LDA #$FF
         TAX
-
+        DB  $AB
         LDY $FFFF
         LDA $FFFF
         LDX $FFFF
@@ -199,7 +201,7 @@
         BCS *
         LDA ($FF),Y
         LDA ($FF)
-
+        DB  $B3
         LDY $FF,X
         LDA $FF,X
         LDX $FF,Y
@@ -208,7 +210,7 @@
         CLV
         LDA $FFFF,Y
         TSX
-
+        DB  $BB
         LDY $FFFF,X
         LDA $FFFF,X
         LDX $FFFF,Y
@@ -216,8 +218,8 @@
 
         CPY #$FF
         CMP ($FF,X)
-
-
+        DB  $C2
+        DB  $C3
         CPY $FF
         CMP $FF
         DEC $FF
@@ -226,7 +228,7 @@
         INY
         CMP #$FF
         DEX
-
+        DB  $CB
         CPY $FFFF
         CMP $FFFF
         DEC $FFFF
@@ -235,8 +237,8 @@
         BNE *
         CMP ($FF),Y
         CMP ($FF)
-
-
+        DB  $D3
+        DB  $D4
         CMP $FF,X
         DEC $FF,X
         SMB5 $FF
@@ -244,16 +246,16 @@
         CLD
         CMP $FFFF,Y
         PHX
-
-
+        DB  $DB
+        DB  $DC
         CMP $FFFF,X
         DEC $FFFF,X
         BBS5 $FF,*
 
         CPX #$FF
         SBC ($FF,X)
-
-
+        DB  $E2
+        DB  $E3
         CPX $FF
         SBC $FF
         INC $FF
@@ -262,7 +264,7 @@
         INX
         SBC #$FF
         NOP
-
+        DB  $EB
         CPX $FFFF
         SBC $FFFF
         INC $FFFF
@@ -271,8 +273,8 @@
         BEQ *
         SBC ($FF),Y
         SBC ($FF)
-
-
+        DB  $F3
+        DB  $F4
         SBC $FF,X
         INC $FF,X
         SMB7 $FF
@@ -280,8 +282,8 @@
         SED
         SBC $FFFF,Y
         PLX
-
-
+        DB  $FB
+        DB  $FC
         SBC $FFFF,X
         INC $FFFF,X
         BBS7 $FF,*

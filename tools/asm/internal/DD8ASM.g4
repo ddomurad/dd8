@@ -15,6 +15,8 @@ prep_instruction
   | P_INC str
   | P_DEF '(' EOL prep_def_arg_lines EOL ')'
   | P_DEF prep_def_args
+  | P_DB arglist
+  | P_DW arglist
   ;
 
 prep_def_args
@@ -68,6 +70,8 @@ label
 P_DEF: '.def';
 P_ORG: '.org';
 P_INC: '.inc';
+P_DB: '.db';
+P_DW: '.dw';
 
 REG
   : [A-Z]
