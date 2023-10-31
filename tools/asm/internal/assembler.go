@@ -133,7 +133,7 @@ func getBytes(st ASTStatement) ([]byte, error) {
 	outBytes := make([]byte, 0, len(values)*vsize)
 	if st.Type == ASTStatementTypeDataByte {
 		for _, v := range values {
-			if v <= 0x00 || v >= 0xff {
+			if v < 0x00 || v >= 0xff {
 				return nil, fmt.Errorf("expected 8bit value got: '%v'", v)
 			}
 			outBytes = append(outBytes, byte(v))
