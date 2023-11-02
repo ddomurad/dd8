@@ -1,10 +1,14 @@
 #include "def.h"
 #include "emulator.h"
 #include "uart.h"
+#include "hex_decode.h"
 
 #include <avr/io.h>
 #include <stdint.h>
+#include <stdio.h>
+#include <string.h>
 #include <util/delay.h>
+#include <util/delay_basic.h>
 
 #define CLK_LOW (CLK_PORT &= ~(1<<CLK_PIN))
 #define CLK_HIGH (CLK_PORT |= (1<<CLK_PIN))
@@ -75,15 +79,30 @@ inline static void io_update() {
   CLK_HALF_DELAY;
 }
 
+char print_buff[64];
+
 int main() {
   io_setup();
   uart_init();
   emu_init();
 
-  uart_write("init\n", 5);
+  uart_write("ready for data...\n", 20);
+  uint8_t rc = hex_read_mem(emu_rom_ptr(), 0x1000, 0x1400);
+  if(rc != 0) {
+    sprintf(print_buff, "hex read failed: %d\n", rc);
+    uart_write(print_buff, 64);
+    while(1) {
+    }
+  }
+
   while(1){
     io_update();
+    if(uart_read_nb() == 'q') {
+      break;
+    }
   }
+
+  emu_dump_ram(0x00, 0x10);
 
   return 0;
 }

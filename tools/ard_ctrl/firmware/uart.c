@@ -1,6 +1,10 @@
 #include "uart.h"
 
 #include <avr/io.h>
+#include <avr/pgmspace.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <string.h>
 
 #define BAUD 9600
 #define UBRR (F_CPU/16/BAUD-1)
@@ -11,13 +15,10 @@ void uart_init() {
   UBRR0L = (uint8_t)UBRR;
 
   UCSR0B = (1<<RXEN0)|(1<<TXEN0);
-  UCSR0C = (1<<USBS0)|(3<<UCSZ00);
+  UCSR0C = (0<<USBS0)|(3<<UCSZ00);
 }
 
 void uart_write(char *str, uint8_t max_len) {
-  /* Wait for empty transmit buffer */
-  //todo: wait for the transmit buffer to be empty??
-
   /* Put data into buffer, sends the data */
   while(*str != 0x00 && max_len > 0) {
     while (!(UCSR0A & (1<<UDRE0)));
@@ -27,8 +28,15 @@ void uart_write(char *str, uint8_t max_len) {
   }
 }
 
-uint8_t uart_read(char *out_Str, uint8_t max_len) {
-  //todo: implement me pls
-  return 0x00;
+uint8_t uart_read() {
+    while((UCSR0A & (1<<RXC0)) == 0);
+    return UDR0; 
 }
 
+
+uint8_t uart_read_nb() {
+  if((UCSR0A & (1<<RXC0)) == 0) {
+    return 0x00;
+  }
+  return UDR0; 
+}

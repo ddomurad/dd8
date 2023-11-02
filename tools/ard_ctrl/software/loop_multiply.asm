@@ -1,0 +1,25 @@
+; simple program to test the assembly language
+
+.org 0x1000
+  clc
+  ldai 0x03 
+  sta 0x00 
+  ldai 0x0b 
+  sta 0x01
+  stz 0x02
+
+loop:
+  ldai 0x00
+  clv 
+  adc 0x01 
+  adc 0x02 
+  sta 0x02  
+
+  dec 0x00 
+  bne loop 
+
+inf_loop:
+  jmp inf_loop
+
+.org 0xfffd
+.db 0x00, 0x10

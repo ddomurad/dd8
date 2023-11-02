@@ -25,6 +25,6 @@
 #define CTRL_PINS      PINK
 #define CTRL_RW_PIN    PINK0
 
-#define CLK_HALF_DELAY_FUNC _delay_ms(100)
+#define CLK_HALF_DELAY_FUNC _delay_ms(10)
 
 #endif //__DEF_H
