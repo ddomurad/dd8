@@ -3,12 +3,12 @@ package tests
 import (
 	"testing"
 
-	"github.com/ddomurad/dd8/tools/asm/internal"
-	"github.com/ddomurad/dd8/tools/asm/internal/assemblers"
+	pkg "github.com/ddomurad/dd8/tools/asm/pkg"
+	"github.com/ddomurad/dd8/tools/asm/pkg/assemblers"
 	"github.com/stretchr/testify/require"
 )
 
-func assertByteCodeWithArray(t *testing.T, expected []byte, acctual internal.ByteCode) {
+func assertByteCodeWithArray(t *testing.T, expected []byte, acctual pkg.ByteCode) {
 	if len(acctual) > len(expected) {
 		require.Fail(t, "len(acctual) > len(expected)")
 	}
@@ -17,22 +17,22 @@ func assertByteCodeWithArray(t *testing.T, expected []byte, acctual internal.Byt
 
 func assertAssembler(t *testing.T, src string, expected []byte) {
 	src += "\n"
-	ast := internal.ParseSrc("test.asm", src)
+	ast := pkg.ParseSrc("test.asm", src)
 	require.False(t, ast.Errors.HasErrors())
-	internal.PreprocessAST(ast, nil)
+	pkg.PreprocessAST(ast, nil)
 	require.False(t, ast.Errors.HasErrors())
-	bcode, err := internal.Assemble(ast, assemblers.OpcodeAssemblerW65C02S)
+	bcode, err := pkg.Assemble(ast, assemblers.OpcodeAssemblerW65C02S)
 	require.NoError(t, err)
 	assertByteCodeWithArray(t, expected, bcode)
 }
 
-func assertAssemblerBC(t *testing.T, src string, expected internal.ByteCode) {
+func assertAssemblerBC(t *testing.T, src string, expected pkg.ByteCode) {
 	src += "\n"
-	ast := internal.ParseSrc("test.asm", src)
+	ast := pkg.ParseSrc("test.asm", src)
 	require.False(t, ast.Errors.HasErrors())
-	internal.PreprocessAST(ast, nil)
+	pkg.PreprocessAST(ast, nil)
 	require.False(t, ast.Errors.HasErrors())
-	bcode, err := internal.Assemble(ast, assemblers.OpcodeAssemblerW65C02S)
+	bcode, err := pkg.Assemble(ast, assemblers.OpcodeAssemblerW65C02S)
 	require.NoError(t, err)
 	require.Equal(t, expected, bcode)
 }
@@ -476,7 +476,7 @@ func TestThatCanBuildBinaryCode(t *testing.T) {
 		)
 	})
 	t.Run("reverse_label_test_page_change", func(t *testing.T) {
-		eb := internal.ByteCode{}
+		eb := pkg.ByteCode{}
 		_ = eb.SetBytes(0x00, []byte{0xea, 0xad, 0xff, 0x01, 0xea, 0xea})
 		_ = eb.SetBytes(0x01ff, []byte{0xea, 0xea})
 		assertAssemblerBC(t, `
@@ -493,7 +493,7 @@ func TestThatCanBuildBinaryCode(t *testing.T) {
 		)
 	})
 	t.Run("reverse_label_test_page_change2", func(t *testing.T) {
-		eb := internal.ByteCode{}
+		eb := pkg.ByteCode{}
 		_ = eb.SetBytes(0x00, []byte{0x10, 0x04, 0xad, 0xff, 0x01, 0xea, 0xea})
 		_ = eb.SetBytes(0x01ff, []byte{0xea, 0xea})
 		assertAssemblerBC(t, `
@@ -511,7 +511,7 @@ func TestThatCanBuildBinaryCode(t *testing.T) {
 		)
 	})
 	t.Run("reverse_label_test_page_change3", func(t *testing.T) {
-		eb := internal.ByteCode{}
+		eb := pkg.ByteCode{}
 		_ = eb.SetBytes(0xf9, []byte{0x10, 0x06, 0xad, 0xff, 0x01, 0xad, 0x01, 0x01, 0xea})
 		_ = eb.SetBytes(0x01ff, []byte{0xea, 0xea})
 		assertAssemblerBC(t, `
@@ -530,7 +530,7 @@ func TestThatCanBuildBinaryCode(t *testing.T) {
 		)
 	})
 	t.Run("reverse_label_test_page_change4", func(t *testing.T) {
-		eb := internal.ByteCode{}
+		eb := pkg.ByteCode{}
 		_ = eb.SetBytes(0xf8, []byte{0x10, 0x05, 0xad, 0xff, 0x01, 0xa5, 0xff, 0xea})
 		_ = eb.SetBytes(0x01ff, []byte{0xea, 0xea})
 		assertAssemblerBC(t, `

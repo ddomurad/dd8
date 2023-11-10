@@ -6,9 +6,9 @@ import (
 	"os"
 	"path"
 
-	"github.com/ddomurad/dd8/tools/asm/internal"
-	"github.com/ddomurad/dd8/tools/asm/internal/assemblers"
-	"github.com/ddomurad/dd8/tools/asm/internal/output"
+	pkg "github.com/ddomurad/dd8/tools/asm/pkg"
+	"github.com/ddomurad/dd8/tools/asm/pkg/assemblers"
+	"github.com/ddomurad/dd8/tools/asm/pkg/output"
 )
 
 func main() {
@@ -37,8 +37,8 @@ func main() {
 	worksparceDir := path.Dir(tail[0])
 	intpuFile := path.Base(tail[0])
 
-	reader := internal.NewFileSourceReader("./" + worksparceDir)
-	byteCode, err := internal.AssembleSrc(intpuFile, reader, assemblers.OpcodeAssemblerW65C02S)
+	reader := pkg.NewFileSourceReader("./" + worksparceDir)
+	byteCode, err := pkg.AssembleSrc(intpuFile, reader, assemblers.OpcodeAssemblerW65C02S)
 
 	if err != nil {
 		os.Stderr.WriteString(err.Error())

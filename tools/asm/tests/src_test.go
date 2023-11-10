@@ -3,14 +3,14 @@ package tests
 import (
 	"testing"
 
-	"github.com/ddomurad/dd8/tools/asm/internal"
-	"github.com/ddomurad/dd8/tools/asm/internal/assemblers"
-	"github.com/ddomurad/dd8/tools/asm/internal/output"
+	pkg "github.com/ddomurad/dd8/tools/asm/pkg"
+	"github.com/ddomurad/dd8/tools/asm/pkg/assemblers"
+	"github.com/ddomurad/dd8/tools/asm/pkg/output"
 	"github.com/stretchr/testify/require"
 )
 
 func TestThatCanParseSimpleAssemlyFile(t *testing.T) {
-	srcReader := internal.NewFileSourceReader("./res/simple_tests/")
+	srcReader := pkg.NewFileSourceReader("./res/simple_tests/")
 	testCases := map[string]string{
 		"test.asm":     "test.out",
 		"test2.asm":    "test2.out",
@@ -22,7 +22,7 @@ func TestThatCanParseSimpleAssemlyFile(t *testing.T) {
 		t.Run("test_file_"+srcName, func(t *testing.T) {
 			expectedOutput, err := srcReader.ReadSourceFile(expectedOutputFile)
 			require.NoError(t, err, "read expected output error")
-			bcode, err := internal.AssembleSrc(srcName, srcReader, assemblers.OpcodeAssemblerW65C02S)
+			bcode, err := pkg.AssembleSrc(srcName, srcReader, assemblers.OpcodeAssemblerW65C02S)
 			require.NoError(t, err, "assemble src")
 			hex := output.GetIntelHEX(bcode)
 			require.Equal(t, expectedOutput, string(hex))
@@ -31,7 +31,7 @@ func TestThatCanParseSimpleAssemlyFile(t *testing.T) {
 }
 
 func TestThatCanParseComplexAssemlyFile(t *testing.T) {
-	srcReader := internal.NewFileSourceReader("./res/crazy_test/")
+	srcReader := pkg.NewFileSourceReader("./res/crazy_test/")
 	testCases := map[string]string{
 		"main.asm": "main.out",
 	}
@@ -40,7 +40,7 @@ func TestThatCanParseComplexAssemlyFile(t *testing.T) {
 		t.Run("test_file_"+srcName, func(t *testing.T) {
 			expectedOutput, err := srcReader.ReadSourceFile(expectedOutputFile)
 			require.NoError(t, err, "read expected output error")
-			bcode, err := internal.AssembleSrc(srcName, srcReader, assemblers.OpcodeAssemblerW65C02S)
+			bcode, err := pkg.AssembleSrc(srcName, srcReader, assemblers.OpcodeAssemblerW65C02S)
 			require.NoError(t, err, "assemble src")
 			hex := output.GetIntelHEX(bcode)
 			require.Equal(t, expectedOutput, string(hex))

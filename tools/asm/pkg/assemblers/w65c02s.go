@@ -3,7 +3,7 @@ package assemblers
 import (
 	"fmt"
 
-	"github.com/ddomurad/dd8/tools/asm/internal"
+	pkg "github.com/ddomurad/dd8/tools/asm/pkg"
 )
 
 var (
@@ -236,7 +236,7 @@ var (
 	}
 )
 
-func prepInstruction(inst internal.ASTStatement) (indirect bool, opcode string, arg1u *uint16, arg1r *byte, arg2u *uint16, arg2r *byte, opcnt int, err error) {
+func prepInstruction(inst pkg.ASTStatement) (indirect bool, opcode string, arg1u *uint16, arg1r *byte, arg2u *uint16, arg2r *byte, opcnt int, err error) {
 	operands := inst.Operands
 
 	indirect = inst.Operands.Indirect(0) || inst.Operands.Indirect(1)
@@ -306,7 +306,7 @@ func is8bit(num *uint16) bool {
 	return num != nil && *num <= 0xff
 }
 
-func OpcodeAssemblerW65C02S(pc int, inst internal.ASTStatement, ignoreRelJmp bool) ([]byte, error) {
+func OpcodeAssemblerW65C02S(pc int, inst pkg.ASTStatement, ignoreRelJmp bool) ([]byte, error) {
 	indirect, opcode, arg1, arg1r, arg2, arg2r, opcnt, err := prepInstruction(inst)
 	if err != nil {
 		return nil, err

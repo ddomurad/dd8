@@ -4,7 +4,7 @@ import (
 	"encoding/hex"
 	"strings"
 
-	"github.com/ddomurad/dd8/tools/asm/internal"
+	pkg "github.com/ddomurad/dd8/tools/asm/pkg"
 )
 
 func getHEXLine(addr int, dataline []byte) string {
@@ -26,7 +26,7 @@ func getHEXLine(addr int, dataline []byte) string {
 	return ":" + strings.ToUpper(hex.EncodeToString(linebytes)) + "\n"
 }
 
-func GetIntelHEX(byteCode internal.ByteCode) []byte {
+func GetIntelHEX(byteCode pkg.ByteCode) []byte {
 	output := ""
 	dataLine := []byte{}
 	addrs := byteCode.GetAddresses()

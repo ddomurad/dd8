@@ -4,14 +4,14 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/ddomurad/dd8/tools/asm/internal"
-	"github.com/ddomurad/dd8/tools/asm/internal/output"
+	pkg "github.com/ddomurad/dd8/tools/asm/pkg"
+	"github.com/ddomurad/dd8/tools/asm/pkg/output"
 	"github.com/stretchr/testify/require"
 )
 
 func TestIntelHexFormat(t *testing.T) {
 	t.Run("simple_test", func(t *testing.T) {
-		byteCode := internal.ByteCode{}
+		byteCode := pkg.ByteCode{}
 		err := byteCode.SetBytes(0x0000, []byte{0x01, 0x02, 0x03, 0x04})
 		require.NoError(t, err)
 
@@ -23,7 +23,7 @@ func TestIntelHexFormat(t *testing.T) {
 	})
 
 	t.Run("simple_test", func(t *testing.T) {
-		byteCode := internal.ByteCode{}
+		byteCode := pkg.ByteCode{}
 		err := byteCode.SetBytes(0x0000, []byte{0x01, 0x02, 0x03, 0x04})
 		require.NoError(t, err)
 
@@ -35,7 +35,7 @@ func TestIntelHexFormat(t *testing.T) {
 	})
 
 	t.Run("address_gap_tesp", func(t *testing.T) {
-		byteCode := internal.ByteCode{}
+		byteCode := pkg.ByteCode{}
 		err := byteCode.SetBytes(0x0000, []byte{0x01, 0x02, 0x03, 0x04})
 		require.NoError(t, err)
 		err = byteCode.SetBytes(0x1000, []byte{0x01, 0x02, 0x03, 0x04})

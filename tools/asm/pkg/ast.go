@@ -6,7 +6,7 @@ import (
 	"strings"
 
 	"github.com/antlr4-go/antlr/v4"
-	"github.com/ddomurad/dd8/tools/asm/internal/parser"
+	"github.com/ddomurad/dd8/tools/asm/pkg/parser"
 )
 
 type ASTNumber int64
