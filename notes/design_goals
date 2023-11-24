@@ -1,0 +1,17 @@
+Some design goals might be unrealistic
+
+- 8 bit computer 
+- Min ROM, max RAM - the system should be mostly RAM based. The ROM should function as a store for default font and common sub-routines. 
+- OPTIONAL 2x 3.5 inch driver 
+- OPTIONAL 1x SD card slot
+- 1x Extension slot (can be used as cartridge, extra ram, or extra peripherals)
+- 2x serial ports (one with the possibility to act as a terminal device) 
+- Few I/O outputs (PWM, Analog input, Digital, I2C buss)
+- PS2 Keyboard input 
+- Video output (specs to be defined), VGA signal
+- Sound output (3 channels, similar to sid chip), headphones + build in speaker (optional) 
+- CPU Clock 12.5Mhz (half vga 25Mhz) if RAM/ROM allows 
+- Real Time Clock
+- Hardware timer
+- Harder random number generator
+- Multiplication coprocessor 
