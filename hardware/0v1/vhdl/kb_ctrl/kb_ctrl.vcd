@@ -1,0 +1,134 @@
+$date
+  Thu Dec  7 21:35:16 2023
+$end
+$version
+  GHDL v0
+$end
+$timescale
+  1 fs
+$end
+$scope module standard $end
+$upscope $end
+$scope module textio $end
+$upscope $end
+$scope module std_logic_1164 $end
+$upscope $end
+$scope module kb_ctrl_tb $end
+$var reg 1 ! nce $end
+$var reg 1 " noe $end
+$var reg 1 # nwe $end
+$var reg 8 $ d_out[7:0] $end
+$var reg 2 % a[1:0] $end
+$var reg 4 & c[3:0] $end
+$var reg 4 ' r[3:0] $end
+$scope module kb_ctrl_0 $end
+$var reg 1 ( nce $end
+$var reg 1 ) noe $end
+$var reg 1 * nwe $end
+$var reg 2 + a[1:0] $end
+$var reg 4 , r[3:0] $end
+$var reg 4 - c[3:0] $end
+$var reg 8 . d_out[7:0] $end
+$var reg 1 / intenral_enabled $end
+$scope module addr_decoder_unit $end
+$var reg 1 0 e $end
+$var reg 2 1 a[1:0] $end
+$var reg 4 2 c[3:0] $end
+$upscope $end
+$upscope $end
+$upscope $end
+$enddefinitions $end
+#0
+0!
+0"
+0#
+bZZZZZZZZ $
+b00 %
+b0000 &
+bUUUU '
+0(
+0)
+0*
+b00 +
+bUUUU ,
+b0000 -
+bZZZZZZZZ .
+0/
+00
+b00 1
+b0000 2
+#500000
+b0000 '
+b0000 ,
+#1000000
+1!
+1(
+#1500000
+#2000000
+1#
+1*
+#2500000
+#3000000
+0!
+1"
+0#
+0(
+1)
+0*
+#3500000
+#4000000
+1#
+1*
+#4500000
+#5000000
+0"
+b00000000 $
+b0001 &
+0)
+b0001 -
+b00000000 .
+1/
+10
+b0001 2
+#5500000
+b00000001 $
+b0001 '
+b0001 ,
+b00000001 .
+#6000000
+b01 %
+b0010 &
+b01 +
+b0010 -
+b01 1
+b0010 2
+#6500000
+b00000010 $
+b0010 '
+b0010 ,
+b00000010 .
+#7000000
+b10 %
+b0100 &
+b10 +
+b0100 -
+b10 1
+b0100 2
+#7500000
+b00000100 $
+b0100 '
+b0100 ,
+b00000100 .
+#8000000
+b11 %
+b1000 &
+b11 +
+b1000 -
+b11 1
+b1000 2
+#8500000
+b00001000 $
+b1000 '
+b1000 ,
+b00001000 .
+#9000000
