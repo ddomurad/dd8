@@ -15,7 +15,7 @@ void emu_step();
 void emu_set_brk(uint16_t addr);
 void emu_clr_brk();
 
-uint8_t emu_set_clok(uint8_t v);
+uint8_t emu_set_clock(uint8_t v);
 
 
 #endif // !__EMULATOR_H

@@ -195,7 +195,7 @@ void emu_reset() {
   emu_start();
 }
 
-uint8_t emu_set_clok(uint8_t v) {
+uint8_t emu_set_clock(uint8_t v) {
   cli();
   if (v == 0) {
     TCCR1A = (1 << WGM10) | (1 << WGM11);

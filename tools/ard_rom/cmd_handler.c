@@ -200,7 +200,7 @@ uint8_t execute_cmd_buffer() {
     return 0;
   }
   if (*cmd_buffer == 'c') {
-    uint8_t r = emu_set_clok(cmd_buffer[1] - '0');
+    uint8_t r = emu_set_clock(cmd_buffer[1] - '0');
     uart_writeln("!ok", 3);
     if (r) {
       write_error("UNSUPPORTED_CLOCK_SETTING");
