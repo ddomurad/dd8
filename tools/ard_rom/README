@@ -8,8 +8,8 @@ Commands:
 "x\n" reset - will perform a reset procedure (pull reset signal high, then pull low), will also resume the clock signal 
 "cN\n" - set clock speed N = {0,1,2,3,4}, 3 and 4 without monitor output
 "n\n" - single step
-TBD "b A\n" - set breakpoint (will stop the clock) on address A 
-TBD "B A\n" - clear breakpoint 
+"b A\n" - set breakpoint (will stop the clock) on address A 
+"B A\n" - clear breakpoint 
 ":INTEL_HEX\n" - will stop the clock and write to the emulated "ROM" memory provided data, this command will check the check-sum and possibly return an error message
 "d\n" - dump emulated ROM memory
 
@@ -21,9 +21,9 @@ Ready message:
 
 Monitor output 
 every clock cycle the address bus and data buss are monitored and dumped on the serial port
-"CC AAAA DD\n" 
+"ro ra kb lc oe we AAAA DD\n" 
 where AAAA (address) is a 16 bit hexadecimal number and DD (data) is a 8-bit hexadecimal number
-CC is a 8-bit hexadecimal number describing the state of control signals (RW, CE_ROM, CE_RAM, CE_KB, CE_LCD, ....)
+ro, ra, kb, lc, oe, and we describe active control signals
 
 Command result
 "!ok\n" - for success
