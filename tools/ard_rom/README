@@ -1,0 +1,8 @@
+Features:
+- emulate EEPROM with standard pinout 
+- able to reset the 6502 
+- able to single clock the 6502 
+- monitor the addr and data bus 
+- reprogrammable on fly 
+- accepts a .hex  
+- reprogram rom on the fly 

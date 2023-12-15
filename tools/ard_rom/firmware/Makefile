@@ -32,4 +32,4 @@ flash: all
 	avrdude -p $(MMCU) -c $(PROGRAMMER) -P $(PROGRAMMER_PORT) -b $(PROGRAMMER_RATE) -D -U flash:w:$(OUT_HEX)
 
 monitor:
-	socat /dev/ttyUSB0,rawer,b9600,crnl -
+	socat /dev/ttyUSB0,rawer,b19200,crnl -
