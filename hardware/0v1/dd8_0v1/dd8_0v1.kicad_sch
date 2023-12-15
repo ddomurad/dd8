@@ -2398,7 +2398,7 @@
     (effects (font (size 1.27 1.27)) (justify left bottom))
     (uuid e2bd97c6-bc95-493c-a685-ff0df19df95e)
   )
-  (text "Bear minium 6502 pc (dd8 v0.1) " (at 309.88 278.13 0)
+  (text "Bare minium 6502 pc (dd8 v0.1) " (at 309.88 278.13 0)
     (effects (font (size 1.27 1.27)) (justify left bottom))
     (uuid f4a92b94-96e5-4b6c-a623-ff6238c1c246)
   )
