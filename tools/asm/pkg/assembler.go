@@ -106,49 +106,6 @@ func Ens8bit(num ASTNumber) (uint8, error) {
 	return uint8(num), nil
 }
 
-func getBytes2(st ASTStatement) ([]byte, error) {
-	vsize := 1
-	if st.Type == ASTStatementTypeDataWord {
-		vsize = 2
-	}
-
-	values := make([]int, 0, len(st.Operands))
-	for _, op := range st.Operands {
-		numValue, ok := op.Number()
-		if ok {
-			values = append(values, int(numValue))
-			continue
-		}
-		strValue, ok := op.String()
-		if ok {
-			for _, s := range strValue {
-				values = append(values, int(s))
-			}
-			continue
-		}
-
-		return nil, fmt.Errorf("expected number or string, got: '%v'", reflect.TypeOf(op.Value))
-	}
-
-	outBytes := make([]byte, 0, len(values)*vsize)
-	if st.Type == ASTStatementTypeDataByte {
-		for _, v := range values {
-			if v < 0x00 || v >= 0xff {
-				return nil, fmt.Errorf("expected 8bit value got: '%v'", v)
-			}
-			outBytes = append(outBytes, byte(v))
-		}
-	} else {
-		for _, v := range values {
-			if v <= 0x00 || v >= 0xffff {
-				return nil, fmt.Errorf("expected 16bit value got: '%v'", v)
-			}
-			outBytes = append(outBytes, byte(v>>8), byte(v))
-		}
-	}
-	return outBytes, nil
-}
-
 func getBytes(st ASTStatement) ([]byte, error) {
 	outBytes := make([]byte, 0)
 
