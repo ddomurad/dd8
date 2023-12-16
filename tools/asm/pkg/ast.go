@@ -310,11 +310,10 @@ func (v *progVisitor) VisitArgument(ctx *parser.ArgumentContext) interface{} {
 
 func (v *progVisitor) VisitStr(ctx *parser.StrContext) interface{} {
 	str := ctx.STR().GetText()
-	str = strings.Trim(str, "\"")
-	str = strings.ReplaceAll(str, "\\n", "\n")
-	str = strings.ReplaceAll(str, "\\s", " ")
-	str = strings.ReplaceAll(str, "\\t", "\t")
-	str = strings.ReplaceAll(str, "\\\\", "\\")
+	str, err := strconv.Unquote(str)
+	if err != nil {
+		v.errorListener.ProgramError(ctx.GetStart().GetLine(), err.Error())
+	}
 	return ASTString(str)
 }
 

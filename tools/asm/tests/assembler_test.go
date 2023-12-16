@@ -552,8 +552,11 @@ func TestThatCanBuildBinaryCode(t *testing.T) {
 		assertAssembler(t, `.db 0x0d, 0x0a, 0x0f, "abc"`, []byte{0x0d, 0x0a, 0x0f, 'a', 'b', 'c'})
 		assertAssembler(t, `.dw 0x0d, 0x0a, 0x0f, "abc"`, []byte{0x0d, 0x00, 0x0a, 0x00, 0x0f, 0x00, 'a', 'b', 'c', 0x00})
 		assertAssembler(t, `.dw 0xf90d, 0x10a, 0xf`, []byte{0x0d, 0xf9, 0x0a, 0x01, 0x0f, 0x00})
+		assertAssembler(t, `.dw "x"`, []byte{'x', 0x00})
 	})
 	t.Run("data_strings", func(t *testing.T) {
-		assertAssembler(t, `.db "d\n\s\t\\\n"`, []byte{'d', '\n', ' ', '\t', '\\', '\n'})
+		assertAssembler(t, `.db "d\n\r\t\\\n"`, []byte{'d', '\n', '\r', '\t', '\\', '\n'})
+		assertAssembler(t, `.dw "", "", ""`, []byte{})
+		assertAssembler(t, `.db "\x00\x01\xff\x111"`, []byte{0x00, 0x01, 0xff, 0x11, '1'})
 	})
 }

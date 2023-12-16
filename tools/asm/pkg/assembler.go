@@ -125,7 +125,7 @@ func getBytes(st ASTStatement) ([]byte, error) {
 			continue
 		}
 		if strValue, ok := op.String(); ok {
-			for _, s := range strValue {
+			for _, s := range []byte(strValue) {
 				outBytes = append(outBytes, byte(s))
 			}
 			if st.Type == ASTStatementTypeDataWord && len(strValue)%2 != 0 {
