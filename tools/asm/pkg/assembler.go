@@ -106,7 +106,7 @@ func Ens8bit(num ASTNumber) (uint8, error) {
 	return uint8(num), nil
 }
 
-func getBytes(st ASTStatement) ([]byte, error) {
+func getBytes2(st ASTStatement) ([]byte, error) {
 	vsize := 1
 	if st.Type == ASTStatementTypeDataWord {
 		vsize = 2
@@ -141,11 +141,45 @@ func getBytes(st ASTStatement) ([]byte, error) {
 	} else {
 		for _, v := range values {
 			if v <= 0x00 || v >= 0xffff {
-				return nil, fmt.Errorf("expected 8bit value got: '%v'", v)
+				return nil, fmt.Errorf("expected 16bit value got: '%v'", v)
 			}
 			outBytes = append(outBytes, byte(v>>8), byte(v))
 		}
 	}
+	return outBytes, nil
+}
+
+func getBytes(st ASTStatement) ([]byte, error) {
+	outBytes := make([]byte, 0)
+
+	for _, op := range st.Operands {
+		if numValue, ok := op.Number(); ok {
+			if st.Type == ASTStatementTypeDataWord {
+				if numValue <= 0x00 || numValue >= 0xffff {
+					return nil, fmt.Errorf("expected 16bit value got: '%v'", numValue)
+				}
+				outBytes = append(outBytes, byte(numValue), byte(numValue>>8))
+			} else {
+				if numValue < 0x00 || numValue >= 0xff {
+					return nil, fmt.Errorf("expected 8bit value got: '%v'", numValue)
+				}
+				outBytes = append(outBytes, byte(numValue))
+			}
+			continue
+		}
+		if strValue, ok := op.String(); ok {
+			for _, s := range strValue {
+				outBytes = append(outBytes, byte(s))
+			}
+			if st.Type == ASTStatementTypeDataWord && len(strValue)%2 != 0 {
+				outBytes = append(outBytes, 0x00)
+			}
+			continue
+		}
+
+		return nil, fmt.Errorf("expected number or string, got: '%v'", reflect.TypeOf(op.Value))
+	}
+
 	return outBytes, nil
 }
 
