@@ -1,6 +1,7 @@
 package tests
 
 import (
+	"fmt"
 	"testing"
 
 	pkg "github.com/ddomurad/dd8/tools/asm/pkg"
@@ -18,6 +19,9 @@ func assertByteCodeWithArray(t *testing.T, expected []byte, acctual pkg.ByteCode
 func assertAssembler(t *testing.T, src string, expected []byte) {
 	src += "\n"
 	ast := pkg.ParseSrc("test.asm", src)
+	for _, e := range ast.Errors.Errors {
+		fmt.Printf("AST ERROR: %s at line %d\n", e.Msg, e.Line)
+	}
 	require.False(t, ast.Errors.HasErrors())
 	pkg.PreprocessAST(ast, nil)
 	require.False(t, ast.Errors.HasErrors())
@@ -584,5 +588,28 @@ func TestThatCanBuildBinaryCode(t *testing.T) {
       stx var_2
       stx var_3
       `, []byte{0x8e, 0xaa, 0xaa, 0x8e, 0xab, 0xaa, 0x8e, 0xaf, 0xaa})
+	})
+
+	t.Run("expr_tests", func(t *testing.T) {
+		assertAssembler(t, `
+      .db 0x01 + 1
+      .db 0x10 * 2
+      .db 13 % 2 + 1
+      .db 2 << 1 + 1
+      .db 10 >> 1
+      .db 11 / 3
+      .db 0x10 | 0x01
+      .db 0x15 & 0x03
+      .db 0xaa ^ 0xff
+      .dw ~0xa5
+      .dw ~0x1a5
+      .dw ~0x1a5+1
+      .db 0x11aa.l
+      .db 0x11aa.h
+      .db ~0xaa.l
+      .db ~0xaa.h
+      .db ~0xaa.l>>1*2+1 
+      `, []byte{0x02, 0x20, 0x02, 0x08, 0x05, 0x03, 0x11, 0x01, 0x55, 0x5a,
+			0xff, 0x5a, 0xfe, 0x5b, 0xfe, 0xaa, 0x11, 0x55, 0xff, 0x0a})
 	})
 }

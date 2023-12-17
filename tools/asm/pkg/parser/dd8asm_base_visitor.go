@@ -48,6 +48,10 @@ func (v *BaseDD8ASMVisitor) VisitArgument(ctx *ArgumentContext) interface{} {
 	return v.VisitChildren(ctx)
 }
 
+func (v *BaseDD8ASMVisitor) VisitExpr(ctx *ExprContext) interface{} {
+	return v.VisitChildren(ctx)
+}
+
 func (v *BaseDD8ASMVisitor) VisitStr(ctx *StrContext) interface{} {
 	return v.VisitChildren(ctx)
 }

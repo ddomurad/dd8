@@ -156,7 +156,7 @@ func Assemble(oast *AST, opcodeAssembler OpcodeAssembler) (ByteCode, error) {
 			} else if s.Type == ASTStatementTypeOrigin {
 				p0, ok := s.Operands.Number(0)
 				if !ok {
-					return byteCode, fmt.Errorf("expected exaclty 1 operand")
+					return byteCode, fmt.Errorf("expected exaclty 1 number operand")
 				}
 				programCounter = int(p0)
 				continue
@@ -174,7 +174,7 @@ func Assemble(oast *AST, opcodeAssembler OpcodeAssembler) (ByteCode, error) {
 			} else if s.Type == ASTStatementTypeSkipBytes || s.Type == ASTStatementTypeSkipWords {
 				n, ok := s.Operands[0].Number()
 				if !ok {
-					return nil, fmt.Errorf("expected number, got: '%v'", s.Operands[0])
+					return nil, fmt.Errorf("expected number, got: '%v'", reflect.TypeOf(s.Operands[0]))
 				}
 				if s.Type == ASTStatementTypeSkipWords {
 					n *= 2

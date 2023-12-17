@@ -38,6 +38,9 @@ type DD8ASMVisitor interface {
 	// Visit a parse tree produced by DD8ASMParser#argument.
 	VisitArgument(ctx *ArgumentContext) interface{}
 
+	// Visit a parse tree produced by DD8ASMParser#expr.
+	VisitExpr(ctx *ExprContext) interface{}
+
 	// Visit a parse tree produced by DD8ASMParser#str.
 	VisitStr(ctx *StrContext) interface{}
 

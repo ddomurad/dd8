@@ -13,6 +13,10 @@ type ASTNumber int64
 type ASTRegister string
 type ASTString string
 type ASTName string
+type ASTExpr struct {
+	Left, Right any
+	Operation   string
+}
 
 type ASTOperand struct {
 	Value    any
@@ -329,6 +333,69 @@ func (v *progVisitor) VisitArgument(ctx *parser.ArgumentContext) interface{} {
 	}
 	cr := v.Visit(children[0].(antlr.ParseTree))
 	return ASTOperand{Value: cr}
+}
+
+func (v *progVisitor) VisitExpr(ctx *parser.ExprContext) interface{} {
+	children := ctx.GetChildren()
+	if len(children) == 1 {
+		vc := v.Visit(children[0].(antlr.ParseTree))
+		if vc == nil {
+			v.statementStructureError(ctx.GetStart().GetLine())
+			return nil
+		}
+		return vc
+	}
+
+	operands := make([]any, 0)
+	operation := ""
+	for _, child := range children {
+		vc := v.Visit(child.(antlr.ParseTree))
+		if vc == nil {
+			tn, ok := child.(antlr.TerminalNode)
+			if !ok {
+				v.statementStructureError(ctx.GetStart().GetLine())
+				return nil
+			}
+			operation = tn.GetText()
+			continue
+		}
+
+		switch tc := vc.(type) {
+		case ASTNumber:
+			operands = append(operands, tc)
+		case ASTName:
+			operands = append(operands, tc)
+		case ASTExpr:
+			operands = append(operands, tc)
+		default:
+			v.statementStructureError(ctx.GetStart().GetLine())
+			return nil
+		}
+	}
+
+	if len(operands) == 2 && operation != "" {
+		return ASTExpr{
+			Left:      operands[0],
+			Right:     operands[1],
+			Operation: operation,
+		}
+	}
+	if len(operands) == 1 && operation == "~" {
+		return ASTExpr{
+			Right:     operands[0],
+			Left:      nil,
+			Operation: operation,
+		}
+	}
+	if len(operands) == 1 && (operation == ".l" || operation == ".h") {
+		return ASTExpr{
+			Left:      operands[0],
+			Right:     nil,
+			Operation: operation,
+		}
+	}
+	v.statementStructureError(ctx.GetStart().GetLine())
+	return nil
 }
 
 func (v *progVisitor) VisitStr(ctx *parser.StrContext) interface{} {
@@ -737,11 +804,88 @@ func PreprocessIncludes(ast *AST, reader SourceReader) bool {
 	return updated
 }
 
+func tryEvaluateExpr(ast *AST, s *ASTStatement, expr ASTExpr) any {
+	lv, rv := expr.Left, expr.Right
+
+	if le, ok := lv.(ASTExpr); ok {
+		lv = tryEvaluateExpr(ast, s, le)
+	}
+
+	if re, ok := rv.(ASTExpr); ok {
+		rv = tryEvaluateExpr(ast, s, re)
+	}
+
+	ln, lok := lv.(ASTNumber)
+	rn, rok := rv.(ASTNumber)
+
+	if lok && !rok {
+		switch expr.Operation {
+		case ".l":
+			return ASTNumber(ln & 0xff)
+		case ".h":
+			return ASTNumber((ln >> 8) & 0xff)
+		}
+	}
+
+	if !lok && rok {
+		switch expr.Operation {
+		case "~":
+			return ASTNumber(^rn & 0xffff)
+		}
+	}
+
+	if lok && rok {
+		switch expr.Operation {
+		case "*":
+			return ASTNumber(ln * rn)
+		case "/":
+			return ASTNumber(ln / rn)
+		case "%":
+			return ASTNumber(ln % rn)
+		case "+":
+			return ASTNumber(ln + rn)
+		case "-":
+			return ASTNumber(ln - rn)
+		case ">>":
+			return ASTNumber(ln >> rn)
+		case "<<":
+			return ASTNumber(ln << rn)
+		case "&":
+			return ASTNumber(ln & rn)
+		case "^":
+			return ASTNumber(ln ^ rn)
+		case "|":
+			return ASTNumber(ln | rn)
+		}
+	}
+
+	ast.Errors.Append(SourceError{
+		Type:    SourceErrorTypeEvalError,
+		SrcName: s.SrcPointer.Name,
+		Line:    s.SrcPointer.Line,
+		Msg:     fmt.Sprint("expression evaluation failed"), //todo: better error
+	})
+	return expr
+}
+
+func PreprocessExpr(ast *AST) {
+	for _, s := range ast.Statements {
+		for i, o := range s.Operands {
+			expr, ok := o.Value.(ASTExpr)
+			if !ok {
+				continue
+			}
+			s.Operands[i].Value = tryEvaluateExpr(ast, &s, expr)
+		}
+	}
+}
+
 func PreprocessAST(ast *AST, reader SourceReader) {
 	for PreprocessIncludes(ast, reader) {
 	}
 
 	PreprocessDefinitions(ast)
+	PreprocessExpr(ast)
 }
 
 func ParseSrc(srcName string, src string) *AST {

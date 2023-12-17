@@ -53,7 +53,21 @@ arglist_lines
   ;
 
 argument
-  : (num | reg | name | str)
+  : (reg | str)
+  | expr
+  ;
+
+expr
+  : '~' expr 
+  | expr ('.l' | '.h' ) 
+  | expr ('*' | '/' | '%' ) expr
+  | expr ('+' | '-') expr 
+  | expr ('<<' | '>>' ) expr 
+  | expr '&' expr 
+  | expr '^' expr 
+  | expr '|' expr 
+  | '(' expr ')'
+  | (num | name)
   ;
 
 str 

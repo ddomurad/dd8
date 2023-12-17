@@ -24,6 +24,20 @@ func assertAST(t *testing.T, expected, actual *pkg.AST) {
 	}
 }
 
+func exprOperand(l any, op string, r any) pkg.ASTOperand {
+	return pkg.ASTOperand{
+		Value: expr(l, op, r),
+	}
+}
+
+func expr(l any, op string, r any) pkg.ASTExpr {
+	return pkg.ASTExpr{
+		Left:      l,
+		Right:     r,
+		Operation: op,
+	}
+}
+
 func numOperand(v pkg.ASTNumber) pkg.ASTOperand {
 	return pkg.ASTOperand{Value: v}
 }
@@ -59,30 +73,31 @@ func pregOperand(v pkg.ASTRegister) pkg.ASTOperand {
 func TestPreprocesor(t *testing.T) {
 	t.Run("apply_defaults", func(t *testing.T) {
 		ast := pkg.ParseSrc("", `
-      .def TEST_VAL := 0x59
-      .def OTHER_VAL := 100
-      .def TEST_ORG := 0x100
+      .def TEST_VAL := 0x59 + 1
+      .def OTHER_VAL := 100 - 1
+      .def TEST_ORG := 0x100*2
       lda TEST_VAL,x 
       .org TEST_ORG
       ldai OTHER_VAL
       `)
 		require.False(t, ast.Errors.HasErrors())
 		pkg.PreprocessDefinitions(ast)
+		pkg.PreprocessExpr(ast)
 		require.False(t, ast.Errors.HasErrors())
 		assertAST(t, &pkg.AST{
 			Statements: []pkg.ASTStatement{
 				{
 					Type:     pkg.ASTStatementTypeInstruction,
 					OpCode:   "lda",
-					Operands: pkg.ASTOperands{numOperand(0x59), regOperand("x")}},
+					Operands: pkg.ASTOperands{numOperand(0x5a), regOperand("x")}},
 				{
 					Type:     pkg.ASTStatementTypeOrigin,
-					Operands: pkg.ASTOperands{numOperand(0x100)},
+					Operands: pkg.ASTOperands{numOperand(0x200)},
 				},
 				{
 					Type:     pkg.ASTStatementTypeInstruction,
 					OpCode:   "ldai",
-					Operands: pkg.ASTOperands{numOperand(100)}},
+					Operands: pkg.ASTOperands{numOperand(99)}},
 			},
 		}, ast)
 	})
@@ -440,6 +455,64 @@ func TestThatCanParseSource(t *testing.T) {
 				{
 					Type:     pkg.ASTStatementTypeSkipWords,
 					Operands: pkg.ASTOperands{numOperand(10)},
+				},
+			},
+		}, ast)
+	})
+
+	t.Run("num_expr_add", func(t *testing.T) {
+		ast := pkg.ParseSrc("", `
+      .db 0x10 + 0x20
+      .db 0x10 - 0x20
+      .db NAME_1 * NAME_2
+      .db 0x10 / TEST_NAME
+      .db 0x10 << 0x20
+      .db 0x10 >> 0x20
+      .db 1 + 2 * 3
+      .db 1 * 2 - 3
+      .db ~1
+      `)
+		require.False(t, ast.Errors.HasErrors())
+		assertAST(t, &pkg.AST{
+			Statements: []pkg.ASTStatement{
+				{
+					Type:     pkg.ASTStatementTypeDataByte,
+					Operands: pkg.ASTOperands{exprOperand(pkg.ASTNumber(0x10), "+", pkg.ASTNumber(0x20))},
+				},
+				{
+					Type:     pkg.ASTStatementTypeDataByte,
+					Operands: pkg.ASTOperands{exprOperand(pkg.ASTNumber(0x10), "-", pkg.ASTNumber(0x20))},
+				},
+				{
+					Type:     pkg.ASTStatementTypeDataByte,
+					Operands: pkg.ASTOperands{exprOperand(pkg.ASTName("NAME_1"), "*", pkg.ASTName("NAME_2"))},
+				},
+				{
+					Type:     pkg.ASTStatementTypeDataByte,
+					Operands: pkg.ASTOperands{exprOperand(pkg.ASTNumber(0x10), "/", pkg.ASTName("TEST_NAME"))},
+				},
+				{
+					Type:     pkg.ASTStatementTypeDataByte,
+					Operands: pkg.ASTOperands{exprOperand(pkg.ASTNumber(0x10), "<<", pkg.ASTNumber(0x20))},
+				},
+				{
+					Type:     pkg.ASTStatementTypeDataByte,
+					Operands: pkg.ASTOperands{exprOperand(pkg.ASTNumber(0x10), ">>", pkg.ASTNumber(0x20))},
+				},
+				{
+					Type: pkg.ASTStatementTypeDataByte,
+					Operands: pkg.ASTOperands{exprOperand(
+						pkg.ASTNumber(1), "+", expr(pkg.ASTNumber(2), "*", pkg.ASTNumber(3)))},
+				},
+				{
+					Type: pkg.ASTStatementTypeDataByte,
+					Operands: pkg.ASTOperands{exprOperand(
+						expr(pkg.ASTNumber(1), "*", pkg.ASTNumber(2)), "-", pkg.ASTNumber(3))},
+				},
+				{
+					Type: pkg.ASTStatementTypeDataByte,
+					Operands: pkg.ASTOperands{exprOperand(
+						nil, "~", pkg.ASTNumber(1))},
 				},
 			},
 		}, ast)
