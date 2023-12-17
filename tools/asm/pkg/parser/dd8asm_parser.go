@@ -43,58 +43,67 @@ func dd8asmParserInit() {
 	}
 	staticData.RuleNames = []string{
 		"prog", "statement", "prep_instruction", "prep_def_args", "prep_def_arg_lines",
-		"instruction", "arglist_p", "arglist", "argument", "str", "num", "reg",
-		"name", "label",
+		"instruction", "arglist_p", "arglist", "arglist_lines", "argument",
+		"str", "num", "reg", "name", "label",
 	}
 	staticData.PredictionContextCache = antlr.NewPredictionContextCache()
 	staticData.serializedATN = []int32{
-		4, 1, 21, 117, 2, 0, 7, 0, 2, 1, 7, 1, 2, 2, 7, 2, 2, 3, 7, 3, 2, 4, 7,
+		4, 1, 21, 138, 2, 0, 7, 0, 2, 1, 7, 1, 2, 2, 7, 2, 2, 3, 7, 3, 2, 4, 7,
 		4, 2, 5, 7, 5, 2, 6, 7, 6, 2, 7, 7, 7, 2, 8, 7, 8, 2, 9, 7, 9, 2, 10, 7,
-		10, 2, 11, 7, 11, 2, 12, 7, 12, 2, 13, 7, 13, 1, 0, 5, 0, 30, 8, 0, 10,
-		0, 12, 0, 33, 9, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 3, 1, 40, 8, 1, 1, 1,
-		1, 1, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2,
-		1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 3, 2, 61, 8, 2, 1, 3, 1, 3, 1, 3, 1,
-		3, 1, 4, 1, 4, 1, 4, 3, 4, 70, 8, 4, 1, 5, 1, 5, 1, 5, 1, 5, 1, 5, 1, 5,
-		1, 5, 1, 5, 1, 5, 1, 5, 1, 5, 1, 5, 1, 5, 1, 5, 1, 5, 1, 5, 1, 5, 3, 5,
-		89, 8, 5, 1, 6, 1, 6, 1, 6, 1, 6, 1, 7, 1, 7, 1, 7, 3, 7, 98, 8, 7, 1,
-		8, 1, 8, 1, 8, 1, 8, 3, 8, 104, 8, 8, 1, 9, 1, 9, 1, 10, 1, 10, 1, 11,
-		1, 11, 1, 12, 1, 12, 1, 13, 1, 13, 1, 13, 1, 13, 0, 0, 14, 0, 2, 4, 6,
-		8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 0, 1, 1, 0, 15, 17, 120, 0, 31,
-		1, 0, 0, 0, 2, 39, 1, 0, 0, 0, 4, 60, 1, 0, 0, 0, 6, 62, 1, 0, 0, 0, 8,
-		66, 1, 0, 0, 0, 10, 88, 1, 0, 0, 0, 12, 90, 1, 0, 0, 0, 14, 94, 1, 0, 0,
-		0, 16, 103, 1, 0, 0, 0, 18, 105, 1, 0, 0, 0, 20, 107, 1, 0, 0, 0, 22, 109,
-		1, 0, 0, 0, 24, 111, 1, 0, 0, 0, 26, 113, 1, 0, 0, 0, 28, 30, 3, 2, 1,
-		0, 29, 28, 1, 0, 0, 0, 30, 33, 1, 0, 0, 0, 31, 29, 1, 0, 0, 0, 31, 32,
-		1, 0, 0, 0, 32, 34, 1, 0, 0, 0, 33, 31, 1, 0, 0, 0, 34, 35, 5, 0, 0, 1,
-		35, 1, 1, 0, 0, 0, 36, 40, 3, 10, 5, 0, 37, 40, 3, 4, 2, 0, 38, 40, 3,
-		26, 13, 0, 39, 36, 1, 0, 0, 0, 39, 37, 1, 0, 0, 0, 39, 38, 1, 0, 0, 0,
-		39, 40, 1, 0, 0, 0, 40, 41, 1, 0, 0, 0, 41, 42, 5, 20, 0, 0, 42, 3, 1,
-		0, 0, 0, 43, 44, 5, 9, 0, 0, 44, 61, 3, 16, 8, 0, 45, 46, 5, 10, 0, 0,
-		46, 61, 3, 18, 9, 0, 47, 48, 5, 8, 0, 0, 48, 49, 5, 1, 0, 0, 49, 50, 5,
-		20, 0, 0, 50, 51, 3, 8, 4, 0, 51, 52, 5, 20, 0, 0, 52, 53, 5, 2, 0, 0,
-		53, 61, 1, 0, 0, 0, 54, 55, 5, 8, 0, 0, 55, 61, 3, 6, 3, 0, 56, 57, 5,
-		11, 0, 0, 57, 61, 3, 14, 7, 0, 58, 59, 5, 12, 0, 0, 59, 61, 3, 14, 7, 0,
-		60, 43, 1, 0, 0, 0, 60, 45, 1, 0, 0, 0, 60, 47, 1, 0, 0, 0, 60, 54, 1,
-		0, 0, 0, 60, 56, 1, 0, 0, 0, 60, 58, 1, 0, 0, 0, 61, 5, 1, 0, 0, 0, 62,
-		63, 3, 24, 12, 0, 63, 64, 5, 3, 0, 0, 64, 65, 3, 16, 8, 0, 65, 7, 1, 0,
-		0, 0, 66, 69, 3, 6, 3, 0, 67, 68, 5, 20, 0, 0, 68, 70, 3, 8, 4, 0, 69,
-		67, 1, 0, 0, 0, 69, 70, 1, 0, 0, 0, 70, 9, 1, 0, 0, 0, 71, 89, 3, 24, 12,
-		0, 72, 73, 3, 24, 12, 0, 73, 74, 3, 12, 6, 0, 74, 89, 1, 0, 0, 0, 75, 76,
-		3, 24, 12, 0, 76, 77, 3, 14, 7, 0, 77, 89, 1, 0, 0, 0, 78, 79, 3, 24, 12,
-		0, 79, 80, 3, 12, 6, 0, 80, 81, 5, 4, 0, 0, 81, 82, 3, 14, 7, 0, 82, 89,
-		1, 0, 0, 0, 83, 84, 3, 24, 12, 0, 84, 85, 3, 14, 7, 0, 85, 86, 5, 4, 0,
-		0, 86, 87, 3, 12, 6, 0, 87, 89, 1, 0, 0, 0, 88, 71, 1, 0, 0, 0, 88, 72,
-		1, 0, 0, 0, 88, 75, 1, 0, 0, 0, 88, 78, 1, 0, 0, 0, 88, 83, 1, 0, 0, 0,
-		89, 11, 1, 0, 0, 0, 90, 91, 5, 5, 0, 0, 91, 92, 3, 14, 7, 0, 92, 93, 5,
-		6, 0, 0, 93, 13, 1, 0, 0, 0, 94, 97, 3, 16, 8, 0, 95, 96, 5, 4, 0, 0, 96,
-		98, 3, 14, 7, 0, 97, 95, 1, 0, 0, 0, 97, 98, 1, 0, 0, 0, 98, 15, 1, 0,
-		0, 0, 99, 104, 3, 20, 10, 0, 100, 104, 3, 22, 11, 0, 101, 104, 3, 24, 12,
-		0, 102, 104, 3, 18, 9, 0, 103, 99, 1, 0, 0, 0, 103, 100, 1, 0, 0, 0, 103,
-		101, 1, 0, 0, 0, 103, 102, 1, 0, 0, 0, 104, 17, 1, 0, 0, 0, 105, 106, 5,
-		14, 0, 0, 106, 19, 1, 0, 0, 0, 107, 108, 7, 0, 0, 0, 108, 21, 1, 0, 0,
-		0, 109, 110, 5, 13, 0, 0, 110, 23, 1, 0, 0, 0, 111, 112, 5, 18, 0, 0, 112,
-		25, 1, 0, 0, 0, 113, 114, 5, 18, 0, 0, 114, 115, 5, 7, 0, 0, 115, 27, 1,
-		0, 0, 0, 7, 31, 39, 60, 69, 88, 97, 103,
+		10, 2, 11, 7, 11, 2, 12, 7, 12, 2, 13, 7, 13, 2, 14, 7, 14, 1, 0, 5, 0,
+		32, 8, 0, 10, 0, 12, 0, 35, 9, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 3, 1, 42,
+		8, 1, 1, 1, 1, 1, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2,
+		1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2,
+		1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 3, 2, 77, 8,
+		2, 1, 3, 1, 3, 1, 3, 1, 3, 1, 4, 1, 4, 1, 4, 3, 4, 86, 8, 4, 1, 5, 1, 5,
+		1, 5, 1, 5, 1, 5, 1, 5, 1, 5, 1, 5, 1, 5, 1, 5, 1, 5, 1, 5, 1, 5, 1, 5,
+		1, 5, 1, 5, 1, 5, 3, 5, 105, 8, 5, 1, 6, 1, 6, 1, 6, 1, 6, 1, 7, 1, 7,
+		1, 7, 3, 7, 114, 8, 7, 1, 8, 1, 8, 1, 8, 3, 8, 119, 8, 8, 1, 9, 1, 9, 1,
+		9, 1, 9, 3, 9, 125, 8, 9, 1, 10, 1, 10, 1, 11, 1, 11, 1, 12, 1, 12, 1,
+		13, 1, 13, 1, 14, 1, 14, 1, 14, 1, 14, 0, 0, 15, 0, 2, 4, 6, 8, 10, 12,
+		14, 16, 18, 20, 22, 24, 26, 28, 0, 1, 1, 0, 15, 17, 143, 0, 33, 1, 0, 0,
+		0, 2, 41, 1, 0, 0, 0, 4, 76, 1, 0, 0, 0, 6, 78, 1, 0, 0, 0, 8, 82, 1, 0,
+		0, 0, 10, 104, 1, 0, 0, 0, 12, 106, 1, 0, 0, 0, 14, 110, 1, 0, 0, 0, 16,
+		115, 1, 0, 0, 0, 18, 124, 1, 0, 0, 0, 20, 126, 1, 0, 0, 0, 22, 128, 1,
+		0, 0, 0, 24, 130, 1, 0, 0, 0, 26, 132, 1, 0, 0, 0, 28, 134, 1, 0, 0, 0,
+		30, 32, 3, 2, 1, 0, 31, 30, 1, 0, 0, 0, 32, 35, 1, 0, 0, 0, 33, 31, 1,
+		0, 0, 0, 33, 34, 1, 0, 0, 0, 34, 36, 1, 0, 0, 0, 35, 33, 1, 0, 0, 0, 36,
+		37, 5, 0, 0, 1, 37, 1, 1, 0, 0, 0, 38, 42, 3, 10, 5, 0, 39, 42, 3, 4, 2,
+		0, 40, 42, 3, 28, 14, 0, 41, 38, 1, 0, 0, 0, 41, 39, 1, 0, 0, 0, 41, 40,
+		1, 0, 0, 0, 41, 42, 1, 0, 0, 0, 42, 43, 1, 0, 0, 0, 43, 44, 5, 20, 0, 0,
+		44, 3, 1, 0, 0, 0, 45, 46, 5, 9, 0, 0, 46, 77, 3, 18, 9, 0, 47, 48, 5,
+		10, 0, 0, 48, 77, 3, 20, 10, 0, 49, 50, 5, 8, 0, 0, 50, 51, 5, 1, 0, 0,
+		51, 52, 5, 20, 0, 0, 52, 53, 3, 8, 4, 0, 53, 54, 5, 20, 0, 0, 54, 55, 5,
+		2, 0, 0, 55, 77, 1, 0, 0, 0, 56, 57, 5, 8, 0, 0, 57, 77, 3, 6, 3, 0, 58,
+		59, 5, 11, 0, 0, 59, 77, 3, 14, 7, 0, 60, 61, 5, 11, 0, 0, 61, 62, 5, 1,
+		0, 0, 62, 63, 5, 20, 0, 0, 63, 64, 3, 16, 8, 0, 64, 65, 5, 20, 0, 0, 65,
+		66, 5, 2, 0, 0, 66, 77, 1, 0, 0, 0, 67, 68, 5, 12, 0, 0, 68, 77, 3, 14,
+		7, 0, 69, 70, 5, 12, 0, 0, 70, 71, 5, 1, 0, 0, 71, 72, 5, 20, 0, 0, 72,
+		73, 3, 16, 8, 0, 73, 74, 5, 20, 0, 0, 74, 75, 5, 2, 0, 0, 75, 77, 1, 0,
+		0, 0, 76, 45, 1, 0, 0, 0, 76, 47, 1, 0, 0, 0, 76, 49, 1, 0, 0, 0, 76, 56,
+		1, 0, 0, 0, 76, 58, 1, 0, 0, 0, 76, 60, 1, 0, 0, 0, 76, 67, 1, 0, 0, 0,
+		76, 69, 1, 0, 0, 0, 77, 5, 1, 0, 0, 0, 78, 79, 3, 26, 13, 0, 79, 80, 5,
+		3, 0, 0, 80, 81, 3, 18, 9, 0, 81, 7, 1, 0, 0, 0, 82, 85, 3, 6, 3, 0, 83,
+		84, 5, 20, 0, 0, 84, 86, 3, 8, 4, 0, 85, 83, 1, 0, 0, 0, 85, 86, 1, 0,
+		0, 0, 86, 9, 1, 0, 0, 0, 87, 105, 3, 26, 13, 0, 88, 89, 3, 26, 13, 0, 89,
+		90, 3, 12, 6, 0, 90, 105, 1, 0, 0, 0, 91, 92, 3, 26, 13, 0, 92, 93, 3,
+		14, 7, 0, 93, 105, 1, 0, 0, 0, 94, 95, 3, 26, 13, 0, 95, 96, 3, 12, 6,
+		0, 96, 97, 5, 4, 0, 0, 97, 98, 3, 14, 7, 0, 98, 105, 1, 0, 0, 0, 99, 100,
+		3, 26, 13, 0, 100, 101, 3, 14, 7, 0, 101, 102, 5, 4, 0, 0, 102, 103, 3,
+		12, 6, 0, 103, 105, 1, 0, 0, 0, 104, 87, 1, 0, 0, 0, 104, 88, 1, 0, 0,
+		0, 104, 91, 1, 0, 0, 0, 104, 94, 1, 0, 0, 0, 104, 99, 1, 0, 0, 0, 105,
+		11, 1, 0, 0, 0, 106, 107, 5, 5, 0, 0, 107, 108, 3, 14, 7, 0, 108, 109,
+		5, 6, 0, 0, 109, 13, 1, 0, 0, 0, 110, 113, 3, 18, 9, 0, 111, 112, 5, 4,
+		0, 0, 112, 114, 3, 14, 7, 0, 113, 111, 1, 0, 0, 0, 113, 114, 1, 0, 0, 0,
+		114, 15, 1, 0, 0, 0, 115, 118, 3, 14, 7, 0, 116, 117, 5, 20, 0, 0, 117,
+		119, 3, 16, 8, 0, 118, 116, 1, 0, 0, 0, 118, 119, 1, 0, 0, 0, 119, 17,
+		1, 0, 0, 0, 120, 125, 3, 22, 11, 0, 121, 125, 3, 24, 12, 0, 122, 125, 3,
+		26, 13, 0, 123, 125, 3, 20, 10, 0, 124, 120, 1, 0, 0, 0, 124, 121, 1, 0,
+		0, 0, 124, 122, 1, 0, 0, 0, 124, 123, 1, 0, 0, 0, 125, 19, 1, 0, 0, 0,
+		126, 127, 5, 14, 0, 0, 127, 21, 1, 0, 0, 0, 128, 129, 7, 0, 0, 0, 129,
+		23, 1, 0, 0, 0, 130, 131, 5, 13, 0, 0, 131, 25, 1, 0, 0, 0, 132, 133, 5,
+		18, 0, 0, 133, 27, 1, 0, 0, 0, 134, 135, 5, 18, 0, 0, 135, 136, 5, 7, 0,
+		0, 136, 29, 1, 0, 0, 0, 8, 33, 41, 76, 85, 104, 113, 118, 124,
 	}
 	deserializer := antlr.NewATNDeserializer(nil)
 	staticData.atn = deserializer.Deserialize(staticData.serializedATN)
@@ -166,12 +175,13 @@ const (
 	DD8ASMParserRULE_instruction        = 5
 	DD8ASMParserRULE_arglist_p          = 6
 	DD8ASMParserRULE_arglist            = 7
-	DD8ASMParserRULE_argument           = 8
-	DD8ASMParserRULE_str                = 9
-	DD8ASMParserRULE_num                = 10
-	DD8ASMParserRULE_reg                = 11
-	DD8ASMParserRULE_name               = 12
-	DD8ASMParserRULE_label              = 13
+	DD8ASMParserRULE_arglist_lines      = 8
+	DD8ASMParserRULE_argument           = 9
+	DD8ASMParserRULE_str                = 10
+	DD8ASMParserRULE_num                = 11
+	DD8ASMParserRULE_reg                = 12
+	DD8ASMParserRULE_name               = 13
+	DD8ASMParserRULE_label              = 14
 )
 
 // IProgContext is an interface to support dynamic dispatch.
@@ -291,7 +301,7 @@ func (p *DD8ASMParser) Prog() (localctx IProgContext) {
 	var _la int
 
 	p.EnterOuterAlt(localctx, 1)
-	p.SetState(31)
+	p.SetState(33)
 	p.GetErrorHandler().Sync(p)
 	if p.HasError() {
 		goto errorExit
@@ -300,11 +310,11 @@ func (p *DD8ASMParser) Prog() (localctx IProgContext) {
 
 	for (int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&1318656) != 0 {
 		{
-			p.SetState(28)
+			p.SetState(30)
 			p.Statement()
 		}
 
-		p.SetState(33)
+		p.SetState(35)
 		p.GetErrorHandler().Sync(p)
 		if p.HasError() {
 			goto errorExit
@@ -312,7 +322,7 @@ func (p *DD8ASMParser) Prog() (localctx IProgContext) {
 		_la = p.GetTokenStream().LA(1)
 	}
 	{
-		p.SetState(34)
+		p.SetState(36)
 		p.Match(DD8ASMParserEOF)
 		if p.HasError() {
 			// Recognition error - abort rule
@@ -456,12 +466,12 @@ func (p *DD8ASMParser) Statement() (localctx IStatementContext) {
 	localctx = NewStatementContext(p, p.GetParserRuleContext(), p.GetState())
 	p.EnterRule(localctx, 2, DD8ASMParserRULE_statement)
 	p.EnterOuterAlt(localctx, 1)
-	p.SetState(39)
+	p.SetState(41)
 	p.GetErrorHandler().Sync(p)
 
 	if p.GetInterpreter().AdaptivePredict(p.BaseParser, p.GetTokenStream(), 1, p.GetParserRuleContext()) == 1 {
 		{
-			p.SetState(36)
+			p.SetState(38)
 			p.Instruction()
 		}
 
@@ -469,7 +479,7 @@ func (p *DD8ASMParser) Statement() (localctx IStatementContext) {
 		goto errorExit
 	} else if p.GetInterpreter().AdaptivePredict(p.BaseParser, p.GetTokenStream(), 1, p.GetParserRuleContext()) == 2 {
 		{
-			p.SetState(37)
+			p.SetState(39)
 			p.Prep_instruction()
 		}
 
@@ -477,7 +487,7 @@ func (p *DD8ASMParser) Statement() (localctx IStatementContext) {
 		goto errorExit
 	} else if p.GetInterpreter().AdaptivePredict(p.BaseParser, p.GetTokenStream(), 1, p.GetParserRuleContext()) == 3 {
 		{
-			p.SetState(38)
+			p.SetState(40)
 			p.Label()
 		}
 
@@ -485,7 +495,7 @@ func (p *DD8ASMParser) Statement() (localctx IStatementContext) {
 		goto errorExit
 	}
 	{
-		p.SetState(41)
+		p.SetState(43)
 		p.Match(DD8ASMParserEOL)
 		if p.HasError() {
 			// Recognition error - abort rule
@@ -525,6 +535,7 @@ type IPrep_instructionContext interface {
 	Prep_def_args() IPrep_def_argsContext
 	P_DB() antlr.TerminalNode
 	Arglist() IArglistContext
+	Arglist_lines() IArglist_linesContext
 	P_DW() antlr.TerminalNode
 
 	// IsPrep_instructionContext differentiates from other interfaces.
@@ -667,6 +678,22 @@ func (s *Prep_instructionContext) Arglist() IArglistContext {
 	return t.(IArglistContext)
 }
 
+func (s *Prep_instructionContext) Arglist_lines() IArglist_linesContext {
+	var t antlr.RuleContext
+	for _, ctx := range s.GetChildren() {
+		if _, ok := ctx.(IArglist_linesContext); ok {
+			t = ctx.(antlr.RuleContext)
+			break
+		}
+	}
+
+	if t == nil {
+		return nil
+	}
+
+	return t.(IArglist_linesContext)
+}
+
 func (s *Prep_instructionContext) P_DW() antlr.TerminalNode {
 	return s.GetToken(DD8ASMParserP_DW, 0)
 }
@@ -692,7 +719,7 @@ func (s *Prep_instructionContext) Accept(visitor antlr.ParseTreeVisitor) interfa
 func (p *DD8ASMParser) Prep_instruction() (localctx IPrep_instructionContext) {
 	localctx = NewPrep_instructionContext(p, p.GetParserRuleContext(), p.GetState())
 	p.EnterRule(localctx, 4, DD8ASMParserRULE_prep_instruction)
-	p.SetState(60)
+	p.SetState(76)
 	p.GetErrorHandler().Sync(p)
 	if p.HasError() {
 		goto errorExit
@@ -702,7 +729,7 @@ func (p *DD8ASMParser) Prep_instruction() (localctx IPrep_instructionContext) {
 	case 1:
 		p.EnterOuterAlt(localctx, 1)
 		{
-			p.SetState(43)
+			p.SetState(45)
 			p.Match(DD8ASMParserP_ORG)
 			if p.HasError() {
 				// Recognition error - abort rule
@@ -710,14 +737,14 @@ func (p *DD8ASMParser) Prep_instruction() (localctx IPrep_instructionContext) {
 			}
 		}
 		{
-			p.SetState(44)
+			p.SetState(46)
 			p.Argument()
 		}
 
 	case 2:
 		p.EnterOuterAlt(localctx, 2)
 		{
-			p.SetState(45)
+			p.SetState(47)
 			p.Match(DD8ASMParserP_INC)
 			if p.HasError() {
 				// Recognition error - abort rule
@@ -725,14 +752,14 @@ func (p *DD8ASMParser) Prep_instruction() (localctx IPrep_instructionContext) {
 			}
 		}
 		{
-			p.SetState(46)
+			p.SetState(48)
 			p.Str()
 		}
 
 	case 3:
 		p.EnterOuterAlt(localctx, 3)
 		{
-			p.SetState(47)
+			p.SetState(49)
 			p.Match(DD8ASMParserP_DEF)
 			if p.HasError() {
 				// Recognition error - abort rule
@@ -740,24 +767,12 @@ func (p *DD8ASMParser) Prep_instruction() (localctx IPrep_instructionContext) {
 			}
 		}
 		{
-			p.SetState(48)
+			p.SetState(50)
 			p.Match(DD8ASMParserT__0)
 			if p.HasError() {
 				// Recognition error - abort rule
 				goto errorExit
 			}
-		}
-		{
-			p.SetState(49)
-			p.Match(DD8ASMParserEOL)
-			if p.HasError() {
-				// Recognition error - abort rule
-				goto errorExit
-			}
-		}
-		{
-			p.SetState(50)
-			p.Prep_def_arg_lines()
 		}
 		{
 			p.SetState(51)
@@ -769,6 +784,18 @@ func (p *DD8ASMParser) Prep_instruction() (localctx IPrep_instructionContext) {
 		}
 		{
 			p.SetState(52)
+			p.Prep_def_arg_lines()
+		}
+		{
+			p.SetState(53)
+			p.Match(DD8ASMParserEOL)
+			if p.HasError() {
+				// Recognition error - abort rule
+				goto errorExit
+			}
+		}
+		{
+			p.SetState(54)
 			p.Match(DD8ASMParserT__1)
 			if p.HasError() {
 				// Recognition error - abort rule
@@ -779,7 +806,7 @@ func (p *DD8ASMParser) Prep_instruction() (localctx IPrep_instructionContext) {
 	case 4:
 		p.EnterOuterAlt(localctx, 4)
 		{
-			p.SetState(54)
+			p.SetState(56)
 			p.Match(DD8ASMParserP_DEF)
 			if p.HasError() {
 				// Recognition error - abort rule
@@ -787,30 +814,15 @@ func (p *DD8ASMParser) Prep_instruction() (localctx IPrep_instructionContext) {
 			}
 		}
 		{
-			p.SetState(55)
+			p.SetState(57)
 			p.Prep_def_args()
 		}
 
 	case 5:
 		p.EnterOuterAlt(localctx, 5)
 		{
-			p.SetState(56)
-			p.Match(DD8ASMParserP_DB)
-			if p.HasError() {
-				// Recognition error - abort rule
-				goto errorExit
-			}
-		}
-		{
-			p.SetState(57)
-			p.Arglist()
-		}
-
-	case 6:
-		p.EnterOuterAlt(localctx, 6)
-		{
 			p.SetState(58)
-			p.Match(DD8ASMParserP_DW)
+			p.Match(DD8ASMParserP_DB)
 			if p.HasError() {
 				// Recognition error - abort rule
 				goto errorExit
@@ -819,6 +831,115 @@ func (p *DD8ASMParser) Prep_instruction() (localctx IPrep_instructionContext) {
 		{
 			p.SetState(59)
 			p.Arglist()
+		}
+
+	case 6:
+		p.EnterOuterAlt(localctx, 6)
+		{
+			p.SetState(60)
+			p.Match(DD8ASMParserP_DB)
+			if p.HasError() {
+				// Recognition error - abort rule
+				goto errorExit
+			}
+		}
+		{
+			p.SetState(61)
+			p.Match(DD8ASMParserT__0)
+			if p.HasError() {
+				// Recognition error - abort rule
+				goto errorExit
+			}
+		}
+		{
+			p.SetState(62)
+			p.Match(DD8ASMParserEOL)
+			if p.HasError() {
+				// Recognition error - abort rule
+				goto errorExit
+			}
+		}
+		{
+			p.SetState(63)
+			p.Arglist_lines()
+		}
+		{
+			p.SetState(64)
+			p.Match(DD8ASMParserEOL)
+			if p.HasError() {
+				// Recognition error - abort rule
+				goto errorExit
+			}
+		}
+		{
+			p.SetState(65)
+			p.Match(DD8ASMParserT__1)
+			if p.HasError() {
+				// Recognition error - abort rule
+				goto errorExit
+			}
+		}
+
+	case 7:
+		p.EnterOuterAlt(localctx, 7)
+		{
+			p.SetState(67)
+			p.Match(DD8ASMParserP_DW)
+			if p.HasError() {
+				// Recognition error - abort rule
+				goto errorExit
+			}
+		}
+		{
+			p.SetState(68)
+			p.Arglist()
+		}
+
+	case 8:
+		p.EnterOuterAlt(localctx, 8)
+		{
+			p.SetState(69)
+			p.Match(DD8ASMParserP_DW)
+			if p.HasError() {
+				// Recognition error - abort rule
+				goto errorExit
+			}
+		}
+		{
+			p.SetState(70)
+			p.Match(DD8ASMParserT__0)
+			if p.HasError() {
+				// Recognition error - abort rule
+				goto errorExit
+			}
+		}
+		{
+			p.SetState(71)
+			p.Match(DD8ASMParserEOL)
+			if p.HasError() {
+				// Recognition error - abort rule
+				goto errorExit
+			}
+		}
+		{
+			p.SetState(72)
+			p.Arglist_lines()
+		}
+		{
+			p.SetState(73)
+			p.Match(DD8ASMParserEOL)
+			if p.HasError() {
+				// Recognition error - abort rule
+				goto errorExit
+			}
+		}
+		{
+			p.SetState(74)
+			p.Match(DD8ASMParserT__1)
+			if p.HasError() {
+				// Recognition error - abort rule
+				goto errorExit
+			}
 		}
 
 	case antlr.ATNInvalidAltNumber:
@@ -940,11 +1061,11 @@ func (p *DD8ASMParser) Prep_def_args() (localctx IPrep_def_argsContext) {
 	p.EnterRule(localctx, 6, DD8ASMParserRULE_prep_def_args)
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(62)
+		p.SetState(78)
 		p.Name()
 	}
 	{
-		p.SetState(63)
+		p.SetState(79)
 		p.Match(DD8ASMParserT__2)
 		if p.HasError() {
 			// Recognition error - abort rule
@@ -952,7 +1073,7 @@ func (p *DD8ASMParser) Prep_def_args() (localctx IPrep_def_argsContext) {
 		}
 	}
 	{
-		p.SetState(64)
+		p.SetState(80)
 		p.Argument()
 	}
 
@@ -1076,15 +1197,15 @@ func (p *DD8ASMParser) Prep_def_arg_lines() (localctx IPrep_def_arg_linesContext
 	p.EnterRule(localctx, 8, DD8ASMParserRULE_prep_def_arg_lines)
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(66)
+		p.SetState(82)
 		p.Prep_def_args()
 	}
-	p.SetState(69)
+	p.SetState(85)
 	p.GetErrorHandler().Sync(p)
 
 	if p.GetInterpreter().AdaptivePredict(p.BaseParser, p.GetTokenStream(), 3, p.GetParserRuleContext()) == 1 {
 		{
-			p.SetState(67)
+			p.SetState(83)
 			p.Match(DD8ASMParserEOL)
 			if p.HasError() {
 				// Recognition error - abort rule
@@ -1092,7 +1213,7 @@ func (p *DD8ASMParser) Prep_def_arg_lines() (localctx IPrep_def_arg_linesContext
 			}
 		}
 		{
-			p.SetState(68)
+			p.SetState(84)
 			p.Prep_def_arg_lines()
 		}
 
@@ -1230,7 +1351,7 @@ func (s *InstructionContext) Accept(visitor antlr.ParseTreeVisitor) interface{} 
 func (p *DD8ASMParser) Instruction() (localctx IInstructionContext) {
 	localctx = NewInstructionContext(p, p.GetParserRuleContext(), p.GetState())
 	p.EnterRule(localctx, 10, DD8ASMParserRULE_instruction)
-	p.SetState(88)
+	p.SetState(104)
 	p.GetErrorHandler().Sync(p)
 	if p.HasError() {
 		goto errorExit
@@ -1240,44 +1361,44 @@ func (p *DD8ASMParser) Instruction() (localctx IInstructionContext) {
 	case 1:
 		p.EnterOuterAlt(localctx, 1)
 		{
-			p.SetState(71)
+			p.SetState(87)
 			p.Name()
 		}
 
 	case 2:
 		p.EnterOuterAlt(localctx, 2)
 		{
-			p.SetState(72)
+			p.SetState(88)
 			p.Name()
 		}
 		{
-			p.SetState(73)
+			p.SetState(89)
 			p.Arglist_p()
 		}
 
 	case 3:
 		p.EnterOuterAlt(localctx, 3)
 		{
-			p.SetState(75)
+			p.SetState(91)
 			p.Name()
 		}
 		{
-			p.SetState(76)
+			p.SetState(92)
 			p.Arglist()
 		}
 
 	case 4:
 		p.EnterOuterAlt(localctx, 4)
 		{
-			p.SetState(78)
+			p.SetState(94)
 			p.Name()
 		}
 		{
-			p.SetState(79)
+			p.SetState(95)
 			p.Arglist_p()
 		}
 		{
-			p.SetState(80)
+			p.SetState(96)
 			p.Match(DD8ASMParserT__3)
 			if p.HasError() {
 				// Recognition error - abort rule
@@ -1285,22 +1406,22 @@ func (p *DD8ASMParser) Instruction() (localctx IInstructionContext) {
 			}
 		}
 		{
-			p.SetState(81)
+			p.SetState(97)
 			p.Arglist()
 		}
 
 	case 5:
 		p.EnterOuterAlt(localctx, 5)
 		{
-			p.SetState(83)
+			p.SetState(99)
 			p.Name()
 		}
 		{
-			p.SetState(84)
+			p.SetState(100)
 			p.Arglist()
 		}
 		{
-			p.SetState(85)
+			p.SetState(101)
 			p.Match(DD8ASMParserT__3)
 			if p.HasError() {
 				// Recognition error - abort rule
@@ -1308,7 +1429,7 @@ func (p *DD8ASMParser) Instruction() (localctx IInstructionContext) {
 			}
 		}
 		{
-			p.SetState(86)
+			p.SetState(102)
 			p.Arglist_p()
 		}
 
@@ -1414,7 +1535,7 @@ func (p *DD8ASMParser) Arglist_p() (localctx IArglist_pContext) {
 	p.EnterRule(localctx, 12, DD8ASMParserRULE_arglist_p)
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(90)
+		p.SetState(106)
 		p.Match(DD8ASMParserT__4)
 		if p.HasError() {
 			// Recognition error - abort rule
@@ -1422,11 +1543,11 @@ func (p *DD8ASMParser) Arglist_p() (localctx IArglist_pContext) {
 		}
 	}
 	{
-		p.SetState(91)
+		p.SetState(107)
 		p.Arglist()
 	}
 	{
-		p.SetState(92)
+		p.SetState(108)
 		p.Match(DD8ASMParserT__5)
 		if p.HasError() {
 			// Recognition error - abort rule
@@ -1549,15 +1670,15 @@ func (p *DD8ASMParser) Arglist() (localctx IArglistContext) {
 	p.EnterRule(localctx, 14, DD8ASMParserRULE_arglist)
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(94)
+		p.SetState(110)
 		p.Argument()
 	}
-	p.SetState(97)
+	p.SetState(113)
 	p.GetErrorHandler().Sync(p)
 
 	if p.GetInterpreter().AdaptivePredict(p.BaseParser, p.GetTokenStream(), 5, p.GetParserRuleContext()) == 1 {
 		{
-			p.SetState(95)
+			p.SetState(111)
 			p.Match(DD8ASMParserT__3)
 			if p.HasError() {
 				// Recognition error - abort rule
@@ -1565,8 +1686,152 @@ func (p *DD8ASMParser) Arglist() (localctx IArglistContext) {
 			}
 		}
 		{
-			p.SetState(96)
+			p.SetState(112)
 			p.Arglist()
+		}
+
+	} else if p.HasError() { // JIM
+		goto errorExit
+	}
+
+errorExit:
+	if p.HasError() {
+		v := p.GetError()
+		localctx.SetException(v)
+		p.GetErrorHandler().ReportError(p, v)
+		p.GetErrorHandler().Recover(p, v)
+		p.SetError(nil)
+	}
+	p.ExitRule()
+	return localctx
+	goto errorExit // Trick to prevent compiler error if the label is not used
+}
+
+// IArglist_linesContext is an interface to support dynamic dispatch.
+type IArglist_linesContext interface {
+	antlr.ParserRuleContext
+
+	// GetParser returns the parser.
+	GetParser() antlr.Parser
+
+	// Getter signatures
+	Arglist() IArglistContext
+	EOL() antlr.TerminalNode
+	Arglist_lines() IArglist_linesContext
+
+	// IsArglist_linesContext differentiates from other interfaces.
+	IsArglist_linesContext()
+}
+
+type Arglist_linesContext struct {
+	antlr.BaseParserRuleContext
+	parser antlr.Parser
+}
+
+func NewEmptyArglist_linesContext() *Arglist_linesContext {
+	var p = new(Arglist_linesContext)
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
+	p.RuleIndex = DD8ASMParserRULE_arglist_lines
+	return p
+}
+
+func InitEmptyArglist_linesContext(p *Arglist_linesContext) {
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
+	p.RuleIndex = DD8ASMParserRULE_arglist_lines
+}
+
+func (*Arglist_linesContext) IsArglist_linesContext() {}
+
+func NewArglist_linesContext(parser antlr.Parser, parent antlr.ParserRuleContext, invokingState int) *Arglist_linesContext {
+	var p = new(Arglist_linesContext)
+
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, parent, invokingState)
+
+	p.parser = parser
+	p.RuleIndex = DD8ASMParserRULE_arglist_lines
+
+	return p
+}
+
+func (s *Arglist_linesContext) GetParser() antlr.Parser { return s.parser }
+
+func (s *Arglist_linesContext) Arglist() IArglistContext {
+	var t antlr.RuleContext
+	for _, ctx := range s.GetChildren() {
+		if _, ok := ctx.(IArglistContext); ok {
+			t = ctx.(antlr.RuleContext)
+			break
+		}
+	}
+
+	if t == nil {
+		return nil
+	}
+
+	return t.(IArglistContext)
+}
+
+func (s *Arglist_linesContext) EOL() antlr.TerminalNode {
+	return s.GetToken(DD8ASMParserEOL, 0)
+}
+
+func (s *Arglist_linesContext) Arglist_lines() IArglist_linesContext {
+	var t antlr.RuleContext
+	for _, ctx := range s.GetChildren() {
+		if _, ok := ctx.(IArglist_linesContext); ok {
+			t = ctx.(antlr.RuleContext)
+			break
+		}
+	}
+
+	if t == nil {
+		return nil
+	}
+
+	return t.(IArglist_linesContext)
+}
+
+func (s *Arglist_linesContext) GetRuleContext() antlr.RuleContext {
+	return s
+}
+
+func (s *Arglist_linesContext) ToStringTree(ruleNames []string, recog antlr.Recognizer) string {
+	return antlr.TreesStringTree(s, ruleNames, recog)
+}
+
+func (s *Arglist_linesContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case DD8ASMVisitor:
+		return t.VisitArglist_lines(s)
+
+	default:
+		return t.VisitChildren(s)
+	}
+}
+
+func (p *DD8ASMParser) Arglist_lines() (localctx IArglist_linesContext) {
+	localctx = NewArglist_linesContext(p, p.GetParserRuleContext(), p.GetState())
+	p.EnterRule(localctx, 16, DD8ASMParserRULE_arglist_lines)
+	p.EnterOuterAlt(localctx, 1)
+	{
+		p.SetState(115)
+		p.Arglist()
+	}
+	p.SetState(118)
+	p.GetErrorHandler().Sync(p)
+
+	if p.GetInterpreter().AdaptivePredict(p.BaseParser, p.GetTokenStream(), 6, p.GetParserRuleContext()) == 1 {
+		{
+			p.SetState(116)
+			p.Match(DD8ASMParserEOL)
+			if p.HasError() {
+				// Recognition error - abort rule
+				goto errorExit
+			}
+		}
+		{
+			p.SetState(117)
+			p.Arglist_lines()
 		}
 
 	} else if p.HasError() { // JIM
@@ -1719,9 +1984,9 @@ func (s *ArgumentContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 
 func (p *DD8ASMParser) Argument() (localctx IArgumentContext) {
 	localctx = NewArgumentContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 16, DD8ASMParserRULE_argument)
+	p.EnterRule(localctx, 18, DD8ASMParserRULE_argument)
 	p.EnterOuterAlt(localctx, 1)
-	p.SetState(103)
+	p.SetState(124)
 	p.GetErrorHandler().Sync(p)
 	if p.HasError() {
 		goto errorExit
@@ -1730,25 +1995,25 @@ func (p *DD8ASMParser) Argument() (localctx IArgumentContext) {
 	switch p.GetTokenStream().LA(1) {
 	case DD8ASMParserHEX_NUM, DD8ASMParserBIN_NUM, DD8ASMParserDEC_NUM:
 		{
-			p.SetState(99)
+			p.SetState(120)
 			p.Num()
 		}
 
 	case DD8ASMParserREG:
 		{
-			p.SetState(100)
+			p.SetState(121)
 			p.Reg()
 		}
 
 	case DD8ASMParserNAME:
 		{
-			p.SetState(101)
+			p.SetState(122)
 			p.Name()
 		}
 
 	case DD8ASMParserSTR:
 		{
-			p.SetState(102)
+			p.SetState(123)
 			p.Str()
 		}
 
@@ -1840,10 +2105,10 @@ func (s *StrContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 
 func (p *DD8ASMParser) Str() (localctx IStrContext) {
 	localctx = NewStrContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 18, DD8ASMParserRULE_str)
+	p.EnterRule(localctx, 20, DD8ASMParserRULE_str)
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(105)
+		p.SetState(126)
 		p.Match(DD8ASMParserSTR)
 		if p.HasError() {
 			// Recognition error - abort rule
@@ -1944,12 +2209,12 @@ func (s *NumContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 
 func (p *DD8ASMParser) Num() (localctx INumContext) {
 	localctx = NewNumContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 20, DD8ASMParserRULE_num)
+	p.EnterRule(localctx, 22, DD8ASMParserRULE_num)
 	var _la int
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(107)
+		p.SetState(128)
 		_la = p.GetTokenStream().LA(1)
 
 		if !((int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&229376) != 0) {
@@ -2043,10 +2308,10 @@ func (s *RegContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 
 func (p *DD8ASMParser) Reg() (localctx IRegContext) {
 	localctx = NewRegContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 22, DD8ASMParserRULE_reg)
+	p.EnterRule(localctx, 24, DD8ASMParserRULE_reg)
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(109)
+		p.SetState(130)
 		p.Match(DD8ASMParserREG)
 		if p.HasError() {
 			// Recognition error - abort rule
@@ -2137,10 +2402,10 @@ func (s *NameContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 
 func (p *DD8ASMParser) Name() (localctx INameContext) {
 	localctx = NewNameContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 24, DD8ASMParserRULE_name)
+	p.EnterRule(localctx, 26, DD8ASMParserRULE_name)
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(111)
+		p.SetState(132)
 		p.Match(DD8ASMParserNAME)
 		if p.HasError() {
 			// Recognition error - abort rule
@@ -2231,10 +2496,10 @@ func (s *LabelContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 
 func (p *DD8ASMParser) Label() (localctx ILabelContext) {
 	localctx = NewLabelContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 26, DD8ASMParserRULE_label)
+	p.EnterRule(localctx, 28, DD8ASMParserRULE_label)
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(113)
+		p.SetState(134)
 		p.Match(DD8ASMParserNAME)
 		if p.HasError() {
 			// Recognition error - abort rule
@@ -2242,7 +2507,7 @@ func (p *DD8ASMParser) Label() (localctx ILabelContext) {
 		}
 	}
 	{
-		p.SetState(114)
+		p.SetState(135)
 		p.Match(DD8ASMParserT__6)
 		if p.HasError() {
 			// Recognition error - abort rule

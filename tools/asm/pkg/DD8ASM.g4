@@ -16,7 +16,9 @@ prep_instruction
   | P_DEF '(' EOL prep_def_arg_lines EOL ')'
   | P_DEF prep_def_args
   | P_DB arglist
+  | P_DB '(' EOL arglist_lines EOL ')'
   | P_DW arglist
+  | P_DW '(' EOL arglist_lines EOL ')'
   ;
 
 prep_def_args
@@ -41,6 +43,10 @@ arglist_p
 
 arglist
   : argument (',' arglist)?
+  ;
+
+arglist_lines
+  : arglist (EOL arglist_lines)?
   ;
 
 argument

@@ -243,6 +243,26 @@ func TestThatCanParseSource(t *testing.T) {
 		}, ast)
 	})
 
+	t.Run(".db_ml", func(t *testing.T) {
+		ast := pkg.ParseSrc("", `
+      .db (
+         0x10, "test data", 0xff
+         0x11, "other data", 0xff
+      )
+      `)
+		require.False(t, ast.Errors.HasErrors())
+		assertAST(t, &pkg.AST{
+			Statements: []pkg.ASTStatement{
+				{
+					Type: pkg.ASTStatementTypeDataByte,
+					Operands: pkg.ASTOperands{
+						numOperand(0x10), strOperand("test data"), numOperand(0xff),
+						numOperand(0x11), strOperand("other data"), numOperand(0xff)},
+				},
+			},
+		}, ast)
+	})
+
 	t.Run(".dw", func(t *testing.T) {
 		ast := pkg.ParseSrc("", `
       .dw 0x10, "test data", 0xff
@@ -254,6 +274,27 @@ func TestThatCanParseSource(t *testing.T) {
 					Type: pkg.ASTStatementTypeDataWord,
 					Operands: pkg.ASTOperands{
 						numOperand(0x10), strOperand("test data"), numOperand(0xff)},
+				},
+			},
+		}, ast)
+	})
+
+	t.Run(".dw_ml", func(t *testing.T) {
+		ast := pkg.ParseSrc("", `
+      .dw ( 
+      0x10, "test data", 0xff 
+      "test", 0x00
+      )
+      `)
+		require.False(t, ast.Errors.HasErrors())
+		assertAST(t, &pkg.AST{
+			Statements: []pkg.ASTStatement{
+				{
+					Type: pkg.ASTStatementTypeDataWord,
+					Operands: pkg.ASTOperands{
+						numOperand(0x10), strOperand("test data"), numOperand(0xff),
+						strOperand("test"), numOperand(0x00),
+					},
 				},
 			},
 		}, ast)

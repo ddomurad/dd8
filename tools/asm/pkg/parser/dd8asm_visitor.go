@@ -32,6 +32,9 @@ type DD8ASMVisitor interface {
 	// Visit a parse tree produced by DD8ASMParser#arglist.
 	VisitArglist(ctx *ArglistContext) interface{}
 
+	// Visit a parse tree produced by DD8ASMParser#arglist_lines.
+	VisitArglist_lines(ctx *Arglist_linesContext) interface{}
+
 	// Visit a parse tree produced by DD8ASMParser#argument.
 	VisitArgument(ctx *ArgumentContext) interface{}
 

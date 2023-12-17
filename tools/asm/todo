@@ -1,4 +1,6 @@
+- allow for inline labels 
+- add vaiables definition - similar to avr .dseg 
+
 - do not allow for e.g. lda [0x10], x
-- add .db statement 
 - add [rjmp] to relative jump instruction 
 - make [addr] to be the calculated relative jump

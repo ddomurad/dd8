@@ -40,6 +40,10 @@ func (v *BaseDD8ASMVisitor) VisitArglist(ctx *ArglistContext) interface{} {
 	return v.VisitChildren(ctx)
 }
 
+func (v *BaseDD8ASMVisitor) VisitArglist_lines(ctx *Arglist_linesContext) interface{} {
+	return v.VisitChildren(ctx)
+}
+
 func (v *BaseDD8ASMVisitor) VisitArgument(ctx *ArgumentContext) interface{} {
 	return v.VisitChildren(ctx)
 }

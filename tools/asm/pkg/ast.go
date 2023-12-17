@@ -298,6 +298,27 @@ func (v *progVisitor) VisitArglist(ctx *parser.ArglistContext) interface{} {
 	return args
 }
 
+func (v *progVisitor) VisitArglist_lines(ctx *parser.Arglist_linesContext) interface{} {
+	children := ctx.GetChildren()
+	operands := ASTOperands{}
+
+	for _, child := range children {
+		vc := v.Visit(child.(antlr.ParseTree))
+		if vc == nil {
+			continue
+		}
+		switch tc := vc.(type) {
+		case ASTOperands:
+			operands = append(operands, tc...)
+		default:
+			v.statementStructureError(ctx.GetStart().GetLine())
+			return nil
+		}
+	}
+
+	return operands
+}
+
 func (v *progVisitor) VisitArgument(ctx *parser.ArgumentContext) interface{} {
 	children := ctx.GetChildren()
 	if len(children) != 1 {
@@ -394,9 +415,9 @@ func (v *progVisitor) VisitPrep_instruction(ctx *parser.Prep_instructionContext)
 	case ".def":
 		return v.buildPrepDefine(ctx, children[1:])
 	case ".db":
-		return v.buildPrepByte(ctx, 1, children[1:])
+		return v.buildPrepByte(ctx, ASTStatementTypeDataByte, children[1:])
 	case ".dw":
-		return v.buildPrepByte(ctx, 2, children[1:])
+		return v.buildPrepByte(ctx, ASTStatementTypeDataWord, children[1:])
 	}
 
 	v.statementStructureError(ctx.GetStart().GetLine())
@@ -486,22 +507,21 @@ func (v *progVisitor) buildPrepDefine(ctx *parser.Prep_instructionContext, child
 	return defs
 }
 
-func (v *progVisitor) buildPrepByte(ctx *parser.Prep_instructionContext, size int, children []antlr.Tree) interface{} {
-	if len(children) != 1 {
-		v.statementStructureError(ctx.GetStart().GetLine())
-		return nil
-	}
+func (v *progVisitor) buildPrepByte(ctx *parser.Prep_instructionContext, defType ASTStatementType, children []antlr.Tree) interface{} {
+	operands := make(ASTOperands, 0)
 
-	vc := v.Visit(children[0].(antlr.ParseTree))
-	operands, ok := vc.(ASTOperands)
-	if !ok {
-		v.statementStructureError(ctx.GetStart().GetLine())
-		return nil
-	}
+	for _, c := range children {
+		vc := v.Visit(c.(antlr.ParseTree))
+		if vc == nil {
+			continue
+		}
 
-	defType := ASTStatementTypeDataByte
-	if size == 2 {
-		defType = ASTStatementTypeDataWord
+		co, ok := vc.(ASTOperands)
+		if !ok {
+			v.statementStructureError(ctx.GetStart().GetLine())
+			return nil
+		}
+		operands = append(operands, co...)
 	}
 
 	return ASTStatement{
@@ -587,17 +607,17 @@ func NewErrorListener(srcName string) *ErrorListener {
 
 // ReportAmbiguity implements antlr.ErrorListener.
 func (*ErrorListener) ReportAmbiguity(recognizer antlr.Parser, dfa *antlr.DFA, startIndex int, stopIndex int, exact bool, ambigAlts *antlr.BitSet, configs *antlr.ATNConfigSet) {
-	panic("unimplemented")
+	panic("unimplemented ReportAmbiguity")
 }
 
 // ReportAttemptingFullContext implements antlr.ErrorListener.
 func (*ErrorListener) ReportAttemptingFullContext(recognizer antlr.Parser, dfa *antlr.DFA, startIndex int, stopIndex int, conflictingAlts *antlr.BitSet, configs *antlr.ATNConfigSet) {
-	panic("unimplemented")
+	panic("unimplemented ReportAttemptingFullContext")
 }
 
 // ReportContextSensitivity implements antlr.ErrorListener.
 func (*ErrorListener) ReportContextSensitivity(recognizer antlr.Parser, dfa *antlr.DFA, startIndex int, stopIndex int, prediction int, configs *antlr.ATNConfigSet) {
-	panic("unimplemented")
+	panic("unimplemented ReportContextSensitivity")
 }
 
 // SyntaxError implements antlr.ErrorListener.
