@@ -205,6 +205,8 @@ func TestThatCanParseSource(t *testing.T) {
         opca 0x10
       test_label:
         opcb 0x20
+      inline_label: opcc 0x30
+      label_1: label_2: opcd 0x40
       `)
 		require.False(t, ast.Errors.HasErrors())
 		assertAST(t, &pkg.AST{
@@ -222,6 +224,28 @@ func TestThatCanParseSource(t *testing.T) {
 					Type:     pkg.ASTStatementTypeInstruction,
 					OpCode:   "opcb",
 					Operands: []pkg.ASTOperand{numOperand(0x20)},
+				},
+				{
+					Type: pkg.ASTStatementTypeLabel,
+					Name: "inline_label",
+				},
+				{
+					Type:     pkg.ASTStatementTypeInstruction,
+					OpCode:   "opcc",
+					Operands: []pkg.ASTOperand{numOperand(0x30)},
+				},
+				{
+					Type: pkg.ASTStatementTypeLabel,
+					Name: "label_1",
+				},
+				{
+					Type: pkg.ASTStatementTypeLabel,
+					Name: "label_2",
+				},
+				{
+					Type:     pkg.ASTStatementTypeInstruction,
+					OpCode:   "opcd",
+					Operands: []pkg.ASTOperand{numOperand(0x40)},
 				},
 			},
 		}, ast)
@@ -356,6 +380,66 @@ func TestThatCanParseSource(t *testing.T) {
 					Type:     pkg.ASTStatementTypePrepDefine,
 					Name:     "TEST-100",
 					Operands: pkg.ASTOperands{numOperand(0b1001_1100)},
+				},
+			},
+		}, ast)
+	})
+
+	t.Run(".byte", func(t *testing.T) {
+		ast := pkg.ParseSrc("", `
+      .byte
+      `)
+		require.False(t, ast.Errors.HasErrors())
+		assertAST(t, &pkg.AST{
+			Statements: []pkg.ASTStatement{
+				{
+					Type:     pkg.ASTStatementTypeSkipBytes,
+					Operands: pkg.ASTOperands{numOperand(1)},
+				},
+			},
+		}, ast)
+	})
+
+	t.Run(".byte_10", func(t *testing.T) {
+		ast := pkg.ParseSrc("", `
+      .byte 10
+      `)
+		require.False(t, ast.Errors.HasErrors())
+		assertAST(t, &pkg.AST{
+			Statements: []pkg.ASTStatement{
+				{
+					Type:     pkg.ASTStatementTypeSkipBytes,
+					Operands: pkg.ASTOperands{numOperand(10)},
+				},
+			},
+		}, ast)
+	})
+
+	t.Run(".word", func(t *testing.T) {
+		ast := pkg.ParseSrc("", `
+      .word
+      `)
+		require.False(t, ast.Errors.HasErrors())
+		assertAST(t, &pkg.AST{
+			Statements: []pkg.ASTStatement{
+				{
+					Type:     pkg.ASTStatementTypeSkipWords,
+					Operands: pkg.ASTOperands{numOperand(1)},
+				},
+			},
+		}, ast)
+	})
+
+	t.Run(".word_10", func(t *testing.T) {
+		ast := pkg.ParseSrc("", `
+      .word 10
+      `)
+		require.False(t, ast.Errors.HasErrors())
+		assertAST(t, &pkg.AST{
+			Statements: []pkg.ASTStatement{
+				{
+					Type:     pkg.ASTStatementTypeSkipWords,
+					Operands: pkg.ASTOperands{numOperand(10)},
 				},
 			},
 		}, ast)

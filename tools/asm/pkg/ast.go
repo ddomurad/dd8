@@ -114,6 +114,8 @@ const (
 	ASTStatementTypeDataByte    ASTStatementType = ".db"
 	ASTStatementTypeDataWord    ASTStatementType = ".dw"
 	ASTStatementTypeLabel       ASTStatementType = "label"
+	ASTStatementTypeSkipBytes   ASTStatementType = ".byte"
+	ASTStatementTypeSkipWords   ASTStatementType = ".word"
 )
 
 type ASTStatement struct {
@@ -418,6 +420,10 @@ func (v *progVisitor) VisitPrep_instruction(ctx *parser.Prep_instructionContext)
 		return v.buildPrepByte(ctx, ASTStatementTypeDataByte, children[1:])
 	case ".dw":
 		return v.buildPrepByte(ctx, ASTStatementTypeDataWord, children[1:])
+	case ".byte":
+		return v.buildSkipBytes(ctx, ASTStatementTypeSkipBytes, children[1:])
+	case ".word":
+		return v.buildSkipBytes(ctx, ASTStatementTypeSkipWords, children[1:])
 	}
 
 	v.statementStructureError(ctx.GetStart().GetLine())
@@ -522,6 +528,35 @@ func (v *progVisitor) buildPrepByte(ctx *parser.Prep_instructionContext, defType
 			return nil
 		}
 		operands = append(operands, co...)
+	}
+
+	return ASTStatement{
+		Type:     defType,
+		Operands: operands,
+		SrcPointer: SrcPointer{
+			Name: v.srcName,
+			Line: ctx.GetStart().GetLine(),
+		},
+	}
+}
+
+func (v *progVisitor) buildSkipBytes(ctx *parser.Prep_instructionContext, defType ASTStatementType, children []antlr.Tree) interface{} {
+	if len(children) > 1 {
+		v.statementStructureError(ctx.GetStart().GetLine())
+		return nil
+	}
+
+	operands := make(ASTOperands, 1)
+
+	if len(children) == 1 {
+		vc := v.Visit(children[0].(antlr.ParseTree))
+		if vc == nil {
+			v.statementStructureError(ctx.GetStart().GetLine())
+			return nil
+		}
+		operands[0] = ASTOperand{Value: vc}
+	} else {
+		operands[0] = ASTOperand{Value: ASTNumber(1)}
 	}
 
 	return ASTStatement{

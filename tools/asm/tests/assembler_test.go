@@ -555,8 +555,34 @@ func TestThatCanBuildBinaryCode(t *testing.T) {
 		assertAssembler(t, `.dw "x"`, []byte{'x', 0x00})
 	})
 	t.Run("data_strings", func(t *testing.T) {
-		assertAssembler(t, `.db "d\n\r\t\\\n"`, []byte{'d', '\n', '\r', '\t', '\\', '\n'})
+		assertAssembler(t, `.db "d\n\r\t\\\n\""`, []byte{'d', '\n', '\r', '\t', '\\', '\n', '"'})
 		assertAssembler(t, `.dw "", "", ""`, []byte{})
 		assertAssembler(t, `.db "\x00\x01\xff\x111"`, []byte{0x00, 0x01, 0xff, 0x11, '1'})
+	})
+	t.Run("skip_bytes", func(t *testing.T) {
+		assertAssembler(t, `
+      .org 0x00 
+      .byte 
+      .db 0xaa 
+      .byte 3 
+      .db 0x11
+      .word 1
+      .db 0xff
+      .word 2 
+      .db 0x01
+      `, []byte{0x00, 0xaa, 0x00, 0x00, 0x00, 0x11, 0x00, 0x00, 0xff, 0x00, 0x00, 0x00, 0x00, 0x01})
+	})
+
+	t.Run("variable_test", func(t *testing.T) {
+		assertAssembler(t, `
+      .org 0xaaaa
+      var_1: .byte 
+      var_2: .word 2 
+      var_3: .byte 
+      .org 0x0000 
+      stx var_1 
+      stx var_2
+      stx var_3
+      `, []byte{0x8e, 0xaa, 0xaa, 0x8e, 0xab, 0xaa, 0x8e, 0xaf, 0xaa})
 	})
 }

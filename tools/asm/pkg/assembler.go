@@ -112,12 +112,12 @@ func getBytes(st ASTStatement) ([]byte, error) {
 	for _, op := range st.Operands {
 		if numValue, ok := op.Number(); ok {
 			if st.Type == ASTStatementTypeDataWord {
-				if numValue <= 0x00 || numValue >= 0xffff {
+				if numValue < 0x00 || numValue > 0xffff {
 					return nil, fmt.Errorf("expected 16bit value got: '%v'", numValue)
 				}
 				outBytes = append(outBytes, byte(numValue), byte(numValue>>8))
 			} else {
-				if numValue < 0x00 || numValue >= 0xff {
+				if numValue < 0x00 || numValue > 0xff {
 					return nil, fmt.Errorf("expected 8bit value got: '%v'", numValue)
 				}
 				outBytes = append(outBytes, byte(numValue))
@@ -170,6 +170,16 @@ func Assemble(oast *AST, opcodeAssembler OpcodeAssembler) (ByteCode, error) {
 					return nil, err
 				}
 				programCounter += len(bs)
+				continue
+			} else if s.Type == ASTStatementTypeSkipBytes || s.Type == ASTStatementTypeSkipWords {
+				n, ok := s.Operands[0].Number()
+				if !ok {
+					return nil, fmt.Errorf("expected number, got: '%v'", s.Operands[0])
+				}
+				if s.Type == ASTStatementTypeSkipWords {
+					n *= 2
+				}
+				programCounter += int(n)
 				continue
 			}
 

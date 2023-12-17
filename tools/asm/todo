@@ -1,6 +1,17 @@
-- allow for inline labels 
-- add vaiables definition - similar to avr .dseg 
+- math instructions 
+ (, ), +, -, *,/, <<, >>, %
+
+- functions 
+eg. low(0xaaaa) or high(NAME)
+eg. lcdenc("test string")
+
+- custom temlates 
 
 - do not allow for e.g. lda [0x10], x
 - add [rjmp] to relative jump instruction 
 - make [addr] to be the calculated relative jump
+e.g: bbr 0, 0x10, [0x01] ; would jump one byte
+     jmp [-0x02] ; would jump two bytes back
+
+
+

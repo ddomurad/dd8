@@ -7,7 +7,8 @@ prog
   ;
 
 statement
-  : (instruction | prep_instruction | label)? EOL
+  : label 
+  | (instruction | prep_instruction)? EOL
   ;
 
 prep_instruction
@@ -19,6 +20,8 @@ prep_instruction
   | P_DB '(' EOL arglist_lines EOL ')'
   | P_DW arglist
   | P_DW '(' EOL arglist_lines EOL ')'
+  | P_BYTE num?
+  | P_WORD num?
   ;
 
 prep_def_args
@@ -78,13 +81,15 @@ P_ORG: '.org';
 P_INC: '.inc';
 P_DB: '.db';
 P_DW: '.dw';
+P_BYTE: '.byte';
+P_WORD: '.word';
 
 REG
   : [A-Z]
   ;
 
 STR 
-  : '"' ( '""' | ~["\r\n] )* '"'
+  : '"' ( '\\"' | ~["\r\n] )* '"'
   ;
 
 HEX_NUM
