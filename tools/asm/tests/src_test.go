@@ -48,3 +48,21 @@ func TestThatCanParseComplexAssemlyFile(t *testing.T) {
 		})
 	}
 }
+
+func TestFullSpecRegression(t *testing.T) {
+	srcReader := pkg.NewFileSourceReader("./res/full_spec/")
+	testCases := map[string]string{
+		"main.asm": "main.out",
+	}
+
+	for srcName, expectedOutputFile := range testCases {
+		t.Run("test_file_"+srcName, func(t *testing.T) {
+			expectedOutput, err := srcReader.ReadSourceFile(expectedOutputFile)
+			require.NoError(t, err, "read expected output error")
+			bcode, err := pkg.AssembleSrc(srcName, srcReader, assemblers.OpcodeAssemblerW65C02S)
+			require.NoError(t, err, "assemble src")
+			hex := output.GetIntelHEX(bcode)
+			require.Equal(t, expectedOutput, string(hex))
+		})
+	}
+}

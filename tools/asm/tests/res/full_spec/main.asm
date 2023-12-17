@@ -1,7 +1,7 @@
 ; this is the only comment type 
 ; only EOL will terminate a comment 
 
-; all preprocessor directives start with a '.'
+; all preprocessor directives start with a '.' - except labels, labels always end with ':'
 ; preprocessor directives have effect on the assembly source code
 
 ; including a source file
@@ -67,8 +67,8 @@ my_var_2: .byte 2 ; my_var_2 points to addr VAR_DEF_LOC+1
 my_var_3: .byte   ; my_var_3 points to addr VAR_DEF_LOC+3
 
 my_other_var_1: .word   ; my_other_var_1 points to addr VAR_DEF_LOC+4
-my_other_var_2: .word 2 ;my_other_var_2 points to addr VAR_DEF_LOC+6 , note that .word 2 has a size of 4
-my_other_var_3: .word   ;my_other_var_3 points to addr VAR_DEF_LOC+10
+my_other_var_2: .word 2 ; my_other_var_2 points to addr VAR_DEF_LOC+6 , note that .word 2 has a size of 4
+my_other_var_3: .word   ; my_other_var_3 points to addr VAR_DEF_LOC+10
 
 ; and variables can be used in the code 
 .org 0x8080
