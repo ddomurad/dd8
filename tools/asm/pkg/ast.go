@@ -25,21 +25,6 @@ type ASTOperand struct {
 
 type ASTOperands []ASTOperand
 
-func (o ASTOperand) IsNumber() bool {
-	_, ok := o.Value.(ASTNumber)
-	return ok
-}
-
-func (o ASTOperand) IsRegister() bool {
-	_, ok := o.Value.(ASTRegister)
-	return ok
-}
-
-func (o ASTOperand) IsName() bool {
-	_, ok := o.Value.(ASTName)
-	return ok
-}
-
 func (o ASTOperand) Number() (ASTNumber, bool) {
 	v, ok := o.Value.(ASTNumber)
 	return v, ok
@@ -208,9 +193,7 @@ func (v *progVisitor) VisitProg(ctx *parser.ProgContext) interface{} {
 
 		switch tres := result.(type) {
 		case []ASTStatement:
-			for _, st := range tres {
-				ast.Statements = append(ast.Statements, st)
-			}
+			ast.Statements = append(ast.Statements, tres...)
 		case ASTStatement:
 			ast.Statements = append(ast.Statements, tres)
 		default:
@@ -392,6 +375,13 @@ func (v *progVisitor) VisitExpr(ctx *parser.ExprContext) interface{} {
 			Left:      operands[0],
 			Right:     nil,
 			Operation: operation,
+		}
+	}
+	if len(operands) == 1 && operation == ")" {
+		return ASTExpr{
+			Left:      operands[0],
+			Right:     nil,
+			Operation: "()",
 		}
 	}
 	v.statementStructureError(ctx.GetStart().GetLine())
@@ -824,6 +814,8 @@ func tryEvaluateExpr(ast *AST, s *ASTStatement, expr ASTExpr) any {
 			return ASTNumber(ln & 0xff)
 		case ".h":
 			return ASTNumber((ln >> 8) & 0xff)
+		case "()":
+			return ln
 		}
 	}
 
@@ -863,7 +855,7 @@ func tryEvaluateExpr(ast *AST, s *ASTStatement, expr ASTExpr) any {
 		Type:    SourceErrorTypeEvalError,
 		SrcName: s.SrcPointer.Name,
 		Line:    s.SrcPointer.Line,
-		Msg:     fmt.Sprint("expression evaluation failed"), //todo: better error
+		Msg:     "expression evaluation failed", //todo: better error
 	})
 	return expr
 }
