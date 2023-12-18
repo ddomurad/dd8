@@ -45,6 +45,11 @@ func (o ASTOperand) Name() (ASTName, bool) {
 	return v, ok
 }
 
+func (o ASTOperand) Expr() (ASTExpr, bool) {
+	v, ok := o.Value.(ASTExpr)
+	return v, ok
+}
+
 func (ol ASTOperands) Number(index int) (ASTNumber, bool) {
 	if len(ol) <= index {
 		return ASTNumber(0), false
@@ -736,7 +741,6 @@ func PreprocessDefinitions(ast *AST) {
 	filtSts := make([]ASTStatement, 0, len(ast.Statements))
 	defs := map[string]ASTOperand{}
 	for _, st := range ast.Statements {
-
 		if st.Type != ASTStatementTypePrepDefine {
 			filtSts = append(filtSts, st)
 			continue
@@ -751,6 +755,9 @@ func PreprocessDefinitions(ast *AST) {
 			})
 		}
 
+		if expr, ok := st.Operands[0].Expr(); ok {
+			st.Operands[0].Value = tryEvaluateExpr(ast, &st, expr)
+		}
 		defs[st.Name] = st.Operands[0]
 	}
 
@@ -860,15 +867,19 @@ func tryEvaluateExpr(ast *AST, s *ASTStatement, expr ASTExpr) any {
 	return expr
 }
 
-func PreprocessExpr(ast *AST) {
-	for _, s := range ast.Statements {
-		for i, o := range s.Operands {
-			expr, ok := o.Value.(ASTExpr)
-			if !ok {
-				continue
-			}
-			s.Operands[i].Value = tryEvaluateExpr(ast, &s, expr)
+func PreprocessExpression(ast *AST, s *ASTStatement) {
+	for i, o := range s.Operands {
+		expr, ok := o.Value.(ASTExpr)
+		if !ok {
+			continue
 		}
+		s.Operands[i].Value = tryEvaluateExpr(ast, s, expr)
+	}
+}
+
+func PreprocessExpressions(ast *AST) {
+	for _, s := range ast.Statements {
+		PreprocessExpression(ast, &s)
 	}
 }
 
@@ -877,7 +888,7 @@ func PreprocessAST(ast *AST, reader SourceReader) {
 	}
 
 	PreprocessDefinitions(ast)
-	PreprocessExpr(ast)
+	PreprocessExpressions(ast)
 }
 
 func ParseSrc(srcName string, src string) *AST {

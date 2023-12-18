@@ -82,7 +82,7 @@ func TestPreprocesor(t *testing.T) {
       `)
 		require.False(t, ast.Errors.HasErrors())
 		pkg.PreprocessDefinitions(ast)
-		pkg.PreprocessExpr(ast)
+		pkg.PreprocessExpressions(ast)
 		require.False(t, ast.Errors.HasErrors())
 		assertAST(t, &pkg.AST{
 			Statements: []pkg.ASTStatement{

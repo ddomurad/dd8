@@ -1,8 +1,13 @@
-- math instructions 
- (, ), +, -, *,/, <<, >>, %
+- refactor value resolving 
+expressions should be resolved as late as possible 
+names are part of the expression 
+definitions only register expressions 
+eg.
+.def V1 := 1 + 2 
+.def V2 := V1 * 2 ; => resolve_value_of{1 + 2}*2 
+
 
 - functions 
-eg. low(0xaaaa) or high(NAME)
 eg. lcdenc("test string")
 
 - custom temlates 

@@ -615,6 +615,15 @@ func TestThatCanBuildBinaryCode(t *testing.T) {
 			0xff, 0x5a, 0xfe, 0x5b, 0xfe, 0xaa, 0x11, 0x55, 0xff, 0x0a, 0x08, 0xea})
 	})
 
+	t.Run("expr_with_const_tests", func(t *testing.T) {
+		assertAssembler(t, `
+        .def N1 := 0xa0 | 0x0a 
+        .def N2 := N1 >> 1
+        .db N1
+        .db N2  
+      `, []byte{0xaa, 0x55})
+	})
+
 	t.Run("use_labels_in_statements", func(t *testing.T) {
 		bc := pkg.ByteCode{}
 		bc.SetBytes(0x1000, []byte{0xea})

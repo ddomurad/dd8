@@ -76,3 +76,27 @@ my_other_var_3: .word   ; my_other_var_3 points to addr VAR_DEF_LOC+10
   sta my_var_1
   ; and event jumped to !!! 
   jmp my_var_1 ; however this should be rarely useful
+
+
+; math expresions can be embeded into any place that accepts a number or (tbd string)
+.org 0x8100
+.db 0xa0 + 0x0a ; = 0xaa 
+.db 0xaa - 0xa0 ; = 0x0a 
+.db (2 + 2)*2   ; = 8 
+.db 2 + 2 * 2   ; = 6 
+.db 2 << 2      ; = 8 
+.db 10 >> 1     ; = 5 
+.db 2*2/2       ; = 2 
+.db 0xaa ^ 0xff ; = 0x55 
+.db 0xaa | 0x55 ; = 0xff 
+.db 0xaa & 0x55 ; = 0x00 
+.db 0x1234.l    ; = 0x34 
+.db 0x1234.h    ; = 0x12 
+.dw ~0xaaaa     ; = 0x5555 
+.dw ~0x00       ; = 0xffff 
+.db ~0xaa.l     ; = 0x55 
+.db ~0xaa.h     ; = 0xff 
+
+.db ~((0x11a9+(3>>1)).l>>1*2+1).l ; = 0xea
+
+
