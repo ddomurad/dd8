@@ -103,9 +103,9 @@ my_other_var_3: .word   ; my_other_var_3 points to addr VAR_DEF_LOC+10
 ; definitions can also represent register - however this might not be practical
 .def (
   DEF_WITH_LABEL := some_label + 0x10
-  RED_DEF        := x 
+  REG_DEF        := x 
   DEF_WITH_DEF   := DEF_WITH_LABEL - some_label
 )
 
 some_label:
-  lda DEF_WITH_DEF, x
+  lda DEF_WITH_DEF, REG_DEF
