@@ -23,8 +23,6 @@ func assertAssembler(t *testing.T, src string, expected []byte) {
 		fmt.Printf("AST ERROR: %s at line %d\n", e.Msg, e.Line)
 	}
 	require.False(t, ast.Errors.HasErrors())
-	// pkg.PreprocessAST(ast, nil)
-	// require.False(t, ast.Errors.HasErrors())
 	bcode, err := pkg.Assemble(ast, assemblers.OpcodeAssemblerW65C02S)
 	require.Nil(t, err)
 	assertByteCodeWithArray(t, expected, bcode)
@@ -34,8 +32,6 @@ func assertAssemblerBC(t *testing.T, src string, expected pkg.ByteCode) {
 	src += "\n"
 	ast := pkg.ParseSrc("test.asm", src)
 	require.False(t, ast.Errors.HasErrors())
-	// pkg.PreprocessAST(ast, nil)
-	// require.False(t, ast.Errors.HasErrors())
 	bcode, err := pkg.Assemble(ast, assemblers.OpcodeAssemblerW65C02S)
 	require.Nil(t, err)
 	require.Equal(t, expected, bcode)
@@ -611,8 +607,9 @@ func TestThatCanBuildBinaryCode(t *testing.T) {
       .db ~0xaa.l>>1*2+1 
       .db (2+2)*2
       .db ~((0x11a9+(3>>1)).l>>1*2+1).l
+      .db 2*2 - 0x01
       `, []byte{0x02, 0x20, 0x02, 0x08, 0x05, 0x03, 0x11, 0x01, 0x55, 0x5a,
-			0xff, 0x5a, 0xfe, 0x5b, 0xfe, 0xaa, 0x11, 0x55, 0xff, 0x0a, 0x08, 0xea})
+			0xff, 0x5a, 0xfe, 0x5b, 0xfe, 0xaa, 0x11, 0x55, 0xff, 0x0a, 0x08, 0xea, 0x03})
 	})
 
 	t.Run("expr_with_const_tests", func(t *testing.T) {
@@ -635,19 +632,34 @@ func TestThatCanBuildBinaryCode(t *testing.T) {
         .org CSTART
         nop
         test_label:
-          nop
+          nop 
           ldai OTHER.l
       `, bc)
 	})
 
 	t.Run("register_definitions", func(t *testing.T) {
-		bc := pkg.ByteCode{}
-		bc.SetBytes(0x00, []byte{0xb5, 0x41})
-		assertAssemblerBC(t, `
+		assertAssembler(t, `
         .def (
-        TEST_REG := x
+          TEST_REG := x
         )
         lda 0x41, TEST_REG 
-      `, bc)
+      `, []byte{0xb5, 0x41})
+	})
+
+	t.Run("string_expression", func(t *testing.T) {
+		assertAssembler(t, `
+        .def (
+          TEST_FACTOR := 2*2 - 1
+          TEST_STR := "some str"
+          TEST_STR_ADD := TEST_STR + " " + "suffix"
+          TEST_STR_MUL := "12"*TEST_FACTOR + "."
+        )
+        .db TEST_STR
+        .db TEST_STR_ADD
+        .db TEST_STR_MUL
+      `, []byte{
+			's', 'o', 'm', 'e', ' ', 's', 't', 'r',
+			's', 'o', 'm', 'e', ' ', 's', 't', 'r', ' ', 's', 'u', 'f', 'f', 'i', 'x',
+			'1', '2', '1', '2', '1', '2', '.'})
 	})
 }

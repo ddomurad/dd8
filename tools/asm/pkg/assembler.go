@@ -118,7 +118,7 @@ func getBytes(st ASTStatement, actx AssemblyContext) ([]byte, error) {
 			}
 			continue
 		}
-		if strValue, ok := op.String(); ok {
+		if strValue, ok := op.String(actx); ok {
 			for _, s := range []byte(strValue) {
 				outBytes = append(outBytes, byte(s))
 			}

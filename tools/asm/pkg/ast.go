@@ -29,9 +29,8 @@ func (o ASTOperand) Number(actx AssemblyContext) (ASTNumber, bool) {
 	return EvaluateExprTo[ASTNumber](o, actx)
 }
 
-func (o ASTOperand) String() (ASTString, bool) {
-	v, ok := o.Value.(ASTString)
-	return v, ok
+func (o ASTOperand) String(actx AssemblyContext) (ASTString, bool) {
+	return EvaluateExprTo[ASTString](o, actx)
 }
 
 func (o ASTOperand) Register(actx AssemblyContext) (ASTRegister, bool) {
@@ -95,10 +94,37 @@ func EvaluateExpr(expr ASTExpr, actx AssemblyContext) (any, bool) {
 		return v, ok
 	}
 
-	ln, lok := lv.(ASTNumber)
-	rn, rok := rv.(ASTNumber)
+	ln, lnok := lv.(ASTNumber)
+	ls, lsok := lv.(ASTString)
+	rn, rnok := rv.(ASTNumber)
+	rs, rsok := rv.(ASTString)
 
-	if lok && !rok {
+	// if (lnok && rsok) || (lsok && rnok) {
+	// 	return 0, false //todo: better error reporting
+	// }
+
+	if lsok && rnok {
+		switch expr.Operation {
+		case "*":
+			return ASTString(strings.Repeat(string(ls), int(rn))), true
+		default:
+			return "", false
+		}
+	}
+
+	if lsok && !rsok {
+		return ls, true
+	}
+	if lsok && rsok {
+		switch expr.Operation {
+		case "+":
+			return ASTString(ls + rs), true
+		default:
+			return "", false
+		}
+	}
+
+	if lnok && !rnok {
 		switch expr.Operation {
 		case ".l":
 			return ASTNumber(ln & 0xff), true
@@ -109,14 +135,14 @@ func EvaluateExpr(expr ASTExpr, actx AssemblyContext) (any, bool) {
 		}
 	}
 
-	if !lok && rok {
+	if !lnok && rnok {
 		switch expr.Operation {
 		case "~":
 			return ASTNumber(^rn & 0xffff), true
 		}
 	}
 
-	if lok && rok {
+	if lnok && rnok {
 		switch expr.Operation {
 		case "*":
 			return ASTNumber(ln * rn), true
@@ -456,6 +482,8 @@ func (v *progVisitor) VisitExpr(ctx *parser.ExprContext) interface{} {
 		}
 
 		switch tc := vc.(type) {
+		case ASTString:
+			operands = append(operands, tc)
 		case ASTNumber:
 			operands = append(operands, tc)
 		case ASTName:
@@ -475,7 +503,7 @@ func (v *progVisitor) VisitExpr(ctx *parser.ExprContext) interface{} {
 			Operation: operation,
 		}
 	}
-	if len(operands) == 1 && operation == "~" {
+	if len(operands) == 1 && (operation == "~") {
 		return ASTExpr{
 			Right:     operands[0],
 			Left:      nil,
@@ -764,39 +792,6 @@ func (v *progVisitor) statementStructureError(line int) {
 	v.errorListener.ProgramError(line, "unexpected statement structure")
 }
 
-func applyDefsToOperand(operand ASTOperand, defs map[string]ASTOperand) (ASTOperand, bool) {
-	nameOp, ok := operand.Name()
-	if !ok {
-		return ASTOperand{}, false
-	}
-
-	nv, ok := defs[string(nameOp)]
-	return nv, ok
-}
-
-func applyDefsToOperands(operands ASTOperands, defs map[string]ASTOperand) bool {
-	rok := false
-	for i, op := range operands {
-		nv, ok := applyDefsToOperand(op, defs)
-		if ok {
-			operands[i] = nv
-			rok = true
-		}
-	}
-
-	return rok
-}
-
-func applyDefinitions(ast *AST, defs map[string]ASTOperand) bool {
-	rok := false
-	for i, st := range ast.Statements {
-		rok = rok || applyDefsToOperands(st.Operands, defs)
-		ast.Statements[i] = st
-	}
-
-	return rok
-}
-
 type ErrorListener struct {
 	srcName string
 	errors  AssemblerError
@@ -843,35 +838,6 @@ func (l *ErrorListener) ProgramError(line int, msg string) {
 		Msg:     msg,
 	})
 }
-
-//	func PreprocessDefinitions(ast *AST) {
-//		filtSts := make([]ASTStatement, 0, len(ast.Statements))
-//		defs := map[string]ASTOperand{}
-//		for _, st := range ast.Statements {
-//			if st.Type != ASTStatementTypePrepDefine {
-//				filtSts = append(filtSts, st)
-//				continue
-//			}
-//			_, ok := defs[st.Name]
-//			if ok {
-//				ast.Errors.Append(SourceError{
-//					Type:    SourceErrorTypeEvalError,
-//					SrcName: st.SrcPointer.Name,
-//					Line:    st.SrcPointer.Line,
-//					Msg:     fmt.Sprintf("label redefinition: '%s'", st.Name),
-//				})
-//			}
-//
-//			if expr, ok := st.Operands[0].Expr(); ok {
-//				st.Operands[0].Value = tryEvaluateExpr(ast, &st, expr)
-//			}
-//			defs[st.Name] = st.Operands[0]
-//		}
-//
-//		ast.Statements = filtSts
-//		for applyDefinitions(ast, defs) {
-//		}
-//	}
 
 func PreprocessIncludes(ast *AST, reader SourceReader) bool {
 	updated := false

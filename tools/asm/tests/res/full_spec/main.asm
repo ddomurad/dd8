@@ -109,3 +109,12 @@ my_other_var_3: .word   ; my_other_var_3 points to addr VAR_DEF_LOC+10
 
 some_label:
   lda DEF_WITH_DEF, REG_DEF
+
+; some string operation are also supported
+.def (
+  SOME_STR := "some" + " " + "str" ; will concatenate strings
+  OTER_STR := SOME_STR + "."
+  REP_STR := "\x00"*10 ; will repeat the 0x00 byte 10 times
+)
+
+.db "\x00"*20 ; repeat 0x00 byte 20 times
