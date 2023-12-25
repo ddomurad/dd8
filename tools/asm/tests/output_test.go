@@ -4,8 +4,8 @@ import (
 	"strings"
 	"testing"
 
-	pkg "github.com/ddomurad/dd8/tools/asm/pkg"
-	"github.com/ddomurad/dd8/tools/asm/pkg/output"
+	pkg "github.com/ddomurad/dd8/tools/asm/asm"
+	"github.com/ddomurad/dd8/tools/asm/asm/output"
 	"github.com/stretchr/testify/require"
 )
 

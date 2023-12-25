@@ -4,7 +4,7 @@ import (
 	"reflect"
 	"testing"
 
-	pkg "github.com/ddomurad/dd8/tools/asm/pkg"
+	pkg "github.com/ddomurad/dd8/tools/asm/asm"
 	"github.com/stretchr/testify/require"
 )
 

@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"testing"
 
-	pkg "github.com/ddomurad/dd8/tools/asm/pkg"
-	"github.com/ddomurad/dd8/tools/asm/pkg/assemblers"
+	pkg "github.com/ddomurad/dd8/tools/asm/asm"
+	"github.com/ddomurad/dd8/tools/asm/asm/assemblers"
 	"github.com/stretchr/testify/require"
 )
 

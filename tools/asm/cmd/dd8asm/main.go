@@ -6,9 +6,9 @@ import (
 	"os"
 	"path"
 
-	pkg "github.com/ddomurad/dd8/tools/asm/pkg"
-	"github.com/ddomurad/dd8/tools/asm/pkg/assemblers"
-	"github.com/ddomurad/dd8/tools/asm/pkg/output"
+	pkg "github.com/ddomurad/dd8/tools/asm/asm"
+	"github.com/ddomurad/dd8/tools/asm/asm/assemblers"
+	"github.com/ddomurad/dd8/tools/asm/asm/output"
 )
 
 func main() {
