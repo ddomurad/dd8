@@ -26,7 +26,7 @@ func assertAssembler(t *testing.T, src string, expected []byte) {
 	// pkg.PreprocessAST(ast, nil)
 	// require.False(t, ast.Errors.HasErrors())
 	bcode, err := pkg.Assemble(ast, assemblers.OpcodeAssemblerW65C02S)
-	require.NoError(t, err)
+	require.Nil(t, err)
 	assertByteCodeWithArray(t, expected, bcode)
 }
 
@@ -37,7 +37,7 @@ func assertAssemblerBC(t *testing.T, src string, expected pkg.ByteCode) {
 	// pkg.PreprocessAST(ast, nil)
 	// require.False(t, ast.Errors.HasErrors())
 	bcode, err := pkg.Assemble(ast, assemblers.OpcodeAssemblerW65C02S)
-	require.NoError(t, err)
+	require.Nil(t, err)
 	require.Equal(t, expected, bcode)
 }
 

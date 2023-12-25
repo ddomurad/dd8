@@ -26,18 +26,7 @@ type ASTOperand struct {
 type ASTOperands []ASTOperand
 
 func (o ASTOperand) Number(actx AssemblyContext) (ASTNumber, bool) {
-	switch tv := o.Value.(type) {
-	case ASTExpr:
-		ev, ok := EvaluateExpr(tv, actx)
-		if !ok {
-			return 0, false
-		}
-		ns, ok := ev.(ASTNumber)
-		return ns, ok
-	case ASTNumber:
-		return tv, true
-	}
-	return 0, false
+	return EvaluateExprTo[ASTNumber](o, actx)
 }
 
 func (o ASTOperand) String() (ASTString, bool) {
@@ -46,18 +35,7 @@ func (o ASTOperand) String() (ASTString, bool) {
 }
 
 func (o ASTOperand) Register(actx AssemblyContext) (ASTRegister, bool) {
-	switch tv := o.Value.(type) {
-	case ASTExpr:
-		ev, ok := EvaluateExpr(tv, actx)
-		if !ok {
-			return "", false
-		}
-		rv, ok := ev.(ASTRegister)
-		return rv, ok
-	case ASTRegister:
-		return tv, true
-	}
-	return "", false
+	return EvaluateExprTo[ASTRegister](o, actx)
 }
 
 func (o ASTOperand) Name() (ASTName, bool) {
@@ -70,38 +48,25 @@ func (o ASTOperand) Expr() (ASTExpr, bool) {
 	return v, ok
 }
 
-//	func EvaluateRegExpr(expr ASTExpr, actx AssemblyContext) (ASTRegister, bool) {
-//		if expr.Operation != "" {
-//			return "", false //todo: add error
-//		}
-//		if expr.Left == nil {
-//			return "", false //todo: add error
-//		}
-//
-//		var success bool
-//		lv := expr.Left
-//
-//		if le, ok := lv.(ASTExpr); ok {
-//			lv, success = EvaluateNumExpr(le, actx)
-//			if !success {
-//				return "", false //todo: error handling
-//			}
-//		}
-//
-//		switch tl := expr.Left.(type) {
-//		case ASTName:
-//			if v, ok := actx.Deffinitions[string(tl)]; ok {
-//				if vi, ok := v.(ASTRegister); ok {
-//					return vi, true
-//				} else {
-//					//todo: error message
-//					return "", false
-//				}
-//			}
-//		}
-//
-//		return ASTRegister(""), true
-//	}
+func EvaluateExprTo[T any](o ASTOperand, actx AssemblyContext) (T, bool) {
+	var def T
+	switch tv := o.Value.(type) {
+	case ASTExpr:
+		ev, ok := EvaluateExpr(tv, actx)
+		if !ok {
+			return def, false
+		}
+		rv, ok := ev.(T)
+		if !ok {
+			return def, false
+		}
+		return rv, true
+	case T:
+		return tv, true
+	}
+
+	return def, false
+}
 
 func EvaluateExpr(expr ASTExpr, actx AssemblyContext) (any, bool) {
 	var success bool
@@ -121,21 +86,13 @@ func EvaluateExpr(expr ASTExpr, actx AssemblyContext) (any, bool) {
 		}
 	}
 
-	nn, nok := lv.(ASTName)
+	nv, nok := lv.(ASTName)
 	if nok && rv == nil && expr.Operation == "" {
-		if v, ok := actx.Labels[string(nn)]; ok {
+		if v, ok := actx.Labels[string(nv)]; ok {
 			return ASTNumber(v), true
 		}
-		if v, ok := actx.Deffinitions[string(nn)]; ok {
-			if vi, ok := v.(ASTNumber); ok {
-				return vi, true
-			} else if vi, ok := v.(ASTRegister); ok {
-				return vi, true
-			} else {
-				//todo: error message
-				return 0, false
-			}
-		}
+		v, ok := actx.Deffinitions[string(nv)]
+		return v, ok
 	}
 
 	ln, lok := lv.(ASTNumber)
@@ -189,21 +146,21 @@ func EvaluateExpr(expr ASTExpr, actx AssemblyContext) (any, bool) {
 
 func (ol ASTOperands) Number(index int, actx AssemblyContext) (ASTNumber, bool) {
 	if len(ol) <= index {
-		return ASTNumber(0), false
+		return 0, false
 	}
 	return ol[index].Number(actx)
 }
 
 func (ol ASTOperands) Register(index int, actx AssemblyContext) (ASTRegister, bool) {
 	if len(ol) <= index {
-		return ASTRegister('0'), false
+		return "", false
 	}
 	return ol[index].Register(actx)
 }
 
 func (ol ASTOperands) Name(index int) (ASTName, bool) {
 	if len(ol) <= index {
-		return ASTName(""), false
+		return "", false
 	}
 	v, ok := ol[index].Value.(ASTName)
 	return v, ok
@@ -211,7 +168,7 @@ func (ol ASTOperands) Name(index int) (ASTName, bool) {
 
 func (ol ASTOperands) String(index int) (ASTString, bool) {
 	if len(ol) <= index {
-		return ASTString(""), false
+		return "", false
 	}
 	v, ok := ol[index].Value.(ASTString)
 	return v, ok

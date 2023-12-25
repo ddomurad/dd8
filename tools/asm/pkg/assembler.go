@@ -13,6 +13,7 @@ type AssemblyContext struct {
 	Deffinitions   map[string]any
 	PrevByteCode   ByteCode
 	ByteCode       ByteCode
+	Errors         AssemblerError
 	PassCnt        int
 }
 
@@ -133,7 +134,20 @@ func getBytes(st ASTStatement, actx AssemblyContext) ([]byte, error) {
 	return outBytes, nil
 }
 
-func Assemble(ast *AST, opcodeAssembler OpcodeAssembler) (ByteCode, error) {
+func toAssemblyError(s ASTStatement, err string) *AssemblerError {
+	return &AssemblerError{
+		Errors: []SourceError{
+			SourceError{
+				Type:    SourceErrorTypeAssemblyError,
+				SrcName: s.SrcPointer.Name,
+				Line:    s.SrcPointer.Line,
+				Msg:     err,
+			},
+		},
+	}
+}
+
+func Assemble(ast *AST, opcodeAssembler OpcodeAssembler) (ByteCode, *AssemblerError) {
 	context := AssemblyContext{
 		ProgramCounter: 0,
 		Labels:         map[string]int{},
@@ -161,25 +175,25 @@ func Assemble(ast *AST, opcodeAssembler OpcodeAssembler) (ByteCode, error) {
 			} else if s.Type == ASTStatementTypeOrigin {
 				p0, ok := s.Operands.Number(0, context)
 				if !ok {
-					return nil, fmt.Errorf("expected exaclty 1 number operand")
+					return nil, toAssemblyError(s, "expected exaclty 1 number operand")
 				}
 				context.ProgramCounter = int(p0)
 				continue
 			} else if s.Type == ASTStatementTypeDataByte || s.Type == ASTStatementTypeDataWord {
 				bs, err := getBytes(s, context)
 				if err != nil {
-					return nil, err
+					return nil, toAssemblyError(s, err.Error())
 				}
 				err = context.ByteCode.SetBytes(context.ProgramCounter, bs)
 				if err != nil {
-					return nil, err
+					return nil, toAssemblyError(s, err.Error())
 				}
 				context.ProgramCounter += len(bs)
 				continue
 			} else if s.Type == ASTStatementTypeSkipBytes || s.Type == ASTStatementTypeSkipWords {
 				n, ok := s.Operands[0].Number(context)
 				if !ok {
-					return nil, fmt.Errorf("expected number, got: '%v'", reflect.TypeOf(s.Operands[0]))
+					return nil, toAssemblyError(s, fmt.Sprintf("expected number, got: '%v'", reflect.TypeOf(s.Operands[0])))
 				}
 				if s.Type == ASTStatementTypeSkipWords {
 					n *= 2
@@ -194,23 +208,23 @@ func Assemble(ast *AST, opcodeAssembler OpcodeAssembler) (ByteCode, error) {
 				}
 				v, ok := EvaluateExpr(expr, context)
 				if !ok {
-					//todo: err
+					return nil, toAssemblyError(s, "failed to evaluate expression")
 				}
 				context.Deffinitions[s.Name] = v
 				continue
 			}
 
 			if s.Type != ASTStatementTypeInstruction {
-				return nil, fmt.Errorf("unexpected statement: %v", s.Type)
+				return nil, toAssemblyError(s, fmt.Sprintf("unexpected statement: %v", s.Type))
 			}
 
 			opBytes, err := opcodeAssembler(s, context, context.PassCnt == 0)
 			if err != nil {
-				return nil, err
+				return nil, toAssemblyError(s, err.Error())
 			}
 			err = context.ByteCode.SetBytes(context.ProgramCounter, opBytes)
 			if err != nil {
-				return nil, err
+				return nil, toAssemblyError(s, err.Error())
 			}
 			context.ProgramCounter += len(opBytes)
 		}
@@ -222,22 +236,23 @@ func Assemble(ast *AST, opcodeAssembler OpcodeAssembler) (ByteCode, error) {
 		context.PrevByteCode = context.ByteCode
 		context.PassCnt++
 
-		if context.PassCnt > 10 {
-			panic("lol !!") //todo make this a poper errro
+		if context.PassCnt > 5 {
+			panic("to many assembly passes") //todo: make this a popper error
 		}
 	}
 }
 
-func AssembleSrc(srcName string, reader SourceReader, opcoOpcodeAssembler OpcodeAssembler) (ByteCode, error) {
+func AssembleSrc(srcName string, reader SourceReader, opcoOpcodeAssembler OpcodeAssembler) (ByteCode, *AssemblerError, error) {
 	ast, err := CompileAST(srcName, reader)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
 	PreprocessAllIncludes(ast, reader)
 	if ast.Errors.HasErrors() {
-		return nil, ast.Errors
+		return nil, &ast.Errors, nil
 	}
 
-	return Assemble(ast, opcoOpcodeAssembler)
+	bc, aerr := Assemble(ast, opcoOpcodeAssembler)
+	return bc, aerr, err
 }

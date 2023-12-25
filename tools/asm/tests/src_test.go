@@ -23,7 +23,8 @@ func TestThatCanParseSimpleAssemlyFile(t *testing.T) {
 		t.Run("test_file_"+srcName, func(t *testing.T) {
 			expectedOutput, err := srcReader.ReadSourceFile(expectedOutputFile)
 			require.NoError(t, err, "read expected output error")
-			bcode, err := pkg.AssembleSrc(srcName, srcReader, assemblers.OpcodeAssemblerW65C02S)
+			bcode, aerr, err := pkg.AssembleSrc(srcName, srcReader, assemblers.OpcodeAssemblerW65C02S)
+			require.Nil(t, aerr, "assemble src")
 			require.NoError(t, err, "assemble src")
 			hex := output.GetIntelHEX(bcode)
 			require.Equal(t, expectedOutput, string(hex))
@@ -41,7 +42,8 @@ func TestThatCanParseComplexAssemlyFile(t *testing.T) {
 		t.Run("test_file_"+srcName, func(t *testing.T) {
 			expectedOutput, err := srcReader.ReadSourceFile(expectedOutputFile)
 			require.NoError(t, err, "read expected output error")
-			bcode, err := pkg.AssembleSrc(srcName, srcReader, assemblers.OpcodeAssemblerW65C02S)
+			bcode, aerr, err := pkg.AssembleSrc(srcName, srcReader, assemblers.OpcodeAssemblerW65C02S)
+			require.Nil(t, aerr, "assemble src")
 			require.NoError(t, err, "assemble src")
 			hex := output.GetIntelHEX(bcode)
 			require.Equal(t, expectedOutput, string(hex))
@@ -59,7 +61,8 @@ func TestFullSpecRegression(t *testing.T) {
 		t.Run("test_file_"+srcName, func(t *testing.T) {
 			expectedOutput, err := srcReader.ReadSourceFile(expectedOutputFile)
 			require.NoError(t, err, "read expected output error")
-			bcode, err := pkg.AssembleSrc(srcName, srcReader, assemblers.OpcodeAssemblerW65C02S)
+			bcode, aerr, err := pkg.AssembleSrc(srcName, srcReader, assemblers.OpcodeAssemblerW65C02S)
+			require.Nil(t, aerr, "assemble src")
 			require.NoError(t, err, "assemble src")
 			hex := output.GetIntelHEX(bcode)
 			require.Equal(t, expectedOutput, string(hex))
