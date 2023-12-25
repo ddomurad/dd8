@@ -96,6 +96,8 @@ my_other_var_3: .word   ; my_other_var_3 points to addr VAR_DEF_LOC+10
 .dw ~0x00       ; = 0xffff 
 .db ~0xaa.l     ; = 0x55 
 .db ~0xaa.h     ; = 0xff 
+.db -(-10)      ; = 10
+
 
 .db ~((0x11a9+(3>>1)).l>>1*2+1).l ; = 0xea
 
