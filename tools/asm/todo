@@ -1,8 +1,6 @@
 
-- ensure "test/0" - will place a 0x00 at the end
-
 - functions 
-eg. lcdenc("test string")
+eg. some_func("test string")
 
 - custom temlates 
 
