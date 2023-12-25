@@ -139,6 +139,8 @@ func EvaluateExpr(expr ASTExpr, actx AssemblyContext) (any, bool) {
 		switch expr.Operation {
 		case "~":
 			return ASTNumber(^rn & 0xffff), true
+		case "-":
+			return -1 * ASTNumber(rn), true
 		}
 	}
 
@@ -503,7 +505,7 @@ func (v *progVisitor) VisitExpr(ctx *parser.ExprContext) interface{} {
 			Operation: operation,
 		}
 	}
-	if len(operands) == 1 && (operation == "~") {
+	if len(operands) == 1 && (operation == "~" || operation == "-") {
 		return ASTExpr{
 			Right:     operands[0],
 			Left:      nil,

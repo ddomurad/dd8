@@ -61,6 +61,7 @@ expr
   | expr ('.l' | '.h' ) 
   | expr ('*' | '/' | '%' ) expr
   | expr ('+' | '-') expr 
+  | '-' expr 
   | expr ('<<' | '>>' ) expr 
   | expr '&' expr 
   | expr '^' expr 
@@ -114,11 +115,11 @@ BIN_NUM
   ;
 
 DEC_NUM
-  : '-'?[0-9_]+
+  : [0-9_]+
   ;
 
 NAME
-  : [A-Z_-]+[A-Z_0-9-]+
+  : [A-Z_]+[A-Z_0-9-]+
   ;
 
 COMMENT

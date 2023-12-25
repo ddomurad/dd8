@@ -137,7 +137,7 @@ func getBytes(st ASTStatement, actx AssemblyContext) ([]byte, error) {
 func toAssemblyError(s ASTStatement, err string) *AssemblerError {
 	return &AssemblerError{
 		Errors: []SourceError{
-			SourceError{
+			{
 				Type:    SourceErrorTypeAssemblyError,
 				SrcName: s.SrcPointer.Name,
 				Line:    s.SrcPointer.Line,
