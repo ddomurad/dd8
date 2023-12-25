@@ -23,8 +23,8 @@ func assertAssembler(t *testing.T, src string, expected []byte) {
 		fmt.Printf("AST ERROR: %s at line %d\n", e.Msg, e.Line)
 	}
 	require.False(t, ast.Errors.HasErrors())
-	pkg.PreprocessAST(ast, nil)
-	require.False(t, ast.Errors.HasErrors())
+	// pkg.PreprocessAST(ast, nil)
+	// require.False(t, ast.Errors.HasErrors())
 	bcode, err := pkg.Assemble(ast, assemblers.OpcodeAssemblerW65C02S)
 	require.NoError(t, err)
 	assertByteCodeWithArray(t, expected, bcode)
@@ -34,8 +34,8 @@ func assertAssemblerBC(t *testing.T, src string, expected pkg.ByteCode) {
 	src += "\n"
 	ast := pkg.ParseSrc("test.asm", src)
 	require.False(t, ast.Errors.HasErrors())
-	pkg.PreprocessAST(ast, nil)
-	require.False(t, ast.Errors.HasErrors())
+	// pkg.PreprocessAST(ast, nil)
+	// require.False(t, ast.Errors.HasErrors())
 	bcode, err := pkg.Assemble(ast, assemblers.OpcodeAssemblerW65C02S)
 	require.NoError(t, err)
 	require.Equal(t, expected, bcode)
@@ -626,11 +626,28 @@ func TestThatCanBuildBinaryCode(t *testing.T) {
 
 	t.Run("use_labels_in_statements", func(t *testing.T) {
 		bc := pkg.ByteCode{}
-		bc.SetBytes(0x1000, []byte{0xea})
+		bc.SetBytes(0x1000, []byte{0xea, 0xea, 0xa9, 0x01})
 		assertAssemblerBC(t, `
-        .def CSTART := 0x1000
+        .def (
+          CSTART := 0x1000
+          OTHER  := test_label + CSTART
+        )
         .org CSTART
         nop
+        test_label:
+          nop
+          ldai OTHER.l
+      `, bc)
+	})
+
+	t.Run("register_definitions", func(t *testing.T) {
+		bc := pkg.ByteCode{}
+		bc.SetBytes(0x00, []byte{0xb5, 0x41})
+		assertAssemblerBC(t, `
+        .def (
+        TEST_REG := x
+        )
+        lda 0x41, TEST_REG 
       `, bc)
 	})
 }

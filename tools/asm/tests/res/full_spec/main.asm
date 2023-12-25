@@ -20,7 +20,7 @@ jmp start        ; jump instruction, jump to location of 'start' label
 ; to define explicit data use .db (data byte) and .dw (data word)
 .org CONST_DATA_LOC ; set location counter to the value of CONST_DATA_LOC
 .db 0xaa   ; this will write 0xaa in the ROM at location   CONST_DATA_LOC+0
-.db 0x10   ; this will write 0x10 in the ROM at location   CONST_DATA_LOC+1 
+.db 0x10   ; this will write 0x  10 in the ROM at location   CONST_DATA_LOC+1 
 .dw 0x10   ; this will write 0x0010 in the ROM at location CONST_DATA_LOC+2 
 .dw 0xaaaa ; this will write 0xaaaa in the ROM at location CONST_DATA_LOC+4
 ; db writes 1 byte and increments the location counter by +1 
@@ -78,7 +78,7 @@ my_other_var_3: .word   ; my_other_var_3 points to addr VAR_DEF_LOC+10
   jmp my_var_1 ; however this should be rarely useful
 
 
-; math expresions can be embeded into any place that accepts a number or (tbd string)
+; math expressions can be embedded into any place that accepts a number or (tbd string)
 .org 0x8100
 .db 0xa0 + 0x0a ; = 0xaa 
 .db 0xaa - 0xa0 ; = 0x0a 
@@ -99,4 +99,13 @@ my_other_var_3: .word   ; my_other_var_3 points to addr VAR_DEF_LOC+10
 
 .db ~((0x11a9+(3>>1)).l>>1*2+1).l ; = 0xea
 
+; definitions can refer to labels and other definitions
+; definitions can also represent register - however this might not be practical
+.def (
+  DEF_WITH_LABEL := some_label + 0x10
+  RED_DEF        := x 
+  DEF_WITH_DEF   := DEF_WITH_LABEL - some_label
+)
 
+some_label:
+  lda DEF_WITH_DEF, x

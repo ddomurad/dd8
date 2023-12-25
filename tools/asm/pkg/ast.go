@@ -25,9 +25,19 @@ type ASTOperand struct {
 
 type ASTOperands []ASTOperand
 
-func (o ASTOperand) Number() (ASTNumber, bool) {
-	v, ok := o.Value.(ASTNumber)
-	return v, ok
+func (o ASTOperand) Number(actx AssemblyContext) (ASTNumber, bool) {
+	switch tv := o.Value.(type) {
+	case ASTExpr:
+		ev, ok := EvaluateExpr(tv, actx)
+		if !ok {
+			return 0, false
+		}
+		ns, ok := ev.(ASTNumber)
+		return ns, ok
+	case ASTNumber:
+		return tv, true
+	}
+	return 0, false
 }
 
 func (o ASTOperand) String() (ASTString, bool) {
@@ -35,9 +45,19 @@ func (o ASTOperand) String() (ASTString, bool) {
 	return v, ok
 }
 
-func (o ASTOperand) Register() (ASTRegister, bool) {
-	v, ok := o.Value.(ASTRegister)
-	return v, ok
+func (o ASTOperand) Register(actx AssemblyContext) (ASTRegister, bool) {
+	switch tv := o.Value.(type) {
+	case ASTExpr:
+		ev, ok := EvaluateExpr(tv, actx)
+		if !ok {
+			return "", false
+		}
+		rv, ok := ev.(ASTRegister)
+		return rv, ok
+	case ASTRegister:
+		return tv, true
+	}
+	return "", false
 }
 
 func (o ASTOperand) Name() (ASTName, bool) {
@@ -50,20 +70,135 @@ func (o ASTOperand) Expr() (ASTExpr, bool) {
 	return v, ok
 }
 
-func (ol ASTOperands) Number(index int) (ASTNumber, bool) {
+//	func EvaluateRegExpr(expr ASTExpr, actx AssemblyContext) (ASTRegister, bool) {
+//		if expr.Operation != "" {
+//			return "", false //todo: add error
+//		}
+//		if expr.Left == nil {
+//			return "", false //todo: add error
+//		}
+//
+//		var success bool
+//		lv := expr.Left
+//
+//		if le, ok := lv.(ASTExpr); ok {
+//			lv, success = EvaluateNumExpr(le, actx)
+//			if !success {
+//				return "", false //todo: error handling
+//			}
+//		}
+//
+//		switch tl := expr.Left.(type) {
+//		case ASTName:
+//			if v, ok := actx.Deffinitions[string(tl)]; ok {
+//				if vi, ok := v.(ASTRegister); ok {
+//					return vi, true
+//				} else {
+//					//todo: error message
+//					return "", false
+//				}
+//			}
+//		}
+//
+//		return ASTRegister(""), true
+//	}
+
+func EvaluateExpr(expr ASTExpr, actx AssemblyContext) (any, bool) {
+	var success bool
+	lv, rv := expr.Left, expr.Right
+
+	if le, ok := lv.(ASTExpr); ok {
+		lv, success = EvaluateExpr(le, actx)
+		if !success {
+			return 0, false
+		}
+	}
+
+	if re, ok := rv.(ASTExpr); ok {
+		rv, success = EvaluateExpr(re, actx)
+		if !success {
+			return 0, false
+		}
+	}
+
+	nn, nok := lv.(ASTName)
+	if nok && rv == nil && expr.Operation == "" {
+		if v, ok := actx.Labels[string(nn)]; ok {
+			return ASTNumber(v), true
+		}
+		if v, ok := actx.Deffinitions[string(nn)]; ok {
+			if vi, ok := v.(ASTNumber); ok {
+				return vi, true
+			} else if vi, ok := v.(ASTRegister); ok {
+				return vi, true
+			} else {
+				//todo: error message
+				return 0, false
+			}
+		}
+	}
+
+	ln, lok := lv.(ASTNumber)
+	rn, rok := rv.(ASTNumber)
+
+	if lok && !rok {
+		switch expr.Operation {
+		case ".l":
+			return ASTNumber(ln & 0xff), true
+		case ".h":
+			return ASTNumber((ln >> 8) & 0xff), true
+		case "()":
+			return ln, true
+		}
+	}
+
+	if !lok && rok {
+		switch expr.Operation {
+		case "~":
+			return ASTNumber(^rn & 0xffff), true
+		}
+	}
+
+	if lok && rok {
+		switch expr.Operation {
+		case "*":
+			return ASTNumber(ln * rn), true
+		case "/":
+			return ASTNumber(ln / rn), true
+		case "%":
+			return ASTNumber(ln % rn), true
+		case "+":
+			return ASTNumber(ln + rn), true
+		case "-":
+			return ASTNumber(ln - rn), true
+		case ">>":
+			return ASTNumber(ln >> rn), true
+		case "<<":
+			return ASTNumber(ln << rn), true
+		case "&":
+			return ASTNumber(ln & rn), true
+		case "^":
+			return ASTNumber(ln ^ rn), true
+		case "|":
+			return ASTNumber(ln | rn), true
+		}
+	}
+
+	return 0, true
+}
+
+func (ol ASTOperands) Number(index int, actx AssemblyContext) (ASTNumber, bool) {
 	if len(ol) <= index {
 		return ASTNumber(0), false
 	}
-	v, ok := ol[index].Value.(ASTNumber)
-	return v, ok
+	return ol[index].Number(actx)
 }
 
-func (ol ASTOperands) Register(index int) (ASTRegister, bool) {
+func (ol ASTOperands) Register(index int, actx AssemblyContext) (ASTRegister, bool) {
 	if len(ol) <= index {
 		return ASTRegister('0'), false
 	}
-	v, ok := ol[index].Value.(ASTRegister)
-	return v, ok
+	return ol[index].Register(actx)
 }
 
 func (ol ASTOperands) Name(index int) (ASTName, bool) {
@@ -79,6 +214,14 @@ func (ol ASTOperands) String(index int) (ASTString, bool) {
 		return ASTString(""), false
 	}
 	v, ok := ol[index].Value.(ASTString)
+	return v, ok
+}
+
+func (ol ASTOperands) Expr(index int) (ASTExpr, bool) {
+	if len(ol) <= index {
+		return ASTExpr{}, false
+	}
+	v, ok := ol[index].Value.(ASTExpr)
 	return v, ok
 }
 
@@ -330,6 +473,13 @@ func (v *progVisitor) VisitExpr(ctx *parser.ExprContext) interface{} {
 		if vc == nil {
 			v.statementStructureError(ctx.GetStart().GetLine())
 			return nil
+		}
+		if nameChild, ok := vc.(ASTName); ok {
+			return ASTExpr{
+				Left:      nameChild,
+				Right:     nil,
+				Operation: "",
+			}
 		}
 		return vc
 	}
@@ -737,34 +887,34 @@ func (l *ErrorListener) ProgramError(line int, msg string) {
 	})
 }
 
-func PreprocessDefinitions(ast *AST) {
-	filtSts := make([]ASTStatement, 0, len(ast.Statements))
-	defs := map[string]ASTOperand{}
-	for _, st := range ast.Statements {
-		if st.Type != ASTStatementTypePrepDefine {
-			filtSts = append(filtSts, st)
-			continue
-		}
-		_, ok := defs[st.Name]
-		if ok {
-			ast.Errors.Append(SourceError{
-				Type:    SourceErrorTypeEvalError,
-				SrcName: st.SrcPointer.Name,
-				Line:    st.SrcPointer.Line,
-				Msg:     fmt.Sprintf("label redefinition: '%s'", st.Name),
-			})
-		}
-
-		if expr, ok := st.Operands[0].Expr(); ok {
-			st.Operands[0].Value = tryEvaluateExpr(ast, &st, expr)
-		}
-		defs[st.Name] = st.Operands[0]
-	}
-
-	ast.Statements = filtSts
-	for applyDefinitions(ast, defs) {
-	}
-}
+//	func PreprocessDefinitions(ast *AST) {
+//		filtSts := make([]ASTStatement, 0, len(ast.Statements))
+//		defs := map[string]ASTOperand{}
+//		for _, st := range ast.Statements {
+//			if st.Type != ASTStatementTypePrepDefine {
+//				filtSts = append(filtSts, st)
+//				continue
+//			}
+//			_, ok := defs[st.Name]
+//			if ok {
+//				ast.Errors.Append(SourceError{
+//					Type:    SourceErrorTypeEvalError,
+//					SrcName: st.SrcPointer.Name,
+//					Line:    st.SrcPointer.Line,
+//					Msg:     fmt.Sprintf("label redefinition: '%s'", st.Name),
+//				})
+//			}
+//
+//			if expr, ok := st.Operands[0].Expr(); ok {
+//				st.Operands[0].Value = tryEvaluateExpr(ast, &st, expr)
+//			}
+//			defs[st.Name] = st.Operands[0]
+//		}
+//
+//		ast.Statements = filtSts
+//		for applyDefinitions(ast, defs) {
+//		}
+//	}
 
 func PreprocessIncludes(ast *AST, reader SourceReader) bool {
 	updated := false
@@ -801,94 +951,9 @@ func PreprocessIncludes(ast *AST, reader SourceReader) bool {
 	return updated
 }
 
-func tryEvaluateExpr(ast *AST, s *ASTStatement, expr ASTExpr) any {
-	lv, rv := expr.Left, expr.Right
-
-	if le, ok := lv.(ASTExpr); ok {
-		lv = tryEvaluateExpr(ast, s, le)
-	}
-
-	if re, ok := rv.(ASTExpr); ok {
-		rv = tryEvaluateExpr(ast, s, re)
-	}
-
-	ln, lok := lv.(ASTNumber)
-	rn, rok := rv.(ASTNumber)
-
-	if lok && !rok {
-		switch expr.Operation {
-		case ".l":
-			return ASTNumber(ln & 0xff)
-		case ".h":
-			return ASTNumber((ln >> 8) & 0xff)
-		case "()":
-			return ln
-		}
-	}
-
-	if !lok && rok {
-		switch expr.Operation {
-		case "~":
-			return ASTNumber(^rn & 0xffff)
-		}
-	}
-
-	if lok && rok {
-		switch expr.Operation {
-		case "*":
-			return ASTNumber(ln * rn)
-		case "/":
-			return ASTNumber(ln / rn)
-		case "%":
-			return ASTNumber(ln % rn)
-		case "+":
-			return ASTNumber(ln + rn)
-		case "-":
-			return ASTNumber(ln - rn)
-		case ">>":
-			return ASTNumber(ln >> rn)
-		case "<<":
-			return ASTNumber(ln << rn)
-		case "&":
-			return ASTNumber(ln & rn)
-		case "^":
-			return ASTNumber(ln ^ rn)
-		case "|":
-			return ASTNumber(ln | rn)
-		}
-	}
-
-	ast.Errors.Append(SourceError{
-		Type:    SourceErrorTypeEvalError,
-		SrcName: s.SrcPointer.Name,
-		Line:    s.SrcPointer.Line,
-		Msg:     "expression evaluation failed", //todo: better error
-	})
-	return expr
-}
-
-func PreprocessExpression(ast *AST, s *ASTStatement) {
-	for i, o := range s.Operands {
-		expr, ok := o.Value.(ASTExpr)
-		if !ok {
-			continue
-		}
-		s.Operands[i].Value = tryEvaluateExpr(ast, s, expr)
-	}
-}
-
-func PreprocessExpressions(ast *AST) {
-	for _, s := range ast.Statements {
-		PreprocessExpression(ast, &s)
-	}
-}
-
-func PreprocessAST(ast *AST, reader SourceReader) {
+func PreprocessAllIncludes(ast *AST, reader SourceReader) {
 	for PreprocessIncludes(ast, reader) {
 	}
-
-	PreprocessDefinitions(ast)
-	PreprocessExpressions(ast)
 }
 
 func ParseSrc(srcName string, src string) *AST {

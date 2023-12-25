@@ -7,6 +7,14 @@ import (
 )
 
 type ByteCode map[int]byte
+type AssemblyContext struct {
+	ProgramCounter int
+	Labels         map[string]int
+	Deffinitions   map[string]any
+	PrevByteCode   ByteCode
+	ByteCode       ByteCode
+	PassCnt        int
+}
 
 func (c ByteCode) SetBytes(sa int, byteCode []byte) error {
 	for i := 0; i < len(byteCode); i++ {
@@ -44,23 +52,8 @@ func (c ByteCode) GetAddresses() []int {
 	return addr
 }
 
-type OpcodeAssembler func(pcc int, inst ASTStatement, ignoreRelJmp bool) ([]byte, error)
-
-func substituteLabel(ast *AST, inst ASTStatement, labels map[string]int) ASTStatement {
-	for i, op := range inst.Operands {
-		strVal, ok := op.Name()
-		if !ok {
-			continue
-		}
-		lblAddr, ok := labels[string(strVal)]
-		if ok {
-			inst.Operands[i].Value = ASTNumber(lblAddr)
-		} else if ast.HasLabel(string(strVal)) {
-			inst.Operands[i].Value = ASTNumber(0x00) //note: temp. replace future label with 0x00
-		}
-	}
-	return inst
-}
+// type OpcodeAssembler func(pcc int, inst ASTStatement, ignoreRelJmp bool) ([]byte, error)
+type OpcodeAssembler func(inst ASTStatement, actx AssemblyContext, ignoreRelJmp bool) ([]byte, error)
 
 func EnsRegister(operands []any, index int) (string, error) {
 	if len(operands) <= index {
@@ -75,12 +68,12 @@ func EnsRegister(operands []any, index int) (string, error) {
 	return string(sv), nil
 }
 
-func Ens16bit(operands []ASTOperand, index int) (uint16, error) {
+func Ens16bit(operands []ASTOperand, index int, actx AssemblyContext) (uint16, error) {
 	if len(operands) <= index {
 		return 0, fmt.Errorf("expected at least %d operands", index)
 	}
 
-	v, ok := operands[0].Number()
+	v, ok := operands[0].Number(actx)
 	if !ok || v > 0xffff || v < 0 {
 		return 0, fmt.Errorf("expected 16bit value, got: %x (hex)", v)
 	}
@@ -106,11 +99,11 @@ func Ens8bit(num ASTNumber) (uint8, error) {
 	return uint8(num), nil
 }
 
-func getBytes(st ASTStatement) ([]byte, error) {
+func getBytes(st ASTStatement, actx AssemblyContext) ([]byte, error) {
 	outBytes := make([]byte, 0)
 
 	for _, op := range st.Operands {
-		if numValue, ok := op.Number(); ok {
+		if numValue, ok := op.Number(actx); ok {
 			if st.Type == ASTStatementTypeDataWord {
 				if numValue < 0x00 || numValue > 0xffff {
 					return nil, fmt.Errorf("expected 16bit value got: '%v'", numValue)
@@ -140,46 +133,70 @@ func getBytes(st ASTStatement) ([]byte, error) {
 	return outBytes, nil
 }
 
-func Assemble(oast *AST, opcodeAssembler OpcodeAssembler) (ByteCode, error) {
-	labels := map[string]int{}
-	prevByteCode := make(ByteCode)
-	passCnt := 0
+func Assemble(ast *AST, opcodeAssembler OpcodeAssembler) (ByteCode, error) {
+	context := AssemblyContext{
+		ProgramCounter: 0,
+		Labels:         map[string]int{},
+		Deffinitions:   map[string]any{},
+		PrevByteCode:   map[int]byte{},
+		ByteCode:       map[int]byte{},
+		PassCnt:        0,
+	}
+
+	for _, s := range ast.Statements {
+		if s.Type == ASTStatementTypeLabel {
+			context.Labels[s.Name] = 0x00
+		}
+	}
 
 	for {
-		programCounter := 0x00
-		byteCode := make(ByteCode)
-		astc := oast.Copy()
-		for _, s := range astc.Statements {
+		context.ProgramCounter = 0
+		context.ByteCode = make(ByteCode)
+		context.Deffinitions = map[string]any{}
+
+		for _, s := range ast.Statements {
 			if s.Type == ASTStatementTypeLabel {
-				labels[s.Name] = programCounter
+				context.Labels[s.Name] = context.ProgramCounter
 				continue
 			} else if s.Type == ASTStatementTypeOrigin {
-				p0, ok := s.Operands.Number(0)
+				p0, ok := s.Operands.Number(0, context)
 				if !ok {
-					return byteCode, fmt.Errorf("expected exaclty 1 number operand")
+					return nil, fmt.Errorf("expected exaclty 1 number operand")
 				}
-				programCounter = int(p0)
+				context.ProgramCounter = int(p0)
 				continue
 			} else if s.Type == ASTStatementTypeDataByte || s.Type == ASTStatementTypeDataWord {
-				bs, err := getBytes(s)
+				bs, err := getBytes(s, context)
 				if err != nil {
 					return nil, err
 				}
-				err = byteCode.SetBytes(programCounter, bs)
+				err = context.ByteCode.SetBytes(context.ProgramCounter, bs)
 				if err != nil {
 					return nil, err
 				}
-				programCounter += len(bs)
+				context.ProgramCounter += len(bs)
 				continue
 			} else if s.Type == ASTStatementTypeSkipBytes || s.Type == ASTStatementTypeSkipWords {
-				n, ok := s.Operands[0].Number()
+				n, ok := s.Operands[0].Number(context)
 				if !ok {
 					return nil, fmt.Errorf("expected number, got: '%v'", reflect.TypeOf(s.Operands[0]))
 				}
 				if s.Type == ASTStatementTypeSkipWords {
 					n *= 2
 				}
-				programCounter += int(n)
+				context.ProgramCounter += int(n)
+				continue
+			} else if s.Type == ASTStatementTypePrepDefine {
+				expr, ok := s.Operands.Expr(0)
+				if !ok {
+					context.Deffinitions[s.Name] = s.Operands[0].Value
+					continue
+				}
+				v, ok := EvaluateExpr(expr, context)
+				if !ok {
+					//todo: err
+				}
+				context.Deffinitions[s.Name] = v
 				continue
 			}
 
@@ -187,24 +204,27 @@ func Assemble(oast *AST, opcodeAssembler OpcodeAssembler) (ByteCode, error) {
 				return nil, fmt.Errorf("unexpected statement: %v", s.Type)
 			}
 
-			s = substituteLabel(astc, s, labels)
-			opBytes, err := opcodeAssembler(programCounter, s, passCnt == 0)
+			opBytes, err := opcodeAssembler(s, context, context.PassCnt == 0)
 			if err != nil {
 				return nil, err
 			}
-			err = byteCode.SetBytes(programCounter, opBytes)
+			err = context.ByteCode.SetBytes(context.ProgramCounter, opBytes)
 			if err != nil {
 				return nil, err
 			}
-			programCounter += len(opBytes)
+			context.ProgramCounter += len(opBytes)
 		}
 
-		if reflect.DeepEqual(prevByteCode, byteCode) {
-			return byteCode, nil
+		if reflect.DeepEqual(context.PrevByteCode, context.ByteCode) {
+			return context.ByteCode, nil
 		}
 
-		prevByteCode = byteCode
-		passCnt++
+		context.PrevByteCode = context.ByteCode
+		context.PassCnt++
+
+		if context.PassCnt > 10 {
+			panic("lol !!") //todo make this a poper errro
+		}
 	}
 }
 
@@ -214,7 +234,7 @@ func AssembleSrc(srcName string, reader SourceReader, opcoOpcodeAssembler Opcode
 		return nil, err
 	}
 
-	PreprocessAST(ast, reader)
+	PreprocessAllIncludes(ast, reader)
 	if ast.Errors.HasErrors() {
 		return nil, ast.Errors
 	}
