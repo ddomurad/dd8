@@ -1,10 +1,20 @@
 ; simple program to test the assembly language
-
+.def (
+ CNT_ADDR := 0x00 
+ CNT_START := 0x9
+)
 .org 0xf000 
+  
+  ldai CNT_START
+  sta CNT_ADDR
+  lda CNT_ADDR
+
   ldai 0b00001100 ; enable
   sta 0x8000
   ldai 0x80       ; set DDRAM = 0x00
   sta 0x8000 
+
+loop:
   ldai 0x01       ; clear display
   sta 0x8000 
 
@@ -96,6 +106,16 @@
 
   ldai 0x53 ; S
   sta 0x8001
+
+  clc
+  ldai 0x30 ; ,
+  adc CNT_ADDR ; + cnt
+  clc
+  sta 0x8001
+
+  dec CNT_ADDR ; cnt--
+  beq inf_loop
+  jmp loop
 
 inf_loop:
   jmp inf_loop
