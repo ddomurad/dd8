@@ -881,7 +881,13 @@ func PreprocessAllIncludes(ast *AST, reader SourceReader) {
 	}
 }
 
-func ParseSrc(srcName string, src string) *AST {
+func parseSrc(srcName string, src string, createListing bool) (*AST, *SourceListing) {
+	var srcListing *SourceListing
+	if createListing {
+		srcListing = NewSourceListing()
+		srcListing.AddSource(srcName, srcName)
+	}
+
 	errorListener := NewErrorListener(srcName)
 	input := antlr.NewInputStream(src)
 	lexer := parser.NewDD8ASMLexer(input)
@@ -893,6 +899,15 @@ func ParseSrc(srcName string, src string) *AST {
 
 	ast := newProgVisitor(srcName, errorListener).Visit(tree).(*AST)
 	ast.Errors = errorListener.errors
+	return ast, srcListing
+}
+
+func ParseSrcWithListing(srcName string, src string) (*AST, *SourceListing) {
+	return parseSrc(srcName, src, true)
+}
+
+func ParseSrc(srcName string, src string) *AST {
+	ast, _ := parseSrc(srcName, src, false)
 	return ast
 }
 
