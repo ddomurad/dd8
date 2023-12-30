@@ -23,7 +23,7 @@ func assertAssembler(t *testing.T, src string, expected []byte) {
 		fmt.Printf("AST ERROR: %s at line %d\n", e.Msg, e.Line)
 	}
 	require.False(t, ast.Errors.HasErrors())
-	bcode, err := pkg.Assemble(ast, assemblers.OpcodeAssemblerW65C02S)
+	bcode, err := pkg.Assemble(ast, assemblers.OpcodeAssemblerW65C02S, nil)
 	require.Nil(t, err)
 	assertByteCodeWithArray(t, expected, bcode)
 }
@@ -32,7 +32,7 @@ func assertAssemblerBC(t *testing.T, src string, expected pkg.ByteCode) {
 	src += "\n"
 	ast := pkg.ParseSrc("test.asm", src)
 	require.False(t, ast.Errors.HasErrors())
-	bcode, err := pkg.Assemble(ast, assemblers.OpcodeAssemblerW65C02S)
+	bcode, err := pkg.Assemble(ast, assemblers.OpcodeAssemblerW65C02S, nil)
 	require.Nil(t, err)
 	require.Equal(t, expected, bcode)
 }

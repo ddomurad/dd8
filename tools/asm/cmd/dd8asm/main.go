@@ -13,6 +13,7 @@ import (
 
 func main() {
 	outFile := flag.String("out", "", "output file")
+	listDir := flag.String("list", "", "source listing dir")
 
 	flag.Parse()
 	tail := flag.Args()
@@ -38,7 +39,8 @@ func main() {
 	intpuFile := path.Base(tail[0])
 
 	reader := pkg.NewFileSourceReader("./" + worksparceDir)
-	byteCode, aerr, err := pkg.AssembleSrc(intpuFile, reader, assemblers.OpcodeAssemblerW65C02S)
+
+	byteCode, sourceListing, aerr, err := pkg.AssembleSrc(intpuFile, reader, assemblers.OpcodeAssemblerW65C02S, *listDir != "")
 
 	if err != nil {
 		os.Stderr.WriteString(err.Error())
@@ -58,6 +60,16 @@ func main() {
 		os.Stderr.WriteString(err.Error())
 		os.Stderr.WriteString("\n")
 		os.Exit(1)
+	}
+
+	if *listDir != "" {
+		writer := pkg.NewFileSourceWriter("./" + *listDir)
+		err := sourceListing.Write(writer)
+		if err != nil {
+			os.Stderr.WriteString(err.Error())
+			os.Stderr.WriteString("\n")
+			os.Exit(1)
+		}
 	}
 
 	os.Exit(0)

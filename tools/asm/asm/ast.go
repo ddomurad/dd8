@@ -841,7 +841,7 @@ func (l *ErrorListener) ProgramError(line int, msg string) {
 	})
 }
 
-func PreprocessIncludes(ast *AST, reader SourceReader) bool {
+func PreprocessIncludes(ast *AST, sourceListing *SourceListing, reader SourceReader) bool {
 	updated := false
 	statements := make([]ASTStatement, 0, len(ast.Statements))
 	for _, s := range ast.Statements {
@@ -856,7 +856,7 @@ func PreprocessIncludes(ast *AST, reader SourceReader) bool {
 					Msg:     "include source name expected to be a string",
 				})
 			}
-			incAst, err := CompileAST(string(srcName), reader)
+			incAst, err := CompileAST(string(srcName), sourceListing, reader)
 			if err != nil {
 				ast.Errors.Append(SourceError{
 					Type:    SourceErrorTypeEvalError,
@@ -876,18 +876,12 @@ func PreprocessIncludes(ast *AST, reader SourceReader) bool {
 	return updated
 }
 
-func PreprocessAllIncludes(ast *AST, reader SourceReader) {
-	for PreprocessIncludes(ast, reader) {
+func PreprocessAllIncludes(ast *AST, sourceListing *SourceListing, reader SourceReader) {
+	for PreprocessIncludes(ast, sourceListing, reader) {
 	}
 }
 
-func parseSrc(srcName string, src string, createListing bool) (*AST, *SourceListing) {
-	var srcListing *SourceListing
-	if createListing {
-		srcListing = NewSourceListing()
-		srcListing.AddSource(srcName, srcName)
-	}
-
+func ParseSrc(srcName string, src string) *AST {
 	errorListener := NewErrorListener(srcName)
 	input := antlr.NewInputStream(src)
 	lexer := parser.NewDD8ASMLexer(input)
@@ -899,19 +893,10 @@ func parseSrc(srcName string, src string, createListing bool) (*AST, *SourceList
 
 	ast := newProgVisitor(srcName, errorListener).Visit(tree).(*AST)
 	ast.Errors = errorListener.errors
-	return ast, srcListing
-}
-
-func ParseSrcWithListing(srcName string, src string) (*AST, *SourceListing) {
-	return parseSrc(srcName, src, true)
-}
-
-func ParseSrc(srcName string, src string) *AST {
-	ast, _ := parseSrc(srcName, src, false)
 	return ast
 }
 
-func CompileAST(srcName string, reader SourceReader) (*AST, error) {
+func CompileAST(srcName string, sourceListing *SourceListing, reader SourceReader) (*AST, error) {
 	src, err := reader.ReadSourceFile(srcName)
 	if err != nil {
 		return nil, err
@@ -922,5 +907,8 @@ func CompileAST(srcName string, reader SourceReader) (*AST, error) {
 		return ast, ast.Errors
 	}
 
+	if sourceListing != nil {
+		sourceListing.AddSource(srcName, src)
+	}
 	return ast, nil
 }

@@ -147,7 +147,7 @@ func toAssemblyError(s ASTStatement, err string) *AssemblerError {
 	}
 }
 
-func Assemble(ast *AST, opcodeAssembler OpcodeAssembler) (ByteCode, *AssemblerError) {
+func Assemble(ast *AST, opcodeAssembler OpcodeAssembler, sourceListing *SourceListing) (ByteCode, *AssemblerError) {
 	context := AssemblyContext{
 		ProgramCounter: 0,
 		Labels:         map[string]int{},
@@ -167,6 +167,9 @@ func Assemble(ast *AST, opcodeAssembler OpcodeAssembler) (ByteCode, *AssemblerEr
 		context.ProgramCounter = 0
 		context.ByteCode = make(ByteCode)
 		context.Deffinitions = map[string]any{}
+		if sourceListing != nil {
+			sourceListing.ClearCodePass()
+		}
 
 		for _, s := range ast.Statements {
 			if s.Type == ASTStatementTypeLabel {
@@ -187,6 +190,9 @@ func Assemble(ast *AST, opcodeAssembler OpcodeAssembler) (ByteCode, *AssemblerEr
 				err = context.ByteCode.SetBytes(context.ProgramCounter, bs)
 				if err != nil {
 					return nil, toAssemblyError(s, err.Error())
+				}
+				if sourceListing != nil {
+					sourceListing.AddCode(s.SrcPointer.Name, s.SrcPointer.Line, context.ProgramCounter, bs...)
 				}
 				context.ProgramCounter += len(bs)
 				continue
@@ -226,6 +232,10 @@ func Assemble(ast *AST, opcodeAssembler OpcodeAssembler) (ByteCode, *AssemblerEr
 			if err != nil {
 				return nil, toAssemblyError(s, err.Error())
 			}
+			if sourceListing != nil {
+				sourceListing.AddCode(s.SrcPointer.Name, s.SrcPointer.Line, context.ProgramCounter, opBytes...)
+			}
+
 			context.ProgramCounter += len(opBytes)
 		}
 
@@ -242,17 +252,22 @@ func Assemble(ast *AST, opcodeAssembler OpcodeAssembler) (ByteCode, *AssemblerEr
 	}
 }
 
-func AssembleSrc(srcName string, reader SourceReader, opcoOpcodeAssembler OpcodeAssembler) (ByteCode, *AssemblerError, error) {
-	ast, err := CompileAST(srcName, reader)
+func AssembleSrc(srcName string, reader SourceReader, opcoOpcodeAssembler OpcodeAssembler, createListing bool) (ByteCode, *SourceListing, *AssemblerError, error) {
+	var sourceListing *SourceListing
+	if createListing {
+		sourceListing = NewSourceListing()
+	}
+
+	ast, err := CompileAST(srcName, sourceListing, reader)
 	if err != nil {
-		return nil, nil, err
+		return nil, nil, nil, err
 	}
 
-	PreprocessAllIncludes(ast, reader)
+	PreprocessAllIncludes(ast, sourceListing, reader)
 	if ast.Errors.HasErrors() {
-		return nil, &ast.Errors, nil
+		return nil, nil, &ast.Errors, nil
 	}
 
-	bc, aerr := Assemble(ast, opcoOpcodeAssembler)
-	return bc, aerr, err
+	bc, aerr := Assemble(ast, opcoOpcodeAssembler, sourceListing)
+	return bc, sourceListing, aerr, err
 }

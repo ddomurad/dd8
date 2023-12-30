@@ -1,0 +1,41 @@
+Line  Loc   Code         Source
+    1                   ;.def will define preprocessor constants 
+    2                   ; this constants are resolved during assembly of the source code 
+    3                   ; think of it as aliases to some values 
+    4                   
+    5                   .def CONST_1    := 0x10               ; number constant
+    6                   .def CONST_2    := 0x1010             ; number constant
+    7                   .def STR_CONST  := "this is a test"   ; string constant
+    8                   
+    9                   ; constants can be also defined in blocks 
+   10                   .def (
+   11                     OTHER_CONST_1   := 0x00
+   12                     OTHER_CONST_2   := 0xaa
+   13                     OTHER_CONST_STR := "other"
+   14                   )
+   15                   
+   16                   ; numbers can be represented in decimal, hexadecimal or binary format 
+   17                   ; numbers can be also augmented with '_' signs to enhance the readability
+   18                   
+   19                   .def (
+   20                     TEST_NUMBER_1 := 100         ; decimal form
+   21                     TEST_NUMBER_2 := 0xaa        ; hexadecimal
+   22                     TEST_NUMBER_3 := 0xaa_aa     ; hexadecimal with _ grouping
+   23                     TEST_NUMBER_4 := 0b1010_0011 ; binary with _ grouping
+   24                   )
+   25                   
+   26                   ; strings can encode special characters or binary data 
+   27                   .def (
+   28                     TEST_STR_1 := "this is\n\ta test \"string\""  ; \\, \", "\n, \t and \r can be used
+   29                     TEST_STR_2 := "this is a byte: \xaa"          ; \xNN represents a byte 
+   30                   )
+   31                   
+   32                   ; a defined constant can be used during constant definition 
+   33                   .def NEW_CONST := TEST_STR_2
+   34                   
+   35                   ; this constants are actually used in this test program 
+   36                   .def RST_VEC_ORG    := 0xfffc
+   37                   .def CONST_DATA_LOC := 0x8000
+   38                   .def TEST_INSTR_LOC := 0xf000
+   39                   .def VAR_DEF_LOC    := 0x0000
+   40                   
