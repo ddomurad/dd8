@@ -13,4 +13,4 @@ install:
 	go install ./cmd/dd8asm/...
 
 gen_antlr:
-	(cd ./pkg/ && antlr4 -no-listener -visitor -Dlanguage=Go -o parser DD8ASM.g4)
+	(cd ./asm/ && antlr4 -no-listener -visitor -Dlanguage=Go -o parser DD8ASM.g4)

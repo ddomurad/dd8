@@ -3,7 +3,7 @@ package assemblers
 import (
 	"fmt"
 
-	pkg "github.com/ddomurad/dd8/tools/asm/pkg"
+	pkg "github.com/ddomurad/dd8/tools/asm/asm"
 )
 
 var (
@@ -236,7 +236,7 @@ var (
 	}
 )
 
-func prepInstruction(inst pkg.ASTStatement) (indirect bool, opcode string, arg1u *uint16, arg1r *byte, arg2u *uint16, arg2r *byte, opcnt int, err error) {
+func prepInstruction(inst pkg.ASTStatement, actx pkg.AssemblyContext) (indirect bool, opcode string, arg1u *uint16, arg1r *byte, arg2u *uint16, arg2r *byte, opcnt int, err error) {
 	operands := inst.Operands
 
 	indirect = inst.Operands.Indirect(0) || inst.Operands.Indirect(1)
@@ -249,12 +249,12 @@ func prepInstruction(inst pkg.ASTStatement) (indirect bool, opcode string, arg1u
 	err = nil
 
 	if opcnt >= 1 {
-		v1r, ok := operands.Register(0)
+		v1r, ok := operands.Register(0, actx)
 		if ok {
 			v1rb := v1r[0]
 			arg1r = &v1rb
 		} else {
-			v1, ok := operands.Number(0)
+			v1, ok := operands.Number(0, actx)
 			if !ok {
 				err = fmt.Errorf("first operand expected to be a number, got instead: '%v'", operands[0])
 				return
@@ -268,13 +268,13 @@ func prepInstruction(inst pkg.ASTStatement) (indirect bool, opcode string, arg1u
 		}
 	}
 	if opcnt >= 2 {
-		v2n, ok := operands.Number(1)
+		v2n, ok := operands.Number(1, actx)
 		if ok {
 			v2u16 := uint16(v2n)
 			arg2u = &v2u16
 			return
 		}
-		v2, ok := operands.Register(1)
+		v2, ok := operands.Register(1, actx)
 		if !ok {
 			err = fmt.Errorf("first operand expected to be a register, got instead: '%v'", operands[1])
 			return
@@ -306,8 +306,9 @@ func is8bit(num *uint16) bool {
 	return num != nil && *num <= 0xff
 }
 
-func OpcodeAssemblerW65C02S(pc int, inst pkg.ASTStatement, ignoreRelJmp bool) ([]byte, error) {
-	indirect, opcode, arg1, arg1r, arg2, arg2r, opcnt, err := prepInstruction(inst)
+func OpcodeAssemblerW65C02S(inst pkg.ASTStatement, actx pkg.AssemblyContext, ignoreRelJmp bool) ([]byte, error) {
+	// func OpcodeAssemblerW65C02S(pc int, inst pkg.ASTStatement, ignoreRelJmp bool) ([]byte, error) {
+	indirect, opcode, arg1, arg1r, arg2, arg2r, opcnt, err := prepInstruction(inst, actx)
 	if err != nil {
 		return nil, err
 	}
@@ -327,7 +328,7 @@ func OpcodeAssemblerW65C02S(pc int, inst pkg.ASTStatement, ignoreRelJmp bool) ([
 	} else if !indirect && opcnt == 1 && arg1 != nil { // a
 		bc, ok := relativeIntructions[opcode]
 		if ok {
-			rj := (int(*arg1) - pc) - 0x02
+			rj := (int(*arg1) - actx.ProgramCounter) - 0x02
 			if rj > 127 || rj < -128 {
 				if !ignoreRelJmp {
 					return nil, fmt.Errorf("relative jump to large at %s", inst.SrcPointer.String())
@@ -406,14 +407,14 @@ func OpcodeAssemblerW65C02S(pc int, inst pkg.ASTStatement, ignoreRelJmp bool) ([
 			return []byte{bc + byte(*arg1)<<4, byte(*arg2)}, nil
 		}
 	} else if !indirect && arg1 != nil && arg2 != nil && opcnt == 3 {
-		arg3, arg3isNum := inst.Operands.Number(2)
+		arg3, arg3isNum := inst.Operands.Number(2, actx)
 		relative := !inst.Operands.Indirect(2)
 		if arg3isNum && is4bit(arg1) && is8bit(arg2) {
 			bc, ok := relativeBitInstructions[opcode]
 			if ok {
 				rj := int(arg3)
 				if relative {
-					rj -= pc + 0x03
+					rj -= actx.ProgramCounter + 0x03
 				}
 				if rj > 127 || rj < -128 {
 					return nil, fmt.Errorf("relative jump to large at %s", inst.SrcPointer.String())

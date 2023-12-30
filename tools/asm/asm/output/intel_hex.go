@@ -4,7 +4,7 @@ import (
 	"encoding/hex"
 	"strings"
 
-	pkg "github.com/ddomurad/dd8/tools/asm/pkg"
+	pkg "github.com/ddomurad/dd8/tools/asm/asm"
 )
 
 func getHEXLine(addr int, dataline []byte) string {

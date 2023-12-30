@@ -1,4 +1,4 @@
-package internal
+package asm
 
 import "fmt"
 
@@ -6,8 +6,9 @@ type SourceErrorType string
 
 const (
 	SourceErrorTypeSyntaxError              SourceErrorType = "syntax_err"
-	SourceErrorTypeUnexpectedStructureError SourceErrorType = "struc_err"
+	SourceErrorTypeUnexpectedStructureError SourceErrorType = "struct_err"
 	SourceErrorTypeEvalError                SourceErrorType = "eval_err"
+	SourceErrorTypeAssemblyError            SourceErrorType = "assembly_err"
 )
 
 type SourceError struct {

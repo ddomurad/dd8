@@ -1,3 +1,5 @@
+ROM and mainboard emulator. Can be used to monitor and single clock the 6502 cpu, and to emulate a ROM chip.
+
 UART interface protocol description:
 
 Server (PC) sends text commands to the ROM emulator (arduino mega). 
