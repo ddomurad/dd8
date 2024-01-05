@@ -1,0 +1,44 @@
+CPU clock at 10Mhz 
+
+I/O:
+  W65C51N:  
+    - 2x UART 
+  W65C22: 
+    - 2x 8bit GPIO 
+    - 2x 16bit Timer 
+
+  - SD CARD
+
+Memory mapping 
+
++-------+-----------+-----------+---------------------------+
+| SIZE  | ADDR      | Device    |   Mapping                 |
++-------+-----------+-----------+---------------------------+
+| 256   | 0000-00FF | 32k SRAM  | Zero-Page                 |
+| 256   | 0100-01FF | 15ns      | Stack                     |
+|32k-512| 0200-7FFF |           | General purpose RAM       |
++-------+-----------+-----------+---------------------------+
+| 8k    | 8000-BFFF | 128k SRAM | 16x8k banked SRAM         |
+|       |           | 55ns      |                           |
++-------+-----------+-----------+---------------------------+
+| 8k    | C000-DFFF | ???       | Reserved                  |
+|       | C000-DFFF | ??ns      | Extension slot space      |
++-------+-----------+-----------+---------------------------+
+| 8k    | C000-C3FF | 1k DP.RAM | Co processor shared memory|
+|       |           | 35ns      |                           |
+|       | C400-DFFF | 8k SRAM   | Co processor private memoy|
+|       |           | 15ns      |                           |
++-------+-----------+-----------+---------------------------+
+| 8k    | E000-FFFF |8k ROM 15ns| system & utility routines |
++-------+-----------+-----------+---------------------------+
+
+Memory chips used:
+1x AS7C256B-15PIN - SRAM 32k*8, 15ns 
+1x AS6C1008-55PCN - SRAM 128k*8, 55ns
+1x AT28C64B15PU - ROM, 8k*8, 15ns
+
+
+Potential GFX capabilities 
+16k ram for 256 x 8x8 bytes tiles 
+2k for tiles data 
+Some sprite data 
