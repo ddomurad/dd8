@@ -4,6 +4,9 @@ eg. some_func("test string")
 
 - custom temlates 
 
+- it is not possible to declare a non zero page opcode accesing zero page 
+e.g. lda 0x0000 will be interpreted as lda 0x00
+
 - do not allow for e.g. lda [0x10], x
 - add [rjmp] to relative jump instruction 
 - make [addr] to be the calculated relative jump
