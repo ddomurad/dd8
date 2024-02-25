@@ -1,0 +1,126 @@
+Line  Loc   Code         Source
+    1                   ; simple program to test the assembly language
+    2                   .def (
+    3                    CNT_ADDR := 0x00 
+    4                    CNT_START := 0x9
+    5                   )
+    6                   .org 0xf000 
+    7                     
+    8  f000  a909        ldai CNT_START
+    9  f002  8500        sta CNT_ADDR
+   10  f004  a500        lda CNT_ADDR
+   11                   
+   12  f006  a90c        ldai 0b00001100 ; enable
+   13  f008  8d0080      sta 0x8000
+   14  f00b  a980        ldai 0x80       ; set DDRAM = 0x00
+   15  f00d  8d0080      sta 0x8000 
+   16                   
+   17                   loop:
+   18  f010  a901        ldai 0x01       ; clear display
+   19  f012  8d0080      sta 0x8000 
+   20                   
+   21  f015  a950        ldai 0x50 ; P
+   22  f017  8d0180      sta 0x8001
+   23                   
+   24  f01a  a961        ldai 0x61 ; a
+   25  f01c  8d0180      sta 0x8001
+   26                   
+   27  f01f  a970        ldai 0x70 ; p
+   28  f021  8d0180      sta 0x8001
+   29                   
+   30  f024  a975        ldai 0x75 ; u
+   31  f026  8d0180      sta 0x8001
+   32                   
+   33  f029  a970        ldai 0x70 ; p
+   34  f02b  8d0180      sta 0x8001
+   35                   
+   36  f02e  a961        ldai 0x61 ; a
+   37  f030  8d0180      sta 0x8001
+   38                   
+   39  f033  a920        ldai 0x20 ; \s
+   40  f035  8d0180      sta 0x8001
+   41                   
+   42  f038  a92b        ldai 0x2b ; +
+   43  f03a  8d0180      sta 0x8001
+   44                   
+   45  f03d  a920        ldai 0x20 ; \s
+   46  f03f  8d0180      sta 0x8001
+   47                   
+   48  f042  a944        ldai 0x44 ; D
+   49  f044  8d0180      sta 0x8001
+   50                   
+   51  f047  a965        ldai 0x65 ; e
+   52  f049  8d0180      sta 0x8001
+   53                   
+   54  f04c  a964        ldai 0x64 ; d
+   55  f04e  8d0180      sta 0x8001
+   56                   
+   57  f051  a965        ldai 0x65 ; e
+   58  f053  8d0180      sta 0x8001
+   59                   
+   60                   
+   61  f056  a920        ldai 0x20 ; \s
+   62  f058  8d0180      sta 0x8001
+   63                   
+   64                   
+   65  f05b  a93d        ldai 0x3d ; =
+   66  f05d  8d0180      sta 0x8001
+   67                   
+   68  f060  a920        ldai 0x20 ; \s
+   69  f062  8d0180      sta 0x8001
+   70                   
+   71  f065  a94c        ldai 0x4c ; L
+   72  f067  8d0180      sta 0x8001
+   73                   
+   74  f06a  a94f        ldai 0x4f ; O
+   75  f06c  8d0180      sta 0x8001
+   76                   
+   77  f06f  a956        ldai 0x56 ; V
+   78  f071  8d0180      sta 0x8001
+   79                   
+   80  f074  a945        ldai 0x45 ; E
+   81  f076  8d0180      sta 0x8001
+   82                   
+   83                   
+   84                   
+   85  f079  a950        ldai 0x50 ; P
+   86  f07b  8d0180      sta 0x8001
+   87                   
+   88                   
+   89  f07e  a92b        ldai 0x2b ; +
+   90  f080  8d0180      sta 0x8001
+   91                   
+   92                   
+   93  f083  a944        ldai 0x44 ; D
+   94  f085  8d0180      sta 0x8001
+   95                   
+   96                   
+   97  f088  a93d        ldai 0x3d ; =
+   98  f08a  8d0180      sta 0x8001
+   99                   
+  100                   
+  101  f08d  a957        ldai 0x57 ; W
+  102  f08f  8d0180      sta 0x8001
+  103                   
+  104  f092  a92d        ldai 0x2d ; ,
+  105  f094  8d0180      sta 0x8001
+  106                   
+  107  f097  a953        ldai 0x53 ; S
+  108  f099  8d0180      sta 0x8001
+  109                   
+  110  f09c  18          clc
+  111  f09d  a930        ldai 0x30 ; ,
+  112  f09f  6500        adc CNT_ADDR ; + cnt
+  113  f0a1  18          clc
+  114  f0a2  8d0180      sta 0x8001
+  115                   
+  116  f0a5  c600        dec CNT_ADDR ; cnt--
+  117  f0a7  f003        beq inf_loop
+  118  f0a9  4c10f0      jmp loop
+  119                   
+  120                   inf_loop:
+  121  f0ac  4cacf0      jmp inf_loop
+  122                   
+  123                   .org 0xfffc
+  124  fffc  00f0      .db 0x00, 0xf0
+  125                   

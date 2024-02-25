@@ -1,0 +1,37 @@
+ROM and mainboard emulator. Can be used to monitor and single clock the 6502 cpu, and to emulate a ROM chip.
+
+UART interface protocol description:
+
+Server (PC) sends text commands to the ROM emulator (arduino mega). 
+
+Commands: 
+"s\n" CLK stop - this command will stop the clock signal at low state
+"r\n" CLK run - will resume clock cycle 
+"x\n" reset - will perform a reset procedure (pull reset signal high, then pull low), will also resume the clock signal 
+"cN\n" - set clock speed N = {0,1,2,3,4}, 3 and 4 without monitor output
+"n\n" - single step
+"b A\n" - set breakpoint (will stop the clock) on address A 
+"B A\n" - clear breakpoint 
+":INTEL_HEX\n" - will stop the clock and write to the emulated "ROM" memory provided data, this command will check the check-sum and possibly return an error message
+"d\n" - dump emulated ROM memory
+
+Output: 
+there are three types of responses: monitor output, command execution result and ROM memory dump
+
+Ready message:
+"!ready\n" - this message is send after emulator initialization
+
+Monitor output 
+every clock cycle the address bus and data buss are monitored and dumped on the serial port
+"ro ra kb lc oe we AAAA DD\n" 
+where AAAA (address) is a 16 bit hexadecimal number and DD (data) is a 8-bit hexadecimal number
+ro, ra, kb, lc, oe, and we describe active control signals
+
+Command result
+"!ok\n" - for success
+"!err MSG\n" - for error with a string message
+
+Every error will stop the clock automatically.
+
+ROM memory dump
+":DD ..." - for every ROM byte

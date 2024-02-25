@@ -1,0 +1,4 @@
+(fp_lib_table
+  (version 7)
+  (lib (name "dd8_footprints_library")(type "KiCad")(uri "/home/work/proj/dd8/hardware/kicad_library/dd8_footprints_library.pretty")(options "")(descr ""))
+)
