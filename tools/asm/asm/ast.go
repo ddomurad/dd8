@@ -231,8 +231,9 @@ type ASTStatementType string
 const (
 	ASTStatementTypeInstruction ASTStatementType = "instr"
 	ASTStatementTypeOrigin      ASTStatementType = ".org"
-	ASTStatementTypePrepDefine  ASTStatementType = ".def"
 	ASTStatementTypeInclude     ASTStatementType = ".inc"
+	ASTStatementTypePrepDefine  ASTStatementType = ".def"
+	ASTStatementTypeTemplate    ASTStatementType = ".tmpl"
 	ASTStatementTypeDataByte    ASTStatementType = ".db"
 	ASTStatementTypeDataWord    ASTStatementType = ".dw"
 	ASTStatementTypeLabel       ASTStatementType = "label"
@@ -615,6 +616,8 @@ func (v *progVisitor) VisitPrep_instruction(ctx *parser.Prep_instructionContext)
 		return v.buildPrepOrigin(ctx, children[1:])
 	case ".def":
 		return v.buildPrepDefine(ctx, children[1:])
+	case ".tmpl":
+		return v.buildPrepTemplate(ctx, children[1:])
 	case ".db":
 		return v.buildPrepByte(ctx, ASTStatementTypeDataByte, children[1:])
 	case ".dw":
@@ -694,6 +697,34 @@ func (v *progVisitor) buildPrepOrigin(ctx *parser.Prep_instructionContext, child
 
 func (v *progVisitor) buildPrepDefine(ctx *parser.Prep_instructionContext, children []antlr.Tree) interface{} {
 	defs := make([]ASTStatement, 0, len(children))
+	for _, c := range children {
+		vc := v.Visit(c.(antlr.ParseTree))
+		if vc == nil {
+			continue
+		}
+
+		switch tv := vc.(type) {
+		case []ASTStatement:
+			defs = append(defs, tv...)
+		default:
+			v.statementStructureError(ctx.GetStart().GetLine())
+			return nil
+		}
+	}
+
+	return defs
+}
+
+func (v *progVisitor) buildPrepTemplate(ctx *parser.Prep_instructionContext, children []antlr.Tree) interface{} {
+	defs := make([]ASTStatement, 0, len(children))
+
+	nameNode := v.Visit(children[0].(antlr.ParseTree))
+	arguments := v.Visit(children[1].(antlr.ParseTree))
+	body := v.Visit(children[2].(antlr.ParseTree))
+	_ = nameNode
+	_ = arguments
+	_ = body
+
 	for _, c := range children {
 		vc := v.Visit(c.(antlr.ParseTree))
 		if vc == nil {

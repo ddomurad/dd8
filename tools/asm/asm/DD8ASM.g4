@@ -16,6 +16,7 @@ prep_instruction
   | P_INC str
   | P_DEF '(' EOL prep_def_arg_lines EOL ')'
   | P_DEF prep_def_args
+  | P_TMPL name '(' namelist? ')'
   | P_DB arglist
   | P_DB '(' EOL arglist_lines EOL ')'
   | P_DW arglist
@@ -82,6 +83,10 @@ reg
   : REG
   ;
 
+namelist
+  : name (',' namelist)?
+  ;
+
 name
   : NAME
   ;
@@ -91,6 +96,7 @@ label
   ;
 
 P_DEF: '.def';
+P_TMPL: '.tmpl';
 P_ORG: '.org';
 P_INC: '.inc';
 P_DB: '.db';
@@ -99,7 +105,7 @@ P_BYTE: '.byte';
 P_WORD: '.word';
 
 REG
-  : [A-Z]
+  : [AXYZ]
   ;
 
 STR 
@@ -119,7 +125,7 @@ DEC_NUM
   ;
 
 NAME
-  : [A-Z_]+[A-Z_0-9-]+
+  : ([A-Z_][A-Z0-9_-]+|[B-W])
   ;
 
 COMMENT

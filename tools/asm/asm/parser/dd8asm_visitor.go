@@ -50,6 +50,9 @@ type DD8ASMVisitor interface {
 	// Visit a parse tree produced by DD8ASMParser#reg.
 	VisitReg(ctx *RegContext) interface{}
 
+	// Visit a parse tree produced by DD8ASMParser#namelist.
+	VisitNamelist(ctx *NamelistContext) interface{}
+
 	// Visit a parse tree produced by DD8ASMParser#name.
 	VisitName(ctx *NameContext) interface{}
 

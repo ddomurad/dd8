@@ -6,6 +6,7 @@
 
 ; including a source file
 .inc "defs.asm" ; the effect of this line is as if the whole file would replace this line 
+.inc "templates.asm"
 
 .org 0xff00           ; set location counter to 0xff00
 start:                ; define a label at location 0xff00

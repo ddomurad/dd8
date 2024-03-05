@@ -64,6 +64,10 @@ func (v *BaseDD8ASMVisitor) VisitReg(ctx *RegContext) interface{} {
 	return v.VisitChildren(ctx)
 }
 
+func (v *BaseDD8ASMVisitor) VisitNamelist(ctx *NamelistContext) interface{} {
+	return v.VisitChildren(ctx)
+}
+
 func (v *BaseDD8ASMVisitor) VisitName(ctx *NameContext) interface{} {
 	return v.VisitChildren(ctx)
 }

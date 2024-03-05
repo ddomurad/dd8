@@ -362,7 +362,7 @@ func TestThatCanParseSource(t *testing.T) {
 		}, ast)
 	})
 
-	t.Run("prep_ol_def", func(t *testing.T) {
+	t.Run("prep_sl_def", func(t *testing.T) {
 		ast := pkg.ParseSrc("", `
       .def TEST := 10
       .def TEST-100 := 0b1001_1100
@@ -382,6 +382,56 @@ func TestThatCanParseSource(t *testing.T) {
 				},
 			},
 		}, ast)
+	})
+
+	t.Run("prep_sl_def_single_caracter_name", func(t *testing.T) {
+		ast := pkg.ParseSrc("", `
+      .def I := 10
+      .def R := 12
+      `)
+		require.False(t, ast.Errors.HasErrors())
+		assertAST(t, &pkg.AST{
+			Statements: []pkg.ASTStatement{
+				{
+					Type:     pkg.ASTStatementTypePrepDefine,
+					Name:     "I",
+					Operands: pkg.ASTOperands{numOperand(10)},
+				},
+				{
+					Type:     pkg.ASTStatementTypePrepDefine,
+					Name:     "R",
+					Operands: pkg.ASTOperands{numOperand(12)},
+				},
+			},
+		}, ast)
+	})
+
+	t.Run("prep_sl_def_a_is_forbidden", func(t *testing.T) {
+		ast := pkg.ParseSrc("", `
+      .def a := 10
+      `)
+		require.True(t, ast.Errors.HasErrors())
+	})
+
+	t.Run("prep_sl_def_x_is_forbidden", func(t *testing.T) {
+		ast := pkg.ParseSrc("", `
+      .def x := 10
+      `)
+		require.True(t, ast.Errors.HasErrors())
+	})
+
+	t.Run("prep_sl_def_y_is_forbidden", func(t *testing.T) {
+		ast := pkg.ParseSrc("", `
+      .def y := 10
+      `)
+		require.True(t, ast.Errors.HasErrors())
+	})
+
+	t.Run("prep_sl_def_Z_is_forbidden", func(t *testing.T) {
+		ast := pkg.ParseSrc("", `
+      .def Z := 10
+      `)
+		require.True(t, ast.Errors.HasErrors())
 	})
 
 	t.Run("prep_ml_def", func(t *testing.T) {
@@ -521,6 +571,43 @@ func TestThatCanParseSource(t *testing.T) {
 					Type: pkg.ASTStatementTypeDataByte,
 					Operands: pkg.ASTOperands{exprOperand(
 						nil, "~", pkg.ASTNumber(1))},
+				},
+			},
+		}, ast)
+	})
+
+	t.Run(".tmpl_simple_templdate_vip", func(t *testing.T) {
+		ast := pkg.ParseSrc("", `
+      .tmpl test_template (v1, v2, v3)
+      `)
+		require.False(t, ast.Errors.HasErrors())
+		assertAST(t, &pkg.AST{
+			Statements: []pkg.ASTStatement{
+				{
+					Type: pkg.ASTStatementTypeTemplate,
+					Name: "test_template",
+					Operands: []pkg.ASTOperand{
+						nameOperand("test_template"),
+					},
+				},
+			},
+		}, ast)
+	})
+
+	t.Run(".tmpl_simple_templdate", func(t *testing.T) {
+		ast := pkg.ParseSrc("", `
+      .tmpl test_template (v1, v2, v3) {
+        opcode v1, v2
+        opcode v3
+      }
+      `)
+		require.False(t, ast.Errors.HasErrors())
+		assertAST(t, &pkg.AST{
+			Statements: []pkg.ASTStatement{
+				{
+					Type:     pkg.ASTStatementTypeTemplate,
+					Name:     "test_template",
+					Operands: []pkg.ASTOperand{},
 				},
 			},
 		}, ast)
