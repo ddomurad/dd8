@@ -716,4 +716,24 @@ func TestThatCanBuildBinaryCode(t *testing.T) {
 			't', 'e', 's', 't',
 		})
 	})
+
+	t.Run("tmpl_with_label", func(t *testing.T) {
+		assertAssembler(t, `
+        .tmpl test_tmpl (v1) { 
+          loop:
+            ldai v1 
+            jmp loop
+        }
+        loop:
+        @test_tmpl (0x11)
+        @test_tmpl (0x22)
+        jmp loop
+      `, []byte{
+			0xa9, 0x11,
+			0x4c, 0x00, 0x00,
+			0xa9, 0x22,
+			0x4c, 0x05, 0x00,
+			0x4c, 0x00, 0x00,
+		})
+	})
 }

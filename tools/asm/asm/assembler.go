@@ -18,63 +18,10 @@ type Template struct {
 	TemplateBlock ASTBlock
 }
 
-type contextDefintion struct {
-	ctx   string
-	name  string
-	value any
-}
-type PrepDeffinitions struct {
-	global  map[string]any
-	context []contextDefintion
-}
-
-func NewPrepDeffinitions() PrepDeffinitions {
-	return PrepDeffinitions{
-		global:  map[string]any{},
-		context: []contextDefintion{},
-	}
-}
-
-func (d *PrepDeffinitions) SetGlobal(name string, value any) {
-	d.global[name] = value
-}
-
-func (d *PrepDeffinitions) Get(name string) (any, bool) {
-	for i := len(d.context) - 1; i >= 0; i-- {
-		if d.context[i].name == name {
-			return d.context[i].value, true
-		}
-	}
-
-	if v, ok := d.global[name]; ok {
-		return v, true
-	}
-
-	return nil, false
-}
-
-func (d *PrepDeffinitions) PushContext(ctx, name string, value any) {
-	d.context = append(d.context, contextDefintion{
-		ctx:   ctx,
-		name:  name,
-		value: value,
-	})
-}
-
-func (d *PrepDeffinitions) PopContext(ctx string) {
-	newContext := make([]contextDefintion, 0, len(d.context))
-	for i := 0; i < len(d.context); i++ {
-		if d.context[i].ctx != ctx {
-			newContext = append(newContext, d.context[i])
-		}
-	}
-	d.context = newContext
-}
-
 type AssemblyContext struct {
 	ProgramCounter  int
-	Labels          map[string]int
-	Deffinitions    PrepDeffinitions
+	Labels          ContextMap[int]
+	Deffinitions    ContextMap[any]
 	Templates       map[string]Template
 	PrevByteCode    ByteCode
 	ByteCode        ByteCode
@@ -222,21 +169,25 @@ func AssembleTemplate(s ASTStatement, context *AssemblyContext, tmpl Template, a
 		context.SourceListing.SetOverrideLine(s.SrcPointer.Name, s.SrcPointer.Line)
 	}
 
+	context.Deffinitions.PushContext(rndCtxName)
+	context.Labels.PushContext(rndCtxName)
+
 	for i, arg := range tmpl.Arguments {
 		expr, ok := args.Expr(i)
 		if !ok {
-			context.Deffinitions.SetGlobal(string(arg), args[i].Value)
+			context.Deffinitions.Set(string(arg), args[i].Value)
 			continue
 		}
 		v, ok := EvaluateExpr(expr, *context)
 		if !ok {
 			return toAssemblyError(s, "failed to evaluate expression")
 		}
-		context.Deffinitions.PushContext(rndCtxName, string(arg), v)
+		context.Deffinitions.Set(string(arg), v)
 	}
 
 	err := AssempleStatements(context, tmpl.TemplateBlock.Statements)
 	context.Deffinitions.PopContext(rndCtxName)
+	context.Labels.PopContext(rndCtxName)
 
 	if context.SourceListing != nil {
 		context.SourceListing.ClearOverride()
@@ -248,7 +199,7 @@ func AssembleTemplate(s ASTStatement, context *AssemblyContext, tmpl Template, a
 func AssempleStatements(context *AssemblyContext, statements []ASTStatement) *AssemblerError {
 	for _, s := range statements {
 		if s.Type == ASTStatementTypeLabel {
-			context.Labels[s.Name] = context.ProgramCounter
+			context.Labels.Set(s.Name, context.ProgramCounter)
 			continue
 		} else if s.Type == ASTStatementTypeOrigin {
 			p0, ok := s.Operands.Number(0, *context)
@@ -284,14 +235,14 @@ func AssempleStatements(context *AssemblyContext, statements []ASTStatement) *As
 		} else if s.Type == ASTStatementTypePrepDefine {
 			expr, ok := s.Operands.Expr(0)
 			if !ok {
-				context.Deffinitions.SetGlobal(s.Name, s.Operands[0].Value)
+				context.Deffinitions.Set(s.Name, s.Operands[0].Value)
 				continue
 			}
 			v, ok := EvaluateExpr(expr, *context)
 			if !ok {
 				return toAssemblyError(s, "failed to evaluate expression")
 			}
-			context.Deffinitions.SetGlobal(s.Name, v)
+			context.Deffinitions.Set(s.Name, v)
 			continue
 		} else if s.Type == ASTStatementTypePrepTemplateDef {
 			argsNames, ok := s.Operands[0].Names()
@@ -345,8 +296,8 @@ func AssempleStatements(context *AssemblyContext, statements []ASTStatement) *As
 func Assemble(ast *AST, opcodeAssembler OpcodeAssembler, sourceListing *SourceListing) (ByteCode, *AssemblerError) {
 	context := AssemblyContext{
 		ProgramCounter:  0,
-		Labels:          map[string]int{},
-		Deffinitions:    NewPrepDeffinitions(),
+		Labels:          NewContextMap[int](),
+		Deffinitions:    NewContextMap[any](),
 		Templates:       map[string]Template{},
 		PrevByteCode:    map[int]byte{},
 		ByteCode:        map[int]byte{},
@@ -357,14 +308,14 @@ func Assemble(ast *AST, opcodeAssembler OpcodeAssembler, sourceListing *SourceLi
 
 	for _, s := range ast.Statements {
 		if s.Type == ASTStatementTypeLabel {
-			context.Labels[s.Name] = 0x00
+			context.Labels.Set(s.Name, 0x00)
 		}
 	}
 
 	for {
 		context.ProgramCounter = 0
 		context.ByteCode = make(ByteCode)
-		context.Deffinitions = NewPrepDeffinitions()
+		context.Deffinitions = NewContextMap[any]()
 		context.Templates = map[string]Template{}
 
 		if sourceListing != nil {

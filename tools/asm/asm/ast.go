@@ -101,7 +101,7 @@ func EvaluateExpr(expr ASTExpr, actx AssemblyContext) (any, bool) {
 
 	nv, nok := lv.(ASTName)
 	if nok && rv == nil && expr.Operation == "" {
-		if v, ok := actx.Labels[string(nv)]; ok {
+		if v, ok := actx.Labels.Get(string(nv)); ok {
 			return ASTNumber(v), true
 		}
 		v, ok := actx.Deffinitions.Get(string(nv))
