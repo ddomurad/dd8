@@ -223,7 +223,6 @@ func AssembleTemplate(s ASTStatement, context *AssemblyContext, tmpl Template, a
 	}
 
 	for i, arg := range tmpl.Arguments {
-		// todo: this kida shares same code as with the  `else if s.Type == ASTStatementTypePrepDefine`
 		expr, ok := args.Expr(i)
 		if !ok {
 			context.Deffinitions.SetGlobal(string(arg), args[i].Value)
@@ -376,96 +375,6 @@ func Assemble(ast *AST, opcodeAssembler OpcodeAssembler, sourceListing *SourceLi
 		if err != nil {
 			return nil, err
 		}
-
-		// for _, s := range ast.Statements {
-		// 	if s.Type == ASTStatementTypeLabel {
-		// 		context.Labels[s.Name] = context.ProgramCounter
-		// 		continue
-		// 	} else if s.Type == ASTStatementTypeOrigin {
-		// 		p0, ok := s.Operands.Number(0, context)
-		// 		if !ok {
-		// 			return nil, toAssemblyError(s, "expected exaclty 1 number operand")
-		// 		}
-		// 		context.ProgramCounter = int(p0)
-		// 		continue
-		// 	} else if s.Type == ASTStatementTypeDataByte || s.Type == ASTStatementTypeDataWord {
-		// 		bs, err := getBytes(s, context)
-		// 		if err != nil {
-		// 			return nil, toAssemblyError(s, err.Error())
-		// 		}
-		// 		err = context.ByteCode.SetBytes(context.ProgramCounter, bs)
-		// 		if err != nil {
-		// 			return nil, toAssemblyError(s, err.Error())
-		// 		}
-		// 		if sourceListing != nil {
-		// 			sourceListing.AddCode(s.SrcPointer.Name, s.SrcPointer.Line, context.ProgramCounter, bs...)
-		// 		}
-		// 		context.ProgramCounter += len(bs)
-		// 		continue
-		// 	} else if s.Type == ASTStatementTypeSkipBytes || s.Type == ASTStatementTypeSkipWords {
-		// 		n, ok := s.Operands[0].Number(context)
-		// 		if !ok {
-		// 			return nil, toAssemblyError(s, fmt.Sprintf("expected number, got: '%v'", reflect.TypeOf(s.Operands[0])))
-		// 		}
-		// 		if s.Type == ASTStatementTypeSkipWords {
-		// 			n *= 2
-		// 		}
-		// 		context.ProgramCounter += int(n)
-		// 		continue
-		// 	} else if s.Type == ASTStatementTypePrepDefine {
-		// 		expr, ok := s.Operands.Expr(0)
-		// 		if !ok {
-		// 			context.Deffinitions[s.Name] = s.Operands[0].Value
-		// 			continue
-		// 		}
-		// 		v, ok := EvaluateExpr(expr, context)
-		// 		if !ok {
-		// 			return nil, toAssemblyError(s, "failed to evaluate expression")
-		// 		}
-		// 		context.Deffinitions[s.Name] = v
-		// 		continue
-		// 	} else if s.Type == ASTStatementTypePrepTemplateDef {
-		// 		argsNames, ok := s.Operands[0].Names()
-		// 		if !ok {
-		// 			return nil, toAssemblyError(s, fmt.Sprintf("expected a list of names, got: '%v'", reflect.TypeOf(s.Operands[0])))
-		// 		}
-		// 		tmplBlock, ok := s.Operands[1].Block()
-		// 		if !ok {
-		// 			return nil, toAssemblyError(s, fmt.Sprintf("expected a block, got: '%v'", reflect.TypeOf(s.Operands[1])))
-		// 		}
-		// 		context.Templates[s.Name] = Template{
-		// 			Arguments:     argsNames,
-		// 			Generate:      AssembleTemplate,
-		// 			TemplateBlock: tmplBlock,
-		// 		}
-		// 		continue
-		// 	} else if s.Type == ASTStatementTypePrepTemplateUse {
-		// 		tmpl, ok := context.Templates[s.Name]
-		// 		if !ok {
-		// 			return nil, toAssemblyError(s, fmt.Sprintf("template '%s' not found", s.Name))
-		// 		}
-		// 		tmpl.Generate(tmpl, s.Operands, &context)
-		// 		_, _ = tmpl, ok
-		// 	}
-		//
-		// 	if s.Type != ASTStatementTypeInstruction {
-		// 		return nil, toAssemblyError(s, fmt.Sprintf("unexpected statement: %v", s.Type))
-		// 	}
-		//
-		// 	opBytes, err := opcodeAssembler(s, context, context.PassCnt == 0)
-		// 	if err != nil {
-		// 		return nil, toAssemblyError(s, err.Error())
-		// 	}
-		// 	err = context.ByteCode.SetBytes(context.ProgramCounter, opBytes)
-		// 	if err != nil {
-		// 		return nil, toAssemblyError(s, err.Error())
-		// 	}
-		// 	if sourceListing != nil {
-		// 		sourceListing.AddCode(s.SrcPointer.Name, s.SrcPointer.Line, context.ProgramCounter, opBytes...)
-		// 	}
-		//
-		// 	context.ProgramCounter += len(opBytes)
-		// }
 
 		if reflect.DeepEqual(context.PrevByteCode, context.ByteCode) {
 			return context.ByteCode, nil

@@ -104,7 +104,6 @@ func EvaluateExpr(expr ASTExpr, actx AssemblyContext) (any, bool) {
 		if v, ok := actx.Labels[string(nv)]; ok {
 			return ASTNumber(v), true
 		}
-		// v, ok := actx.Deffinitions[string(nv)]
 		v, ok := actx.Deffinitions.Get(string(nv))
 		return v, ok
 	}
@@ -113,10 +112,6 @@ func EvaluateExpr(expr ASTExpr, actx AssemblyContext) (any, bool) {
 	ls, lsok := lv.(ASTString)
 	rn, rnok := rv.(ASTNumber)
 	rs, rsok := rv.(ASTString)
-
-	// if (lnok && rsok) || (lsok && rnok) {
-	// 	return 0, false //todo: better error reporting
-	// }
 
 	if lsok && rnok {
 		switch expr.Operation {
@@ -334,25 +329,37 @@ func (v *progVisitor) VisitErrorNode(_ antlr.ErrorNode) interface{} {
 }
 
 func (v *progVisitor) VisitProg(ctx *parser.ProgContext) interface{} {
-	ast := AST{}
-	for _, n := range ctx.GetChildren() {
-		result := v.Visit(n.(antlr.ParseTree))
-		if result == nil {
+	return &AST{
+		Statements: v.visitStatmentChildren(ctx.BaseParserRuleContext, ctx.GetChildren()),
+	}
+}
+
+func (v *progVisitor) VisitTmpl_block(ctx *parser.Tmpl_blockContext) interface{} {
+	return ASTBlock{
+		Statements: v.visitStatmentChildren(ctx.BaseParserRuleContext, ctx.GetChildren()),
+	}
+}
+
+func (v *progVisitor) visitStatmentChildren(ctx antlr.BaseParserRuleContext, children []antlr.Tree) []ASTStatement {
+	statements := make([]ASTStatement, 0, len(children))
+
+	for _, child := range children {
+		vc := v.Visit(child.(antlr.ParseTree))
+		if vc == nil {
 			continue
 		}
-
-		switch tres := result.(type) {
+		switch tc := vc.(type) {
 		case []ASTStatement:
-			ast.Statements = append(ast.Statements, tres...)
+			statements = append(statements, tc...)
 		case ASTStatement:
-			ast.Statements = append(ast.Statements, tres)
+			statements = append(statements, tc)
 		default:
 			v.statementStructureError(ctx.GetStart().GetLine())
 			return nil
 		}
 	}
 
-	return &ast
+	return statements
 }
 
 func (v *progVisitor) VisitStatement(ctx *parser.StatementContext) interface{} {
@@ -715,33 +722,6 @@ func (v *progVisitor) VisitNamelist(ctx *parser.NamelistContext) interface{} {
 	return names
 }
 
-func (v *progVisitor) VisitTmpl_block(ctx *parser.Tmpl_blockContext) interface{} {
-	children := ctx.GetChildren()
-	_ = children
-	block := ASTBlock{
-		Statements: []ASTStatement{},
-	}
-
-	// todo: refactor this, similar to VisitProg
-	for _, child := range children {
-		vc := v.Visit(child.(antlr.ParseTree))
-		if vc == nil {
-			continue
-		}
-		switch tc := vc.(type) {
-		case []ASTStatement:
-			block.Statements = append(block.Statements, tc...)
-		case ASTStatement:
-			block.Statements = append(block.Statements, tc)
-		default:
-			v.statementStructureError(ctx.GetStart().GetLine())
-			return nil
-		}
-	}
-
-	return block
-}
-
 func (v *progVisitor) buildPrepOrigin(ctx *parser.Prep_instructionContext, children []antlr.Tree) interface{} {
 	if len(children) != 1 {
 		v.errorListener.ProgramError(ctx.GetStart().GetLine(), "preprocessor argument missing")
@@ -798,13 +778,22 @@ func (v *progVisitor) buildTemplateUsage(ctx *parser.Prep_instructionContext, ch
 		return nil
 	}
 
-	// todo: check if namenode is astname
-	// todo: check if arguments are astname
+	_, ok := nameNode.(ASTName)
+	if !ok {
+		v.statementStructureError(ctx.GetStart().GetLine())
+		return nil
+	}
+
+	argOperands, ok := arguments.(ASTOperands)
+	if !ok {
+		v.statementStructureError(ctx.GetStart().GetLine())
+		return nil
+	}
 
 	return ASTStatement{
 		Type:     ASTStatementTypePrepTemplateUse,
 		Name:     string(nameNode.(ASTName)),
-		Operands: arguments.(ASTOperands),
+		Operands: argOperands,
 		SrcPointer: SrcPointer{
 			Name: v.srcName,
 			Line: ctx.GetStart().GetLine(),
@@ -813,8 +802,6 @@ func (v *progVisitor) buildTemplateUsage(ctx *parser.Prep_instructionContext, ch
 }
 
 func (v *progVisitor) buildPrepTemplate(ctx *parser.Prep_instructionContext, children []antlr.Tree) interface{} {
-	// todo: refactor this function
-
 	var nameNode interface{}
 	var arguments interface{}
 	var body interface{}
@@ -832,14 +819,23 @@ func (v *progVisitor) buildPrepTemplate(ctx *parser.Prep_instructionContext, chi
 		return nil
 	}
 
-	// todo: check if namenode is astname
-	// todo: check if arguments are astname
+	_, ok := nameNode.(ASTName)
+	if !ok {
+		v.statementStructureError(ctx.GetStart().GetLine())
+		return nil
+	}
+
+	argNames, ok := arguments.([]ASTName)
+	if !ok {
+		v.statementStructureError(ctx.GetStart().GetLine())
+		return nil
+	}
 
 	return ASTStatement{
 		Type: ASTStatementTypePrepTemplateDef,
 		Name: string(nameNode.(ASTName)),
 		Operands: []ASTOperand{
-			{Value: arguments},
+			{Value: argNames},
 			{Value: body},
 		},
 		SrcPointer: SrcPointer{
