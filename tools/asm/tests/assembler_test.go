@@ -736,4 +736,33 @@ func TestThatCanBuildBinaryCode(t *testing.T) {
 			0x4c, 0x00, 0x00,
 		})
 	})
+
+	t.Run("tmpl_nested_with_labels", func(t *testing.T) {
+		assertAssembler(t, `
+        .tmpl test_tmpl1 (v1) { 
+          .tmpl test_tmpl2 (v2) {
+            lbl:
+            ldai v2 
+            jmp lbl
+          }
+
+          lbl:
+            ldai v1 
+            @test_tmpl2 (0x22 + v1)
+            jmp lbl
+        }
+        lbl:
+        ldai 0x00
+        @test_tmpl1 (0x11)
+        jmp lbl
+      `, []byte{
+			0xa9, 0x00,
+			0xa9, 0x11,
+			0xa9, 0x33,
+			0x4c, 0x04, 0x00,
+			0x4c, 0x02, 0x00,
+			0x4c, 0x00, 0x00,
+		})
+	})
+
 }
