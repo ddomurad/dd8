@@ -26,3 +26,17 @@
 ; .db "this is\n\ta test \"string\"" 
 ; ldai 0x10  ; CONST_1
 
+
+.tmpl nested_template_with_labels (arg) {
+  .tmpl sub_template (arg2) {
+    loop: ; this label is not visible outside the sub template
+      ldai arg2
+      jmp loop ; infinite loop, just and example
+  }
+
+  loop: ; this label is not visible outside the template
+    @sub_template (arg*2) ; use sub template
+    jmp loop ; infinite loop
+}
+
+@nested_template_with_labels (0x10) ; use the template

@@ -29,10 +29,15 @@ func NewSourceListing() *SourceListing {
 	}
 }
 
-func (l *SourceListing) SetOverrideLine(source string, line int) {
+func (l *SourceListing) OverrideLine(source string, line int) bool {
+	if l.overide {
+		return false
+	}
+
 	l.overide = true
 	l.overideSource = source
 	l.overideLine = line
+	return true
 }
 
 func (l *SourceListing) ClearOverride() {

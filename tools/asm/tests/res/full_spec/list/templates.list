@@ -39,3 +39,19 @@ Line  Loc   Code         Source
    27                   ; ldai 0x10  ; CONST_1
    28                   
    29                   
+   30                   .tmpl nested_template_with_labels (arg) {
+   31                     .tmpl sub_template (arg2) {
+   32                       loop: ; this label is not visible outside the sub template
+   33                         ldai arg2
+   34                         jmp loop ; infinite loop, just and example
+   35                     }
+   36                   
+   37                     loop: ; this label is not visible outside the template
+   38                       @sub_template (arg*2) ; use sub template
+   39                       jmp loop ; infinite loop
+   40                   }
+   41                   
+   42  1025  a920      @nested_template_with_labels (0x10) ; use the template
+   42  1027  4c2510  
+   42  102a  4c2510  
+   43                   

@@ -165,8 +165,9 @@ func AssembleTemplate(s ASTStatement, context *AssemblyContext, tmpl Template, a
 		return toAssemblyError(ASTStatement{}, fmt.Sprintf("template expected %d arguments, got: %d", len(tmpl.Arguments), len(args)))
 	}
 
+	srcListingOverriden := false
 	if context.SourceListing != nil {
-		context.SourceListing.SetOverrideLine(s.SrcPointer.Name, s.SrcPointer.Line)
+		srcListingOverriden = context.SourceListing.OverrideLine(s.SrcPointer.Name, s.SrcPointer.Line)
 	}
 
 	context.Deffinitions.PushContext(rndCtxName)
@@ -189,7 +190,7 @@ func AssembleTemplate(s ASTStatement, context *AssemblyContext, tmpl Template, a
 	context.Deffinitions.PopContext(rndCtxName)
 	context.Labels.PopContext(rndCtxName)
 
-	if context.SourceListing != nil {
+	if srcListingOverriden {
 		context.SourceListing.ClearOverride()
 	}
 
