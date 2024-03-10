@@ -7,6 +7,9 @@
   ldai CONST_1 ; of course, you can use golo constants
 }
 
+.tmpl other_template (var) {
+  .db var
+}
 
 @some_template (1,2,3) ; this is how you use a template
 ; this will be expanded to:

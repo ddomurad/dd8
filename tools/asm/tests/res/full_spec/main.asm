@@ -120,3 +120,5 @@ some_label:
 )
 
 .db "\x00"*20 ; repeat 0x00 byte 20 times
+
+@other_template("test string")
