@@ -18,6 +18,10 @@ type ASTExpr struct {
 	Operation   string
 }
 
+type ASTBlock struct {
+	Statements []ASTStatement
+}
+
 type ASTOperand struct {
 	Value    any
 	Indirect bool
@@ -42,8 +46,18 @@ func (o ASTOperand) Name() (ASTName, bool) {
 	return v, ok
 }
 
+func (o ASTOperand) Names() ([]ASTName, bool) {
+	v, ok := o.Value.([]ASTName)
+	return v, ok
+}
+
 func (o ASTOperand) Expr() (ASTExpr, bool) {
 	v, ok := o.Value.(ASTExpr)
+	return v, ok
+}
+
+func (o ASTOperand) Block() (ASTBlock, bool) {
+	v, ok := o.Value.(ASTBlock)
 	return v, ok
 }
 
@@ -90,7 +104,8 @@ func EvaluateExpr(expr ASTExpr, actx AssemblyContext) (any, bool) {
 		if v, ok := actx.Labels[string(nv)]; ok {
 			return ASTNumber(v), true
 		}
-		v, ok := actx.Deffinitions[string(nv)]
+		// v, ok := actx.Deffinitions[string(nv)]
+		v, ok := actx.Deffinitions.Get(string(nv))
 		return v, ok
 	}
 
@@ -229,16 +244,17 @@ func (p SrcPointer) String() string {
 type ASTStatementType string
 
 const (
-	ASTStatementTypeInstruction ASTStatementType = "instr"
-	ASTStatementTypeOrigin      ASTStatementType = ".org"
-	ASTStatementTypeInclude     ASTStatementType = ".inc"
-	ASTStatementTypePrepDefine  ASTStatementType = ".def"
-	ASTStatementTypeTemplate    ASTStatementType = ".tmpl"
-	ASTStatementTypeDataByte    ASTStatementType = ".db"
-	ASTStatementTypeDataWord    ASTStatementType = ".dw"
-	ASTStatementTypeLabel       ASTStatementType = "label"
-	ASTStatementTypeSkipBytes   ASTStatementType = ".byte"
-	ASTStatementTypeSkipWords   ASTStatementType = ".word"
+	ASTStatementTypeInstruction     ASTStatementType = "instr"
+	ASTStatementTypeOrigin          ASTStatementType = ".org"
+	ASTStatementTypeInclude         ASTStatementType = ".inc"
+	ASTStatementTypePrepDefine      ASTStatementType = ".def"
+	ASTStatementTypePrepTemplateDef ASTStatementType = ".tmpl"
+	ASTStatementTypePrepTemplateUse ASTStatementType = "@"
+	ASTStatementTypeDataByte        ASTStatementType = ".db"
+	ASTStatementTypeDataWord        ASTStatementType = ".dw"
+	ASTStatementTypeLabel           ASTStatementType = "label"
+	ASTStatementTypeSkipBytes       ASTStatementType = ".byte"
+	ASTStatementTypeSkipWords       ASTStatementType = ".word"
 )
 
 type ASTStatement struct {
@@ -618,6 +634,8 @@ func (v *progVisitor) VisitPrep_instruction(ctx *parser.Prep_instructionContext)
 		return v.buildPrepDefine(ctx, children[1:])
 	case ".tmpl":
 		return v.buildPrepTemplate(ctx, children[1:])
+	case "@":
+		return v.buildTemplateUsage(ctx, children[1:])
 	case ".db":
 		return v.buildPrepByte(ctx, ASTStatementTypeDataByte, children[1:])
 	case ".dw":
@@ -674,6 +692,56 @@ func (v *progVisitor) VisitPrep_def_arg_lines(ctx *parser.Prep_def_arg_linesCont
 	return defs
 }
 
+func (v *progVisitor) VisitNamelist(ctx *parser.NamelistContext) interface{} {
+	children := ctx.GetChildren()
+	names := make([]ASTName, 0)
+
+	for _, child := range children {
+		vc := v.Visit(child.(antlr.ParseTree))
+		if vc == nil {
+			continue
+		}
+		switch t := vc.(type) {
+		case ASTName:
+			names = append(names, t)
+		case []ASTName:
+			names = append(names, t...)
+		default:
+			v.statementStructureError(ctx.GetStart().GetLine())
+			return nil
+		}
+	}
+
+	return names
+}
+
+func (v *progVisitor) VisitTmpl_block(ctx *parser.Tmpl_blockContext) interface{} {
+	children := ctx.GetChildren()
+	_ = children
+	block := ASTBlock{
+		Statements: []ASTStatement{},
+	}
+
+	// todo: refactor this, similar to VisitProg
+	for _, child := range children {
+		vc := v.Visit(child.(antlr.ParseTree))
+		if vc == nil {
+			continue
+		}
+		switch tc := vc.(type) {
+		case []ASTStatement:
+			block.Statements = append(block.Statements, tc...)
+		case ASTStatement:
+			block.Statements = append(block.Statements, tc)
+		default:
+			v.statementStructureError(ctx.GetStart().GetLine())
+			return nil
+		}
+	}
+
+	return block
+}
+
 func (v *progVisitor) buildPrepOrigin(ctx *parser.Prep_instructionContext, children []antlr.Tree) interface{} {
 	if len(children) != 1 {
 		v.errorListener.ProgramError(ctx.GetStart().GetLine(), "preprocessor argument missing")
@@ -715,32 +783,70 @@ func (v *progVisitor) buildPrepDefine(ctx *parser.Prep_instructionContext, child
 	return defs
 }
 
-func (v *progVisitor) buildPrepTemplate(ctx *parser.Prep_instructionContext, children []antlr.Tree) interface{} {
-	defs := make([]ASTStatement, 0, len(children))
+func (v *progVisitor) buildTemplateUsage(ctx *parser.Prep_instructionContext, children []antlr.Tree) interface{} {
+	var nameNode interface{}
+	var arguments interface{}
 
-	nameNode := v.Visit(children[0].(antlr.ParseTree))
-	arguments := v.Visit(children[1].(antlr.ParseTree))
-	body := v.Visit(children[2].(antlr.ParseTree))
-	_ = nameNode
-	_ = arguments
-	_ = body
-
-	for _, c := range children {
-		vc := v.Visit(c.(antlr.ParseTree))
-		if vc == nil {
-			continue
-		}
-
-		switch tv := vc.(type) {
-		case []ASTStatement:
-			defs = append(defs, tv...)
-		default:
-			v.statementStructureError(ctx.GetStart().GetLine())
-			return nil
-		}
+	if len(children) == 4 {
+		nameNode = v.Visit(children[0].(antlr.ParseTree))
+		arguments = v.Visit(children[2].(antlr.ParseTree))
+	} else if len(children) == 3 {
+		nameNode = v.Visit(children[0].(antlr.ParseTree))
+		arguments = ASTOperands{}
+	} else {
+		v.statementStructureError(ctx.GetStart().GetLine())
+		return nil
 	}
 
-	return defs
+	// todo: check if namenode is astname
+	// todo: check if arguments are astname
+
+	return ASTStatement{
+		Type:     ASTStatementTypePrepTemplateUse,
+		Name:     string(nameNode.(ASTName)),
+		Operands: arguments.(ASTOperands),
+		SrcPointer: SrcPointer{
+			Name: v.srcName,
+			Line: ctx.GetStart().GetLine(),
+		},
+	}
+}
+
+func (v *progVisitor) buildPrepTemplate(ctx *parser.Prep_instructionContext, children []antlr.Tree) interface{} {
+	// todo: refactor this function
+
+	var nameNode interface{}
+	var arguments interface{}
+	var body interface{}
+
+	if len(children) == 5 {
+		nameNode = v.Visit(children[0].(antlr.ParseTree))
+		arguments = v.Visit(children[2].(antlr.ParseTree))
+		body = v.Visit(children[4].(antlr.ParseTree))
+	} else if len(children) == 4 {
+		nameNode = v.Visit(children[0].(antlr.ParseTree))
+		arguments = []ASTName{}
+		body = v.Visit(children[3].(antlr.ParseTree))
+	} else {
+		v.statementStructureError(ctx.GetStart().GetLine())
+		return nil
+	}
+
+	// todo: check if namenode is astname
+	// todo: check if arguments are astname
+
+	return ASTStatement{
+		Type: ASTStatementTypePrepTemplateDef,
+		Name: string(nameNode.(ASTName)),
+		Operands: []ASTOperand{
+			{Value: arguments},
+			{Value: body},
+		},
+		SrcPointer: SrcPointer{
+			Name: v.srcName,
+			Line: ctx.GetStart().GetLine(),
+		},
+	}
 }
 
 func (v *progVisitor) buildPrepByte(ctx *parser.Prep_instructionContext, defType ASTStatementType, children []antlr.Tree) interface{} {

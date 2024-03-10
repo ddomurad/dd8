@@ -1,2 +1,2 @@
 all:
-	dd8asm -out ./main.out ./main.asm
+	dd8asm -out ./main.out -list ./list ./main.asm

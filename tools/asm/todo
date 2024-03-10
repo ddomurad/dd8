@@ -14,4 +14,4 @@ e.g: bbr 0, 0x10, [0x01] ; would jump one byte
      jmp [-0x02] ; would jump two bytes back
 
 
-
+- update listing with template opcodes

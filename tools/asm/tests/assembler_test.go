@@ -664,4 +664,56 @@ func TestThatCanBuildBinaryCode(t *testing.T) {
 			's', 'o', 'm', 'e', ' ', 's', 't', 'r', ' ', 's', 'u', 'f', 'f', 'i', 'x',
 			'1', '2', '1', '2', '1', '2', '.'})
 	})
+
+	t.Run("tmpl_simple_test", func(t *testing.T) {
+		assertAssembler(t, `
+        .tmpl test_tmpl () { 
+          ldai 0xab 
+          nop
+        }
+
+        @test_tmpl ()
+        @test_tmpl ()
+      `, []byte{0xa9, 0xab, 0xea, 0xa9, 0xab, 0xea})
+	})
+
+	t.Run("tmpl_with_params", func(t *testing.T) {
+		assertAssembler(t, `
+        .def TEST_VAL := 100 
+        .def TEST_STR := "test"
+
+        .tmpl test_tmpl (v1, v2) { 
+          ldai v1 
+          .db v2
+          .db TEST_STR
+        }
+
+        @test_tmpl (TEST_VAL, TEST_STR)
+        @test_tmpl (0x01, 0x20)
+      `, []byte{
+			0xa9, 0x64,
+			't', 'e', 's', 't',
+			't', 'e', 's', 't',
+			0xa9, 0x01, 0x20,
+			't', 'e', 's', 't',
+		})
+	})
+
+	t.Run("tmpl_with_params_expr", func(t *testing.T) {
+		assertAssembler(t, `
+        .def TEST_VAL := 100 
+        .def TEST_STR := "test"
+
+        .tmpl test_tmpl (v1, v2) { 
+          ldai v1 
+          .db v2
+        }
+
+        @test_tmpl (TEST_VAL>>1, TEST_STR*2)
+      `, []byte{
+			0xa9, 0x32,
+			't', 'e', 's', 't',
+			't', 'e', 's', 't',
+		})
+	})
 }

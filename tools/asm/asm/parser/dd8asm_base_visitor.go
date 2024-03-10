@@ -20,6 +20,10 @@ func (v *BaseDD8ASMVisitor) VisitPrep_instruction(ctx *Prep_instructionContext) 
 	return v.VisitChildren(ctx)
 }
 
+func (v *BaseDD8ASMVisitor) VisitTmpl_block(ctx *Tmpl_blockContext) interface{} {
+	return v.VisitChildren(ctx)
+}
+
 func (v *BaseDD8ASMVisitor) VisitPrep_def_args(ctx *Prep_def_argsContext) interface{} {
 	return v.VisitChildren(ctx)
 }

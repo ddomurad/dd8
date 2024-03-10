@@ -1,0 +1,38 @@
+Line  Loc   Code         Source
+    1                   .org TMPL_TEST_LOC
+    2                   
+    3                   .tmpl some_template (i,j,k) { ; this defines a template with 3 arguments
+    4                     ldai i ; arguments are actually just local definitions
+    5                     sta j
+    6                     .db k
+    7                     ldai CONST_1 ; of course, you can use golo constants
+    8                   }
+    9                   
+   10                   
+   11  1000  a901      @some_template (1,2,3) ; this is how you use a template
+   11  1002  8502    
+   11  1004  03      
+   11  1005  a910    
+   12                   ; this will be expanded to:
+   13                   ; ldai 1 
+   14                   ; sta 2 
+   15                   ; .db 3 
+   16                   ; ldai 0x10  ; CONST_1
+   17                   
+   18                   ; you cal also use expiresion as template arguments
+   19  1007  a9c8      @some_template (TEST_NUMBER_1*2, RST_VEC_ORG.l, TEST_STR_1) 
+   19  1009  85fc    
+   19  100b  74686973
+   19  100f  2069730a
+   19  1013  09612074
+   19  1017  65737420
+   19  101b  22737472
+   19  101f  696e6722
+   19  1023  a910    
+   20                   ; this will be expanded to:
+   21                   ; ldai 200 
+   22                   ; sta 0xfc
+   23                   ; .db "this is\n\ta test \"string\"" 
+   24                   ; ldai 0x10  ; CONST_1
+   25                   
+   26                   

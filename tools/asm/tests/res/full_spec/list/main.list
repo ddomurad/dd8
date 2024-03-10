@@ -7,7 +7,7 @@ Line  Loc   Code         Source
     6                   
     7                   ; including a source file
     8                   .inc "defs.asm" ; the effect of this line is as if the whole file would replace this line 
-    9                   
+    9                   .inc "templates.asm"
    10                   .org 0xff00           ; set location counter to 0xff00
    11                   start:                ; define a label at location 0xff00
    12  ff00  ea        nop                   ; opcode 

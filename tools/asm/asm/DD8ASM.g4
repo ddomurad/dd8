@@ -16,13 +16,18 @@ prep_instruction
   | P_INC str
   | P_DEF '(' EOL prep_def_arg_lines EOL ')'
   | P_DEF prep_def_args
-  | P_TMPL name '(' namelist? ')'
+  | P_TMPL name '(' namelist? ')' tmpl_block
+  | '@'name '(' arglist? ')'
   | P_DB arglist
   | P_DB '(' EOL arglist_lines EOL ')'
   | P_DW arglist
   | P_DW '(' EOL arglist_lines EOL ')'
   | P_BYTE num?
   | P_WORD num?
+  ;
+
+tmpl_block
+  : '{'  statement*  '}'
   ;
 
 prep_def_args

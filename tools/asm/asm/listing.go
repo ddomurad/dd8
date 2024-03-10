@@ -17,13 +17,26 @@ type FileListing struct {
 }
 
 type SourceListing struct {
-	FileListings map[string]FileListing
+	FileListings  map[string]FileListing
+	overide       bool
+	overideLine   int
+	overideSource string
 }
 
 func NewSourceListing() *SourceListing {
 	return &SourceListing{
 		FileListings: map[string]FileListing{},
 	}
+}
+
+func (l *SourceListing) SetOverrideLine(source string, line int) {
+	l.overide = true
+	l.overideSource = source
+	l.overideLine = line
+}
+
+func (l *SourceListing) ClearOverride() {
+	l.overide = false
 }
 
 func (l *SourceListing) AddSource(srcName string, src string) {
@@ -42,6 +55,11 @@ func (l *SourceListing) ClearCodePass() {
 }
 
 func (l *SourceListing) AddCode(srcName string, line int, location int, codes ...byte) {
+	if l.overide {
+		srcName = l.overideSource
+		line = l.overideLine
+	}
+
 	if _, ok := l.FileListings[srcName].CodeLines[line]; !ok {
 		l.FileListings[srcName].CodeLines[line] = []CodeListing{}
 	}

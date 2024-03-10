@@ -46,4 +46,21 @@ func Test_ListingGeneration(t *testing.T) {
     2                   
 `)
 	})
+	t.Run("list_for_template", func(t *testing.T) {
+		assertListing(t, `.tmpl test(v1) {
+  ldai v1
+}
+
+@test(0xaa)
+@test(0xbb)`,
+			`Line  Loc   Code         Source
+    1                   .tmpl test(v1) {
+    2                     ldai v1
+    3                   }
+    4                   
+    5  0000  a9aa      @test(0xaa)
+    6  0002  a9bb      @test(0xbb)
+    7                   
+`)
+	})
 }

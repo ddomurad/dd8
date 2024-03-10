@@ -17,6 +17,9 @@ type DD8ASMVisitor interface {
 	// Visit a parse tree produced by DD8ASMParser#prep_instruction.
 	VisitPrep_instruction(ctx *Prep_instructionContext) interface{}
 
+	// Visit a parse tree produced by DD8ASMParser#tmpl_block.
+	VisitTmpl_block(ctx *Tmpl_blockContext) interface{}
+
 	// Visit a parse tree produced by DD8ASMParser#prep_def_args.
 	VisitPrep_def_args(ctx *Prep_def_argsContext) interface{}
 

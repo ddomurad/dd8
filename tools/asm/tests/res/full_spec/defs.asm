@@ -37,6 +37,7 @@
 .def CONST_DATA_LOC := 0x8000
 .def TEST_INSTR_LOC := 0xf000
 .def VAR_DEF_LOC    := 0x0000
+.def TMPL_TEST_LOC  := 0x1000
 
 
 .def i := "some i value" ; preprocessor constants can also be single charas long

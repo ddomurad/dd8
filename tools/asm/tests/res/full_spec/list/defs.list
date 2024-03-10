@@ -38,4 +38,8 @@ Line  Loc   Code         Source
    37                   .def CONST_DATA_LOC := 0x8000
    38                   .def TEST_INSTR_LOC := 0xf000
    39                   .def VAR_DEF_LOC    := 0x0000
-   40                   
+   40                   .def TMPL_TEST_LOC  := 0x1000
+   41                   
+   42                   
+   43                   .def i := "some i value" ; preprocessor constants can also be single charas long
+   44                   

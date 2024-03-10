@@ -8,17 +8,34 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
+func clearSrcPointer(statements []pkg.ASTStatement) []pkg.ASTStatement {
+	for i := range statements {
+		statements[i].SrcPointer = pkg.SrcPointer{}
+
+		for j, op := range statements[i].Operands {
+			blockOperand, ok := op.Value.(pkg.ASTBlock)
+			if ok {
+				blockOperand.Statements = clearSrcPointer(blockOperand.Statements)
+				statements[i].Operands[j].Value = blockOperand
+			}
+		}
+	}
+
+	return statements
+}
+
 func assertASTStatement(t *testing.T, expected, actual pkg.ASTStatement) {
 	expectedType := reflect.TypeOf(expected)
 	require.Equal(t, expectedType, reflect.TypeOf(actual))
-
-	actual.SrcPointer = pkg.SrcPointer{}
-	expected.SrcPointer = pkg.SrcPointer{}
 	require.Equal(t, expected, actual, "instruction")
 }
 
 func assertAST(t *testing.T, expected, actual *pkg.AST) {
 	require.Len(t, actual.Statements, len(expected.Statements), "statements count")
+
+	actual.Statements = clearSrcPointer(actual.Statements)
+	expected.Statements = clearSrcPointer(expected.Statements)
+
 	for i, expectedStatement := range expected.Statements {
 		assertASTStatement(t, expectedStatement, actual.Statements[i])
 	}
@@ -58,8 +75,16 @@ func nameOperand(v pkg.ASTName) pkg.ASTOperand {
 	return pkg.ASTOperand{Value: v}
 }
 
+func nameListOperand(v ...pkg.ASTName) pkg.ASTOperand {
+	return pkg.ASTOperand{Value: v}
+}
+
 func regOperand(v pkg.ASTRegister) pkg.ASTOperand {
 	return pkg.ASTOperand{Value: v}
+}
+
+func blockOperand(v ...pkg.ASTStatement) pkg.ASTOperand {
+	return pkg.ASTOperand{Value: pkg.ASTBlock{Statements: v}}
 }
 
 func pnumOperand(v pkg.ASTNumber) pkg.ASTOperand {
@@ -523,6 +548,7 @@ func TestThatCanParseSource(t *testing.T) {
       .db 0x10 + 0x20
       .db 0x10 - 0x20
       .db NAME_1 * NAME_2
+      .db NAME_3
       .db 0x10 / TEST_NAME
       .db 0x10 << 0x20
       .db 0x10 >> 0x20
@@ -544,6 +570,10 @@ func TestThatCanParseSource(t *testing.T) {
 				{
 					Type:     pkg.ASTStatementTypeDataByte,
 					Operands: pkg.ASTOperands{exprOperand(nameExpresion("NAME_1"), "*", nameExpresion("NAME_2"))},
+				},
+				{
+					Type:     pkg.ASTStatementTypeDataByte,
+					Operands: pkg.ASTOperands{exprOperand(pkg.ASTName("NAME_3"), "", nil)},
 				},
 				{
 					Type:     pkg.ASTStatementTypeDataByte,
@@ -576,25 +606,45 @@ func TestThatCanParseSource(t *testing.T) {
 		}, ast)
 	})
 
-	t.Run(".tmpl_simple_templdate_vip", func(t *testing.T) {
+	t.Run(".tmpl_no_params", func(t *testing.T) {
 		ast := pkg.ParseSrc("", `
-      .tmpl test_template (v1, v2, v3)
+      .tmpl test_template () {
+        opcode v1, v2
+        opcode v3
+      }
       `)
 		require.False(t, ast.Errors.HasErrors())
 		assertAST(t, &pkg.AST{
 			Statements: []pkg.ASTStatement{
 				{
-					Type: pkg.ASTStatementTypeTemplate,
+					Type: pkg.ASTStatementTypePrepTemplateDef,
 					Name: "test_template",
 					Operands: []pkg.ASTOperand{
-						nameOperand("test_template"),
+						nameListOperand([]pkg.ASTName{}...),
+						blockOperand(
+							pkg.ASTStatement{
+								Type:   pkg.ASTStatementTypeInstruction,
+								OpCode: "opcode",
+								Operands: pkg.ASTOperands{
+									exprOperand(pkg.ASTName("v1"), "", nil),
+									exprOperand(pkg.ASTName("v2"), "", nil),
+								},
+							},
+							pkg.ASTStatement{
+								Type:   pkg.ASTStatementTypeInstruction,
+								OpCode: "opcode",
+								Operands: pkg.ASTOperands{
+									exprOperand(pkg.ASTName("v3"), "", nil),
+								},
+							},
+						),
 					},
 				},
 			},
 		}, ast)
 	})
 
-	t.Run(".tmpl_simple_templdate", func(t *testing.T) {
+	t.Run(".tmpl_simple_template", func(t *testing.T) {
 		ast := pkg.ParseSrc("", `
       .tmpl test_template (v1, v2, v3) {
         opcode v1, v2
@@ -605,9 +655,124 @@ func TestThatCanParseSource(t *testing.T) {
 		assertAST(t, &pkg.AST{
 			Statements: []pkg.ASTStatement{
 				{
-					Type:     pkg.ASTStatementTypeTemplate,
+					Type: pkg.ASTStatementTypePrepTemplateDef,
+					Name: "test_template",
+					Operands: []pkg.ASTOperand{
+						nameListOperand("v1", "v2", "v3"),
+						blockOperand(
+							pkg.ASTStatement{
+								Type:   pkg.ASTStatementTypeInstruction,
+								OpCode: "opcode",
+								Operands: pkg.ASTOperands{
+									exprOperand(pkg.ASTName("v1"), "", nil),
+									exprOperand(pkg.ASTName("v2"), "", nil),
+								},
+							},
+							pkg.ASTStatement{
+								Type:   pkg.ASTStatementTypeInstruction,
+								OpCode: "opcode",
+								Operands: pkg.ASTOperands{
+									exprOperand(pkg.ASTName("v3"), "", nil),
+								},
+							},
+						),
+					},
+				},
+			},
+		}, ast)
+	})
+
+	t.Run(".tmpl_use_template", func(t *testing.T) {
+		ast := pkg.ParseSrc("", `
+      @test_template(0x01, x, "test", VAR, TEST*2)
+    `)
+		require.False(t, ast.Errors.HasErrors())
+		assertAST(t, &pkg.AST{
+			Statements: []pkg.ASTStatement{
+				{
+					Type: pkg.ASTStatementTypePrepTemplateUse,
+					Name: "test_template",
+					Operands: []pkg.ASTOperand{
+						numOperand(0x01),
+						regOperand("x"),
+						strOperand("test"),
+						exprOperand(pkg.ASTName("VAR"), "", nil),
+						exprOperand(nameExpresion("TEST"), "*", pkg.ASTNumber(2)),
+					},
+				},
+			},
+		}, ast)
+	})
+
+	t.Run(".tmpl_use_template_no_params", func(t *testing.T) {
+		ast := pkg.ParseSrc("", `
+      @test_template()
+    `)
+		require.False(t, ast.Errors.HasErrors())
+		assertAST(t, &pkg.AST{
+			Statements: []pkg.ASTStatement{
+				{
+					Type:     pkg.ASTStatementTypePrepTemplateUse,
 					Name:     "test_template",
 					Operands: []pkg.ASTOperand{},
+				},
+			},
+		}, ast)
+	})
+
+	t.Run(".tmpl_in_tmpl", func(t *testing.T) {
+		ast := pkg.ParseSrc("", `
+      .tmpl test_template (v1, v2, v3) {
+        opcode v1, v2
+        opcode v3
+        .tmpl nested_template (v4, v5) {
+          opcode v10, v11
+        }
+      }
+      `)
+		require.False(t, ast.Errors.HasErrors())
+		assertAST(t, &pkg.AST{
+			Statements: []pkg.ASTStatement{
+				{
+					Type: pkg.ASTStatementTypePrepTemplateDef,
+					Name: "test_template",
+					Operands: []pkg.ASTOperand{
+						nameListOperand("v1", "v2", "v3"),
+						blockOperand(
+							pkg.ASTStatement{
+								Type:   pkg.ASTStatementTypeInstruction,
+								OpCode: "opcode",
+								Operands: pkg.ASTOperands{
+									exprOperand(pkg.ASTName("v1"), "", nil),
+									exprOperand(pkg.ASTName("v2"), "", nil),
+								},
+							},
+							pkg.ASTStatement{
+								Type:   pkg.ASTStatementTypeInstruction,
+								OpCode: "opcode",
+								Operands: pkg.ASTOperands{
+									exprOperand(pkg.ASTName("v3"), "", nil),
+								},
+							},
+							pkg.ASTStatement{
+								Type: pkg.ASTStatementTypePrepTemplateDef,
+								Name: "nested_template",
+								Operands: []pkg.ASTOperand{
+									nameListOperand("v4", "v5"),
+									blockOperand(
+										pkg.ASTStatement{
+											Type:   pkg.ASTStatementTypeInstruction,
+											OpCode: "opcode",
+											Operands: pkg.ASTOperands{
+												exprOperand(pkg.ASTName("v10"), "", nil),
+												exprOperand(pkg.ASTName("v11"), "", nil),
+											},
+										},
+									),
+								},
+							},
+						),
+					},
 				},
 			},
 		}, ast)
