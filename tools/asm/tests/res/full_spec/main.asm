@@ -2,11 +2,13 @@
 ; only EOL will terminate a comment 
 
 ; all preprocessor directives start with a '.' - except labels, labels always end with ':'
+; ... and template executions, those start with a '@'
 ; preprocessor directives have effect on the assembly source code
 
 ; including a source file
 .inc "defs.asm" ; the effect of this line is as if the whole file would replace this line 
 .inc "templates.asm"
+
 .org 0xff00           ; set location counter to 0xff00
 start:                ; define a label at location 0xff00
 nop                   ; opcode 
@@ -14,13 +16,13 @@ start_1: nop          ; labels can be also inline
 start_2: start_3: nop ; this is also supported
 
 
-.org RST_VEC_ORG ; set location counter to the value of RST_VEC_ORG
+.org RST_VEC_ORG ; set location counter to the value of RST_VEC_ORG (defined in defs.asm)
 jmp start        ; jump instruction, jump to location of 'start' label
 
 ; to define explicit data use .db (data byte) and .dw (data word)
 .org CONST_DATA_LOC ; set location counter to the value of CONST_DATA_LOC
 .db 0xaa   ; this will write 0xaa in the ROM at location   CONST_DATA_LOC+0
-.db 0x10   ; this will write 0x  10 in the ROM at location   CONST_DATA_LOC+1 
+.db 0x10   ; this will write 0x  10 in the ROM at location CONST_DATA_LOC+1 
 .dw 0x10   ; this will write 0x0010 in the ROM at location CONST_DATA_LOC+2 
 .dw 0xaaaa ; this will write 0xaaaa in the ROM at location CONST_DATA_LOC+4
 ; db writes 1 byte and increments the location counter by +1 
@@ -121,4 +123,5 @@ some_label:
 
 .db "\x00"*20 ; repeat 0x00 byte 20 times
 
+; execute a defined template
 @other_template("test string")

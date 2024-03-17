@@ -1,10 +1,13 @@
 .org TMPL_TEST_LOC
+; there are different types of templates 
+; .tmpl - act as custom blueprints, that can be later executed or "expanded"
+; .rep - repeats the template body defined number of times 
 
 .tmpl some_template (i,j,k) { ; this defines a template with 3 arguments
   ldai i ; arguments are actually just local definitions
   sta j
   .db k
-  ldai CONST_1 ; you can use global constants
+  ldai CONST_1 ; you can also use global constants
 }
 
 .tmpl other_template (var) {
@@ -27,22 +30,28 @@
 ; ldai 0x10  ; CONST_1
 
 
+; templates can be nested, however the sub_template is not visible outside 
 .tmpl nested_template_with_labels (arg) {
   .tmpl sub_template (arg2) {
-    loop: ; this label is not visible outside the sub template
+    loop: ; this label is not visible outside the sub_template
       ldai arg2
       jmp loop ; infinite loop, just an example
   }
 
-  loop: ; this label is not visible outside the template, and not visible inside the sub template
+  loop: ; this label is not visible outside this template, and not visible inside the sub_template
     @sub_template (arg*2) ; use sub template
-    jmp loop ; infinite loop
+    jmp loop ; infinite loop, just an example
 }
 
 @nested_template_with_labels (0x10) ; use the template
 
-
-.rep i, 3, 8 { ; this is a repeat template, i is the iterator variable, 3 is the start value and 8 is the end value (included)
+; this is a repeat template 
+; i is the iterator variable
+; 3 is the start value
+; and 8 is the end value (included)
+; currently the repeat template will always count from start to end, 
+; incrementing the iterator variable by +1 or -1 (if start < end)
+.rep i, 3, 8 { 
   .db i, i*2
   ldai i
 }
@@ -60,7 +69,18 @@
 ;.db 8, 16
 ;ldai 8
 
-; you can also mix templates 
+.rep i, 5, 0 {
+  ldai i*2
+}
+; this will expand to:
+; ldai 10 
+; ldai 8
+; ldai 6
+; ldai 4
+; ldai 2 
+; ldai 0
+
+; templates can be also mixed 
 .tmpl nested_template_with_repeat_and_labels (st, en) {
   .tmpl sub_template(s1) {
     loop:

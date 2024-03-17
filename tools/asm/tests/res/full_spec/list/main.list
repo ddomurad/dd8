@@ -3,141 +3,144 @@ Line  Loc   Code         Source
     2                   ; only EOL will terminate a comment 
     3                   
     4                   ; all preprocessor directives start with a '.' - except labels, labels always end with ':'
-    5                   ; preprocessor directives have effect on the assembly source code
-    6                   
-    7                   ; including a source file
-    8                   .inc "defs.asm" ; the effect of this line is as if the whole file would replace this line 
-    9                   .inc "templates.asm"
-   10                   .org 0xff00           ; set location counter to 0xff00
-   11                   start:                ; define a label at location 0xff00
-   12  ff00  ea        nop                   ; opcode 
-   13  ff01  ea        start_1: nop          ; labels can be also inline 
-   14  ff02  ea        start_2: start_3: nop ; this is also supported
-   15                   
-   16                   
-   17                   .org RST_VEC_ORG ; set location counter to the value of RST_VEC_ORG
-   18  fffc  4c00ff    jmp start        ; jump instruction, jump to location of 'start' label
-   19                   
-   20                   ; to define explicit data use .db (data byte) and .dw (data word)
-   21                   .org CONST_DATA_LOC ; set location counter to the value of CONST_DATA_LOC
-   22  8000  aa        .db 0xaa   ; this will write 0xaa in the ROM at location   CONST_DATA_LOC+0
-   23  8001  10        .db 0x10   ; this will write 0x  10 in the ROM at location   CONST_DATA_LOC+1 
-   24  8002  1000      .dw 0x10   ; this will write 0x0010 in the ROM at location CONST_DATA_LOC+2 
-   25  8004  aaaa      .dw 0xaaaa ; this will write 0xaaaa in the ROM at location CONST_DATA_LOC+4
-   26                   ; db writes 1 byte and increments the location counter by +1 
-   27                   ; dw writes 2 bytes and increments the location counter by +2 
-   28                   
-   29                   ; more than one value can be written in one line 
-   30  8006  102030    .db 0x10, 0x20, 0x30    ; this will increment the location counter by +3
-   31  8009  10000001  .dw 0x10, 0x100, 0x1000 ; this will increment the location counter by +6
-   31  800d  0010    
-   32                   
-   33                   ; data can be also provided in string format 
-   34  800f  74657374  .db "test string" ; this will write the ascii codes, 0x74, 0x65, ... etc.
-   34  8013  20737472
-   34  8017  696e67  
-   35                   ; the upper line will also increment the location counter by the number of characters 
-   36                   
-   37  801a  31323300  .dw "123" ; will write 0x31, 0x32, 0x33, 0x00  - note the alignment to full words
-   38                   ; the upper line will increment the location counter by full words, in this case 4 bytes
-   39                   
-   40                   ; data can be defined also in blocks 
-   41  801e  736f6d65  .db (
-   41  8022  20746573
-   41  8026  74207374
-   41  802a  72696e67
-   41  802e  006f7468
-   41  8032  65720a73
-   41  8036  7472696e
-   41  803a  6700    
-   42                     "some test string", 0x00 
-   43                     "other\nstring", 0x00
-   44                   )
-   45                   
-   46                   .org TEST_INSTR_LOC
-   47  f000  28          plp                              ; opcode only instruction
-   48  f001  2a          rol a                            ; opcode with register operand
-   49  f002  a911        ldai 0x11                        ; load immediate  alt to lda #$11
-   50  f004  a5aa        lda 0xaa                         ; zero page addressing mode
-   51  f006  adaaaa      lda 0xaaaa                       ; absolute addressing mode
-   52  f009  a1aa        lda [0xaa,  x]                   ; zero page indexed indirect mode
-   53  f00b  b1aa        lda [0xaa], y                    ; zero page indirect indexed with Y mode
-   54  f00d  b2bb        lda [0xbb]                       ; zero page indirect mode
-   55  f00f  b5cc        lda 0xcc,   x                    ; zero page indexed with X mode
-   56  f011  b9cc00      lda 0xcc,   y                    ; zero page indexed with Y mode
-   57  f014  bdaacc      lda 0xccaa, x                    ; absolute indexed with X mode
-   58  f017  b9aacc      lda 0xccaa, y                    ; absolute indexed with Y mode
-   59  f01a  0f10e3      bbr 0,      0x10, TEST_INSTR_LOC ; branch to TEST_INSTR_LOC if bit 0 of zero page location 0x10 is cleared
-   60  f01d  9720        smb 1,      0x20                 ; set bit 1 of zero page location 0x20
-   61                   
-   62                   .org VAR_DEF_LOC  
-   63                   ; variables can be defined with the combination of labels and .byte / .word directives 
-   64                   ; a .byte or .byte n directive just increments the location counter 
-   65                   my_var_1: .byte   ; my_var_1 points to addr VAR_DEF_LOC
-   66                   my_var_2: .byte 2 ; my_var_2 points to addr VAR_DEF_LOC+1
-   67                   my_var_3: .byte   ; my_var_3 points to addr VAR_DEF_LOC+3
-   68                   
-   69                   my_other_var_1: .word   ; my_other_var_1 points to addr VAR_DEF_LOC+4
-   70                   my_other_var_2: .word 2 ; my_other_var_2 points to addr VAR_DEF_LOC+6 , note that .word 2 has a size of 4
-   71                   my_other_var_3: .word   ; my_other_var_3 points to addr VAR_DEF_LOC+10
-   72                   
-   73                   ; and variables can be used in the code 
-   74                   .org 0x8080
-   75  8080  a9aa        ldai 0xaa 
-   76  8082  8500        sta my_var_1
-   77                     ; and event jumped to !!! 
-   78  8084  4c0000      jmp my_var_1 ; however this should be rarely useful
-   79                   
-   80                   
-   81                   ; math expressions can be embedded into any place that accepts a number or (tbd string)
-   82                   .org 0x8100
-   83  8100  aa        .db 0xa0 + 0x0a ; = 0xaa 
-   84  8101  0a        .db 0xaa - 0xa0 ; = 0x0a 
-   85  8102  08        .db (2 + 2)*2   ; = 8 
-   86  8103  06        .db 2 + 2 * 2   ; = 6 
-   87  8104  08        .db 2 << 2      ; = 8 
-   88  8105  05        .db 10 >> 1     ; = 5 
-   89  8106  02        .db 2*2/2       ; = 2 
-   90  8107  55        .db 0xaa ^ 0xff ; = 0x55 
-   91  8108  ff        .db 0xaa | 0x55 ; = 0xff 
-   92  8109  00        .db 0xaa & 0x55 ; = 0x00 
-   93  810a  34        .db 0x1234.l    ; = 0x34 
-   94  810b  12        .db 0x1234.h    ; = 0x12 
-   95  810c  5555      .dw ~0xaaaa     ; = 0x5555 
-   96  810e  ffff      .dw ~0x00       ; = 0xffff 
-   97  8110  55        .db ~0xaa.l     ; = 0x55 
-   98  8111  ff        .db ~0xaa.h     ; = 0xff 
-   99  8112  0a        .db -(-10)      ; = 10
-  100                   
-  101                   
-  102  8113  ea        .db ~((0x11a9+(3>>1)).l>>1*2+1).l ; = 0xea
+    5                   ; ... and template executions, those start with a '@'
+    6                   ; preprocessor directives have effect on the assembly source code
+    7                   
+    8                   ; including a source file
+    9                   .inc "defs.asm" ; the effect of this line is as if the whole file would replace this line 
+   10                   .inc "templates.asm"
+   11                   
+   12                   .org 0xff00           ; set location counter to 0xff00
+   13                   start:                ; define a label at location 0xff00
+   14  ff00  ea        nop                   ; opcode 
+   15  ff01  ea        start_1: nop          ; labels can be also inline 
+   16  ff02  ea        start_2: start_3: nop ; this is also supported
+   17                   
+   18                   
+   19                   .org RST_VEC_ORG ; set location counter to the value of RST_VEC_ORG (defined in defs.asm)
+   20  fffc  4c00ff    jmp start        ; jump instruction, jump to location of 'start' label
+   21                   
+   22                   ; to define explicit data use .db (data byte) and .dw (data word)
+   23                   .org CONST_DATA_LOC ; set location counter to the value of CONST_DATA_LOC
+   24  8000  aa        .db 0xaa   ; this will write 0xaa in the ROM at location   CONST_DATA_LOC+0
+   25  8001  10        .db 0x10   ; this will write 0x  10 in the ROM at location CONST_DATA_LOC+1 
+   26  8002  1000      .dw 0x10   ; this will write 0x0010 in the ROM at location CONST_DATA_LOC+2 
+   27  8004  aaaa      .dw 0xaaaa ; this will write 0xaaaa in the ROM at location CONST_DATA_LOC+4
+   28                   ; db writes 1 byte and increments the location counter by +1 
+   29                   ; dw writes 2 bytes and increments the location counter by +2 
+   30                   
+   31                   ; more than one value can be written in one line 
+   32  8006  102030    .db 0x10, 0x20, 0x30    ; this will increment the location counter by +3
+   33  8009  10000001  .dw 0x10, 0x100, 0x1000 ; this will increment the location counter by +6
+   33  800d  0010    
+   34                   
+   35                   ; data can be also provided in string format 
+   36  800f  74657374  .db "test string" ; this will write the ascii codes, 0x74, 0x65, ... etc.
+   36  8013  20737472
+   36  8017  696e67  
+   37                   ; the upper line will also increment the location counter by the number of characters 
+   38                   
+   39  801a  31323300  .dw "123" ; will write 0x31, 0x32, 0x33, 0x00  - note the alignment to full words
+   40                   ; the upper line will increment the location counter by full words, in this case 4 bytes
+   41                   
+   42                   ; data can be defined also in blocks 
+   43  801e  736f6d65  .db (
+   43  8022  20746573
+   43  8026  74207374
+   43  802a  72696e67
+   43  802e  006f7468
+   43  8032  65720a73
+   43  8036  7472696e
+   43  803a  6700    
+   44                     "some test string", 0x00 
+   45                     "other\nstring", 0x00
+   46                   )
+   47                   
+   48                   .org TEST_INSTR_LOC
+   49  f000  28          plp                              ; opcode only instruction
+   50  f001  2a          rol a                            ; opcode with register operand
+   51  f002  a911        ldai 0x11                        ; load immediate  alt to lda #$11
+   52  f004  a5aa        lda 0xaa                         ; zero page addressing mode
+   53  f006  adaaaa      lda 0xaaaa                       ; absolute addressing mode
+   54  f009  a1aa        lda [0xaa,  x]                   ; zero page indexed indirect mode
+   55  f00b  b1aa        lda [0xaa], y                    ; zero page indirect indexed with Y mode
+   56  f00d  b2bb        lda [0xbb]                       ; zero page indirect mode
+   57  f00f  b5cc        lda 0xcc,   x                    ; zero page indexed with X mode
+   58  f011  b9cc00      lda 0xcc,   y                    ; zero page indexed with Y mode
+   59  f014  bdaacc      lda 0xccaa, x                    ; absolute indexed with X mode
+   60  f017  b9aacc      lda 0xccaa, y                    ; absolute indexed with Y mode
+   61  f01a  0f10e3      bbr 0,      0x10, TEST_INSTR_LOC ; branch to TEST_INSTR_LOC if bit 0 of zero page location 0x10 is cleared
+   62  f01d  9720        smb 1,      0x20                 ; set bit 1 of zero page location 0x20
+   63                   
+   64                   .org VAR_DEF_LOC  
+   65                   ; variables can be defined with the combination of labels and .byte / .word directives 
+   66                   ; a .byte or .byte n directive just increments the location counter 
+   67                   my_var_1: .byte   ; my_var_1 points to addr VAR_DEF_LOC
+   68                   my_var_2: .byte 2 ; my_var_2 points to addr VAR_DEF_LOC+1
+   69                   my_var_3: .byte   ; my_var_3 points to addr VAR_DEF_LOC+3
+   70                   
+   71                   my_other_var_1: .word   ; my_other_var_1 points to addr VAR_DEF_LOC+4
+   72                   my_other_var_2: .word 2 ; my_other_var_2 points to addr VAR_DEF_LOC+6 , note that .word 2 has a size of 4
+   73                   my_other_var_3: .word   ; my_other_var_3 points to addr VAR_DEF_LOC+10
+   74                   
+   75                   ; and variables can be used in the code 
+   76                   .org 0x8080
+   77  8080  a9aa        ldai 0xaa 
+   78  8082  8500        sta my_var_1
+   79                     ; and event jumped to !!! 
+   80  8084  4c0000      jmp my_var_1 ; however this should be rarely useful
+   81                   
+   82                   
+   83                   ; math expressions can be embedded into any place that accepts a number or (tbd string)
+   84                   .org 0x8100
+   85  8100  aa        .db 0xa0 + 0x0a ; = 0xaa 
+   86  8101  0a        .db 0xaa - 0xa0 ; = 0x0a 
+   87  8102  08        .db (2 + 2)*2   ; = 8 
+   88  8103  06        .db 2 + 2 * 2   ; = 6 
+   89  8104  08        .db 2 << 2      ; = 8 
+   90  8105  05        .db 10 >> 1     ; = 5 
+   91  8106  02        .db 2*2/2       ; = 2 
+   92  8107  55        .db 0xaa ^ 0xff ; = 0x55 
+   93  8108  ff        .db 0xaa | 0x55 ; = 0xff 
+   94  8109  00        .db 0xaa & 0x55 ; = 0x00 
+   95  810a  34        .db 0x1234.l    ; = 0x34 
+   96  810b  12        .db 0x1234.h    ; = 0x12 
+   97  810c  5555      .dw ~0xaaaa     ; = 0x5555 
+   98  810e  ffff      .dw ~0x00       ; = 0xffff 
+   99  8110  55        .db ~0xaa.l     ; = 0x55 
+  100  8111  ff        .db ~0xaa.h     ; = 0xff 
+  101  8112  0a        .db -(-10)      ; = 10
+  102                   
   103                   
-  104                   ; definitions can refer to labels and other definitions
-  105                   ; definitions can also represent register - however this might not be practical
-  106                   .def (
-  107                     DEF_WITH_LABEL := some_label + 0x10
-  108                     REG_DEF        := x 
-  109                     DEF_WITH_DEF   := DEF_WITH_LABEL - some_label
-  110                   )
-  111                   
-  112                   some_label:
-  113  8114  b510        lda DEF_WITH_DEF, REG_DEF
-  114                   
-  115                   ; some string operation are also supported
-  116                   .def (
-  117                     SOME_STR := "some" + " " + "str" ; will concatenate strings
-  118                     OTER_STR := SOME_STR + "."
-  119                     REP_STR := "\x00"*10 ; will repeat the 0x00 byte 10 times
-  120                   )
-  121                   
-  122  8116  00000000  .db "\x00"*20 ; repeat 0x00 byte 20 times
-  122  811a  00000000
-  122  811e  00000000
-  122  8122  00000000
-  122  8126  00000000
+  104  8113  ea        .db ~((0x11a9+(3>>1)).l>>1*2+1).l ; = 0xea
+  105                   
+  106                   ; definitions can refer to labels and other definitions
+  107                   ; definitions can also represent register - however this might not be practical
+  108                   .def (
+  109                     DEF_WITH_LABEL := some_label + 0x10
+  110                     REG_DEF        := x 
+  111                     DEF_WITH_DEF   := DEF_WITH_LABEL - some_label
+  112                   )
+  113                   
+  114                   some_label:
+  115  8114  b510        lda DEF_WITH_DEF, REG_DEF
+  116                   
+  117                   ; some string operation are also supported
+  118                   .def (
+  119                     SOME_STR := "some" + " " + "str" ; will concatenate strings
+  120                     OTER_STR := SOME_STR + "."
+  121                     REP_STR := "\x00"*10 ; will repeat the 0x00 byte 10 times
+  122                   )
   123                   
-  124                   @other_template(var="test string")
-  124  812a  74657374    .db var
-  124  812e  20737472
-  124  8132  696e67  
+  124  8116  00000000  .db "\x00"*20 ; repeat 0x00 byte 20 times
+  124  811a  00000000
+  124  811e  00000000
+  124  8122  00000000
+  124  8126  00000000
   125                   
+  126                   ; execute a defined template
+  127                   @other_template(var="test string")
+  127  812a  74657374    .db var
+  127  812e  20737472
+  127  8132  696e67  
+  128                   
