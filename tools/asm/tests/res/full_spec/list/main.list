@@ -136,7 +136,8 @@ Line  Loc   Code         Source
   122  8122  00000000
   122  8126  00000000
   123                   
-  124  812a  74657374  @other_template("test string")
+  124                   @other_template(var="test string")
+  124  812a  74657374    .db var
   124  812e  20737472
   124  8132  696e67  
   125                   

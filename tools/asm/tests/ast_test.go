@@ -777,4 +777,35 @@ func TestThatCanParseSource(t *testing.T) {
 			},
 		}, ast)
 	})
+
+	t.Run(".rep_test", func(t *testing.T) {
+		ast := pkg.ParseSrc("", `
+      .rep i, 0, 10 {
+        opcode i
+      }
+      `)
+		require.False(t, ast.Errors.HasErrors())
+		assertAST(t, &pkg.AST{
+			Statements: []pkg.ASTStatement{
+				{
+					Type: pkg.ASTStatementTypePrepRepeate,
+					Name: "",
+					Operands: pkg.ASTOperands{
+						nameOperand("i"),
+						numOperand(0),
+						numOperand(10),
+						blockOperand(
+							pkg.ASTStatement{
+								Type:   pkg.ASTStatementTypeInstruction,
+								OpCode: "opcode",
+								Operands: pkg.ASTOperands{
+									exprOperand(pkg.ASTName("i"), "", nil),
+								},
+							},
+						),
+					},
+				},
+			},
+		}, ast)
+	})
 }

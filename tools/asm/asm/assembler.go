@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"reflect"
 	"sort"
+	"strings"
 
 	"github.com/google/uuid"
 )
@@ -13,6 +14,7 @@ type ByteCode map[int]byte
 type TemplateGenerator func(s ASTStatement, context *AssemblyContext, tmpl Template, args ASTOperands) *AssemblerError
 
 type Template struct {
+	Name          string
 	Arguments     []ASTName
 	Generate      TemplateGenerator
 	TemplateBlock ASTBlock
@@ -159,6 +161,31 @@ func toAssemblyError(s ASTStatement, err string) *AssemblerError {
 	}
 }
 
+// todo: move to a better place and refactor
+func sprintOperands(actx AssemblyContext, ops ASTOperands, names ...ASTName) string {
+	out := ""
+	for i, op := range ops {
+		if i > 0 {
+			out += ", "
+		}
+		if names != nil && i < len(names) {
+			out += fmt.Sprintf("%s=", (names)[i])
+		}
+
+		if v, ok := op.Number(actx); ok {
+			out += fmt.Sprintf("0x%x", v)
+		} else if v, ok := op.String(actx); ok {
+			vs := strings.ReplaceAll(string(v), "\n", "\\n")
+			out += fmt.Sprintf("\"%v\"", vs)
+		} else if v, ok := op.Register(actx); ok {
+			out += fmt.Sprintf("%v", v)
+		} else {
+			out += fmt.Sprintf("%v", v)
+		}
+	}
+	return out
+}
+
 func AssembleTemplate(s ASTStatement, context *AssemblyContext, tmpl Template, args ASTOperands) *AssemblerError {
 	rndCtxName := uuid.New().String()
 	if len(tmpl.Arguments) != len(args) {
@@ -186,6 +213,13 @@ func AssembleTemplate(s ASTStatement, context *AssemblyContext, tmpl Template, a
 		context.Deffinitions.Set(string(arg), v)
 	}
 
+	if context.SourceListing != nil {
+		context.SourceListing.InsertVirtualLine(
+			s.SrcPointer.Name,
+			s.SrcPointer.Line,
+			fmt.Sprintf("@%s(%s)", s.Name, sprintOperands(*context, args, tmpl.Arguments...)),
+		)
+	}
 	err := AssempleStatements(context, tmpl.TemplateBlock.Statements)
 	context.Deffinitions.PopContext(rndCtxName)
 	context.Labels.PopContext(rndCtxName)
@@ -195,6 +229,87 @@ func AssembleTemplate(s ASTStatement, context *AssemblyContext, tmpl Template, a
 	}
 
 	return err
+}
+
+func AssembleRepeat(s ASTStatement, context *AssemblyContext, args ASTOperands) *AssemblerError {
+	if len(args) != 4 {
+		return toAssemblyError(s, "repeate expected 4 arguments")
+	}
+
+	vname, ok := args[0].Name()
+	if !ok {
+		return toAssemblyError(s, "repeate expected a name as first argument")
+	}
+
+	vstart, ok := args[1].Number(*context)
+	if !ok {
+		return toAssemblyError(s, "repeate expected a number as second argument")
+	}
+
+	vend, ok := args[2].Number(*context)
+	if !ok {
+		return toAssemblyError(s, "repeate expected a number as third argument")
+	}
+
+	vblock, ok := args[3].Block()
+	if !ok {
+		return toAssemblyError(s, "repeate expected a code block as fourth argument")
+	}
+
+	srcListingOverriden := false
+	if context.SourceListing != nil {
+		srcListingOverriden = context.SourceListing.OverrideLine(s.SrcPointer.Name, s.SrcPointer.Line)
+	}
+
+	if context.SourceListing != nil {
+		context.SourceListing.InsertVirtualLine(
+			s.SrcPointer.Name,
+			s.SrcPointer.Line,
+			fmt.Sprintf("@repeate %s=%d to %d", vname, vstart, vend))
+	}
+
+	i := vstart
+	for {
+		rndCtxName := uuid.New().String()
+		context.Deffinitions.PushContext(rndCtxName)
+		context.Labels.PushContext(rndCtxName)
+
+		context.Deffinitions.Set(string(vname), ASTNumber(i))
+
+		if context.SourceListing != nil {
+			context.SourceListing.InsertVirtualLine(
+				s.SrcPointer.Name,
+				s.SrcPointer.Line,
+				fmt.Sprintf("@repeate %s=%d", vname, i))
+		}
+
+		err := AssempleStatements(context, vblock.Statements)
+
+		context.Deffinitions.PopContext(rndCtxName)
+		context.Labels.PopContext(rndCtxName)
+
+		if err != nil {
+			return err
+		}
+
+		if vstart > vend {
+			i--
+			if i < vend {
+				break
+			}
+		} else {
+			i++
+			if i > vend {
+				break
+			}
+		}
+	}
+
+	if srcListingOverriden {
+		context.SourceListing.ClearOverride()
+	}
+
+	return nil
 }
 
 func AssempleStatements(context *AssemblyContext, statements []ASTStatement) *AssemblerError {
@@ -255,6 +370,7 @@ func AssempleStatements(context *AssemblyContext, statements []ASTStatement) *As
 				return toAssemblyError(s, fmt.Sprintf("expected a block, got: '%v'", reflect.TypeOf(s.Operands[1])))
 			}
 			context.Templates[s.Name] = Template{
+				Name:          s.Name,
 				Arguments:     argsNames,
 				Generate:      AssembleTemplate,
 				TemplateBlock: tmplBlock,
@@ -266,6 +382,12 @@ func AssempleStatements(context *AssemblyContext, statements []ASTStatement) *As
 				return toAssemblyError(s, fmt.Sprintf("template '%s' not found", s.Name))
 			}
 			err := tmpl.Generate(s, context, tmpl, s.Operands)
+			if err != nil {
+				return err
+			}
+			continue
+		} else if s.Type == ASTStatementTypePrepRepeate {
+			err := AssembleRepeat(s, context, s.Operands)
 			if err != nil {
 				return err
 			}

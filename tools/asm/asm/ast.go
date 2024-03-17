@@ -244,6 +244,7 @@ const (
 	ASTStatementTypeInclude         ASTStatementType = ".inc"
 	ASTStatementTypePrepDefine      ASTStatementType = ".def"
 	ASTStatementTypePrepTemplateDef ASTStatementType = ".tmpl"
+	ASTStatementTypePrepRepeate     ASTStatementType = ".rep"
 	ASTStatementTypePrepTemplateUse ASTStatementType = "@"
 	ASTStatementTypeDataByte        ASTStatementType = ".db"
 	ASTStatementTypeDataWord        ASTStatementType = ".dw"
@@ -642,7 +643,9 @@ func (v *progVisitor) VisitPrep_instruction(ctx *parser.Prep_instructionContext)
 	case ".tmpl":
 		return v.buildPrepTemplate(ctx, children[1:])
 	case "@":
-		return v.buildTemplateUsage(ctx, children[1:])
+		return v.buildPrepTemplateUsage(ctx, children[1:])
+	case ".rep":
+		return v.buildPrepRepeate(ctx, children[1:])
 	case ".db":
 		return v.buildPrepByte(ctx, ASTStatementTypeDataByte, children[1:])
 	case ".dw":
@@ -763,7 +766,7 @@ func (v *progVisitor) buildPrepDefine(ctx *parser.Prep_instructionContext, child
 	return defs
 }
 
-func (v *progVisitor) buildTemplateUsage(ctx *parser.Prep_instructionContext, children []antlr.Tree) interface{} {
+func (v *progVisitor) buildPrepTemplateUsage(ctx *parser.Prep_instructionContext, children []antlr.Tree) interface{} {
 	var nameNode interface{}
 	var arguments interface{}
 
@@ -838,6 +841,57 @@ func (v *progVisitor) buildPrepTemplate(ctx *parser.Prep_instructionContext, chi
 			{Value: argNames},
 			{Value: body},
 		},
+		SrcPointer: SrcPointer{
+			Name: v.srcName,
+			Line: ctx.GetStart().GetLine(),
+		},
+	}
+}
+
+func (v *progVisitor) buildPrepRepeate(ctx *parser.Prep_instructionContext, children []antlr.Tree) interface{} {
+	if len(children) != 6 {
+		v.statementStructureError(ctx.GetStart().GetLine())
+		return nil
+	}
+	name := v.Visit(children[0].(antlr.ParseTree))
+	startValue := v.Visit(children[2].(antlr.ParseTree))
+	endValue := v.Visit(children[4].(antlr.ParseTree))
+	body := v.Visit(children[5].(antlr.ParseTree))
+
+	operands := make(ASTOperands, 4)
+
+	if name, ok := name.(ASTName); ok {
+		operands[0] = ASTOperand{Value: name}
+	} else {
+		v.statementStructureError(ctx.GetStart().GetLine())
+		return nil
+	}
+
+	if startValue, ok := startValue.(ASTOperand); ok {
+		operands[1] = startValue
+	} else {
+		v.statementStructureError(ctx.GetStart().GetLine())
+		return nil
+	}
+
+	if endValue, ok := endValue.(ASTOperand); ok {
+		operands[2] = endValue
+	} else {
+		v.statementStructureError(ctx.GetStart().GetLine())
+		return nil
+	}
+
+	if body, ok := body.(ASTBlock); ok {
+		operands[3] = ASTOperand{Value: body}
+	} else {
+		v.statementStructureError(ctx.GetStart().GetLine())
+		return nil
+	}
+
+	_, _, _, _ = name, startValue, endValue, body
+	return ASTStatement{
+		Type:     ASTStatementTypePrepRepeate,
+		Operands: operands,
 		SrcPointer: SrcPointer{
 			Name: v.srcName,
 			Line: ctx.GetStart().GetLine(),

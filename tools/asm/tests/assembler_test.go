@@ -765,4 +765,23 @@ func TestThatCanBuildBinaryCode(t *testing.T) {
 		})
 	})
 
+	t.Run("rep_test", func(t *testing.T) {
+		assertAssembler(t, `
+        .rep i, 3, 8 {
+          .db i, i*2
+        }
+      `, []byte{
+			3, 6, 4, 8, 5, 10, 6, 12, 7, 14, 8, 16,
+		})
+	})
+
+	t.Run("rep_backward_test", func(t *testing.T) {
+		assertAssembler(t, `
+        .rep i, 10, 3 {
+          .db i
+        }
+      `, []byte{
+			10, 9, 8, 7, 6, 5, 4, 3,
+		})
+	})
 }

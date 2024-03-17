@@ -40,3 +40,9 @@
 }
 
 @nested_template_with_labels (0x10) ; use the template
+
+
+.rep i, 3, 8 {
+  .db i, i*2
+  ldai i
+}

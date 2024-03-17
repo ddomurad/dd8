@@ -17,6 +17,7 @@ prep_instruction
   | P_DEF '(' EOL prep_def_arg_lines EOL ')'
   | P_DEF prep_def_args
   | P_TMPL name '(' namelist? ')' tmpl_block
+  | P_REP name ',' argument ',' argument tmpl_block
   | '@'name '(' arglist? ')'
   | P_DB arglist
   | P_DB '(' EOL arglist_lines EOL ')'
@@ -102,6 +103,7 @@ label
 
 P_DEF: '.def';
 P_TMPL: '.tmpl';
+P_REP: '.rep';
 P_ORG: '.org';
 P_INC: '.inc';
 P_DB: '.db';

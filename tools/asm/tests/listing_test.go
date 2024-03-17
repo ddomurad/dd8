@@ -16,7 +16,7 @@ func assertListing(t *testing.T, src string, expectedListing string) {
 	listing.AddSource("test.asm", src)
 	_, err := asm.Assemble(ast, assemblers.OpcodeAssemblerW65C02S, listing)
 	require.Nil(t, err)
-	actuallListing := listing.FileListings["test.asm"].String()
+	actuallListing := listing.FileListings["test.asm"].String(listing.FileListings)
 	require.Equal(t, expectedListing, actuallListing)
 }
 
@@ -58,8 +58,10 @@ func Test_ListingGeneration(t *testing.T) {
     2                     ldai v1
     3                   }
     4                   
-    5  0000  a9aa      @test(0xaa)
-    6  0002  a9bb      @test(0xbb)
+    5                   @test(v1=0xaa)
+    5  0000  a9aa        ldai v1
+    6                   @test(v1=0xbb)
+    6  0002  a9bb        ldai v1
     7                   
 `)
 	})

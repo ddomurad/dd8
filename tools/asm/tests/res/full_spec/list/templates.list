@@ -12,10 +12,11 @@ Line  Loc   Code         Source
    11                     .db var
    12                   }
    13                   
-   14  1000  a901      @some_template (1,2,3) ; this is how you use a template
-   14  1002  8502    
-   14  1004  03      
-   14  1005  a910    
+   14                   @some_template(i=0x1, j=0x2, k=0x3)
+   14  1000  a901        ldai i ; arguments are actually just local definitions
+   14  1002  8502        sta j
+   14  1004  03          .db k
+   14  1005  a910        ldai CONST_1 ; of course, you can use golo constants
    15                   ; this will be expanded to:
    16                   ; ldai 1 
    17                   ; sta 2 
@@ -23,15 +24,16 @@ Line  Loc   Code         Source
    19                   ; ldai 0x10  ; CONST_1
    20                   
    21                   ; you cal also use expiresion as template arguments
-   22  1007  a9c8      @some_template (TEST_NUMBER_1*2, RST_VEC_ORG.l, TEST_STR_1) 
-   22  1009  85fc    
-   22  100b  74686973
+   22                   @some_template(i=0xc8, j=0xfc, k="this is\n	a test "string"")
+   22  1007  a9c8        ldai i ; arguments are actually just local definitions
+   22  1009  85fc        sta j
+   22  100b  74686973    .db k
    22  100f  2069730a
    22  1013  09612074
    22  1017  65737420
    22  101b  22737472
    22  101f  696e6722
-   22  1023  a910    
+   22  1023  a910        ldai CONST_1 ; of course, you can use golo constants
    23                   ; this will be expanded to:
    24                   ; ldai 200 
    25                   ; sta 0xfc
@@ -47,11 +49,36 @@ Line  Loc   Code         Source
    35                     }
    36                   
    37                     loop: ; this label is not visible outside the template
-   38                       @sub_template (arg*2) ; use sub template
+   38                   @sub_template(arg2=0x20)
    39                       jmp loop ; infinite loop
    40                   }
    41                   
-   42  1025  a920      @nested_template_with_labels (0x10) ; use the template
-   42  1027  4c2510  
-   42  102a  4c2510  
+   42                   @nested_template_with_labels(arg=0x10)
+   42  1025  a920            ldai arg2
+   42  1027  4c2510          jmp loop ; infinite loop, just and example
+   42  102a  4c2510        jmp loop ; infinite loop
    43                   
+   44                   
+   45                   @repeate i=3 to 8
+   45                   @repeate i=3
+   45  102d  0306        .db i, i*2
+   45  102f  a903        ldai i
+   45                   @repeate i=4
+   45  1031  0408        .db i, i*2
+   45  1033  a904        ldai i
+   45                   @repeate i=5
+   45  1035  050a        .db i, i*2
+   45  1037  a905        ldai i
+   45                   @repeate i=6
+   45  1039  060c        .db i, i*2
+   45  103b  a906        ldai i
+   45                   @repeate i=7
+   45  103d  070e        .db i, i*2
+   45  103f  a907        ldai i
+   45                   @repeate i=8
+   45  1041  0810        .db i, i*2
+   45  1043  a908        ldai i
+   46                     .db i, i*2
+   47                     ldai i
+   48                   }
+   49                   
