@@ -2,7 +2,6 @@
 - functions 
 eg. some_func("test string")
 
-- custom temlates 
 
 - it is not possible to declare a non zero page opcode accesing zero page 
 e.g. lda 0x0000 will be interpreted as lda 0x00
@@ -14,7 +13,4 @@ e.g: bbr 0, 0x10, [0x01] ; would jump one byte
      jmp [-0x02] ; would jump two bytes back
 
 
-- update listing with template opcodes
-- support for labels in templates
-- add repeat tempalte 
-- add if emplate
+- add if template
