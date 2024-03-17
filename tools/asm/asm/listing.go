@@ -73,6 +73,11 @@ func (l *SourceListing) ClearCodePass() {
 }
 
 func (l *SourceListing) InsertVirtualLine(srcName string, line int, src string) {
+	if l.overide {
+		srcName = l.overideSource
+		line = l.overideLine
+	}
+
 	if _, ok := l.FileListings[srcName].CodeLines[line]; !ok {
 		l.FileListings[srcName].CodeLines[line] = []CodeListing{}
 	}

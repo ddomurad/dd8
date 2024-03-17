@@ -5,7 +5,7 @@ Line  Loc   Code         Source
     4                     ldai i ; arguments are actually just local definitions
     5                     sta j
     6                     .db k
-    7                     ldai CONST_1 ; of course, you can use golo constants
+    7                     ldai CONST_1 ; you can use global constants
     8                   }
     9                   
    10                   .tmpl other_template (var) {
@@ -16,14 +16,14 @@ Line  Loc   Code         Source
    14  1000  a901        ldai i ; arguments are actually just local definitions
    14  1002  8502        sta j
    14  1004  03          .db k
-   14  1005  a910        ldai CONST_1 ; of course, you can use golo constants
+   14  1005  a910        ldai CONST_1 ; you can use global constants
    15                   ; this will be expanded to:
    16                   ; ldai 1 
    17                   ; sta 2 
    18                   ; .db 3 
    19                   ; ldai 0x10  ; CONST_1
    20                   
-   21                   ; you cal also use expiresion as template arguments
+   21                   ; you cal also use expressions as template arguments
    22                   @some_template(i=0xc8, j=0xfc, k="this is\n	a test "string"")
    22  1007  a9c8        ldai i ; arguments are actually just local definitions
    22  1009  85fc        sta j
@@ -33,7 +33,7 @@ Line  Loc   Code         Source
    22  1017  65737420
    22  101b  22737472
    22  101f  696e6722
-   22  1023  a910        ldai CONST_1 ; of course, you can use golo constants
+   22  1023  a910        ldai CONST_1 ; you can use global constants
    23                   ; this will be expanded to:
    24                   ; ldai 200 
    25                   ; sta 0xfc
@@ -45,17 +45,18 @@ Line  Loc   Code         Source
    31                     .tmpl sub_template (arg2) {
    32                       loop: ; this label is not visible outside the sub template
    33                         ldai arg2
-   34                         jmp loop ; infinite loop, just and example
+   34                         jmp loop ; infinite loop, just an example
    35                     }
    36                   
-   37                     loop: ; this label is not visible outside the template
-   38                   @sub_template(arg2=0x20)
+   37                     loop: ; this label is not visible outside the template, and not visible inside the sub template
+   38                       @sub_template (arg*2) ; use sub template
    39                       jmp loop ; infinite loop
    40                   }
    41                   
    42                   @nested_template_with_labels(arg=0x10)
+   42                   @sub_template(arg2=0x20)
    42  1025  a920            ldai arg2
-   42  1027  4c2510          jmp loop ; infinite loop, just and example
+   42  1027  4c2510          jmp loop ; infinite loop, just an example
    42  102a  4c2510        jmp loop ; infinite loop
    43                   
    44                   
@@ -81,4 +82,45 @@ Line  Loc   Code         Source
    46                     .db i, i*2
    47                     ldai i
    48                   }
-   49                   
+   49                   ; this will be expanded to:
+   50                   ;.db 3, 6
+   51                   ;ldai 3
+   52                   ;.db 4, 8
+   53                   ;ldai 4
+   54                   ;.db 5, 10
+   55                   ;ldai 5
+   56                   ;.db 6, 12
+   57                   ;ldai 6
+   58                   ;.db 7, 14
+   59                   ;ldai 7
+   60                   ;.db 8, 16
+   61                   ;ldai 8
+   62                   
+   63                   ; you can also mix templates 
+   64                   .tmpl nested_template_with_repeat_and_labels (st, en) {
+   65                     .tmpl sub_template(s1) {
+   66                       loop:
+   67                       ldai s1 
+   68                       jmp loop
+   69                     }
+   70                   
+   71                     .rep i, st, en {
+   72                       @sub_template (i)
+   73                     }
+   74                   }
+   75                   
+   76                   @nested_template_with_repeat_and_labels(st=0x0, en=0x2)
+   76                   @repeat i=0
+   76                   @sub_template(s1=0x0)
+   76  1045  a900          ldai s1 
+   76  1047  4c4510        jmp loop
+   76                   @repeat i=1
+   76                   @sub_template(s1=0x1)
+   76  104a  a901          ldai s1 
+   76  104c  4c4a10        jmp loop
+   76                   @repeat i=2
+   76                   @sub_template(s1=0x2)
+   76  104f  a902          ldai s1 
+   76  1051  4c4f10        jmp loop
+   77                   
+   78                   
