@@ -233,39 +233,32 @@ func AssembleTemplate(s ASTStatement, context *AssemblyContext, tmpl Template, a
 
 func AssembleRepeat(s ASTStatement, context *AssemblyContext, args ASTOperands) *AssemblerError {
 	if len(args) != 4 {
-		return toAssemblyError(s, "repeate expected 4 arguments")
+		return toAssemblyError(s, "repeat expected 4 arguments")
 	}
 
 	vname, ok := args[0].Name()
 	if !ok {
-		return toAssemblyError(s, "repeate expected a name as first argument")
+		return toAssemblyError(s, "repeat expected a name as first argument")
 	}
 
 	vstart, ok := args[1].Number(*context)
 	if !ok {
-		return toAssemblyError(s, "repeate expected a number as second argument")
+		return toAssemblyError(s, "repeat expected a number as second argument")
 	}
 
 	vend, ok := args[2].Number(*context)
 	if !ok {
-		return toAssemblyError(s, "repeate expected a number as third argument")
+		return toAssemblyError(s, "repeat expected a number as third argument")
 	}
 
 	vblock, ok := args[3].Block()
 	if !ok {
-		return toAssemblyError(s, "repeate expected a code block as fourth argument")
+		return toAssemblyError(s, "repeat expected a code block as fourth argument")
 	}
 
 	srcListingOverriden := false
 	if context.SourceListing != nil {
 		srcListingOverriden = context.SourceListing.OverrideLine(s.SrcPointer.Name, s.SrcPointer.Line)
-	}
-
-	if context.SourceListing != nil {
-		context.SourceListing.InsertVirtualLine(
-			s.SrcPointer.Name,
-			s.SrcPointer.Line,
-			fmt.Sprintf("@repeate %s=%d to %d", vname, vstart, vend))
 	}
 
 	i := vstart
@@ -280,7 +273,7 @@ func AssembleRepeat(s ASTStatement, context *AssemblyContext, args ASTOperands) 
 			context.SourceListing.InsertVirtualLine(
 				s.SrcPointer.Name,
 				s.SrcPointer.Line,
-				fmt.Sprintf("@repeate %s=%d", vname, i))
+				fmt.Sprintf("@repeat %s=%d", vname, i))
 		}
 
 		err := AssempleStatements(context, vblock.Statements)
@@ -306,6 +299,14 @@ func AssembleRepeat(s ASTStatement, context *AssemblyContext, args ASTOperands) 
 	}
 
 	if srcListingOverriden {
+		// note: this is not ideal, it will list the reteach definition after the last iteration
+		if context.SourceListing != nil {
+			context.SourceListing.InsertVirtualLine(
+				s.SrcPointer.Name,
+				s.SrcPointer.Line,
+				fmt.Sprintf("@repeat %s=%d to %d", vname, vstart, vend))
+		}
+
 		context.SourceListing.ClearOverride()
 	}
 
@@ -386,7 +387,7 @@ func AssempleStatements(context *AssemblyContext, statements []ASTStatement) *As
 				return err
 			}
 			continue
-		} else if s.Type == ASTStatementTypePrepRepeate {
+		} else if s.Type == ASTStatementTypePrepRepeat {
 			err := AssembleRepeat(s, context, s.Operands)
 			if err != nil {
 				return err

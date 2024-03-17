@@ -59,25 +59,25 @@ Line  Loc   Code         Source
    42  102a  4c2510        jmp loop ; infinite loop
    43                   
    44                   
-   45                   @repeate i=3 to 8
-   45                   @repeate i=3
+   45                   @repeat i=3
    45  102d  0306        .db i, i*2
    45  102f  a903        ldai i
-   45                   @repeate i=4
+   45                   @repeat i=4
    45  1031  0408        .db i, i*2
    45  1033  a904        ldai i
-   45                   @repeate i=5
+   45                   @repeat i=5
    45  1035  050a        .db i, i*2
    45  1037  a905        ldai i
-   45                   @repeate i=6
+   45                   @repeat i=6
    45  1039  060c        .db i, i*2
    45  103b  a906        ldai i
-   45                   @repeate i=7
+   45                   @repeat i=7
    45  103d  070e        .db i, i*2
    45  103f  a907        ldai i
-   45                   @repeate i=8
+   45                   @repeat i=8
    45  1041  0810        .db i, i*2
    45  1043  a908        ldai i
+   45                   @repeat i=3 to 8
    46                     .db i, i*2
    47                     ldai i
    48                   }

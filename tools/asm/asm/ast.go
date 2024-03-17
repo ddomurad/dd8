@@ -244,7 +244,7 @@ const (
 	ASTStatementTypeInclude         ASTStatementType = ".inc"
 	ASTStatementTypePrepDefine      ASTStatementType = ".def"
 	ASTStatementTypePrepTemplateDef ASTStatementType = ".tmpl"
-	ASTStatementTypePrepRepeate     ASTStatementType = ".rep"
+	ASTStatementTypePrepRepeat      ASTStatementType = ".rep"
 	ASTStatementTypePrepTemplateUse ASTStatementType = "@"
 	ASTStatementTypeDataByte        ASTStatementType = ".db"
 	ASTStatementTypeDataWord        ASTStatementType = ".dw"
@@ -645,7 +645,7 @@ func (v *progVisitor) VisitPrep_instruction(ctx *parser.Prep_instructionContext)
 	case "@":
 		return v.buildPrepTemplateUsage(ctx, children[1:])
 	case ".rep":
-		return v.buildPrepRepeate(ctx, children[1:])
+		return v.buildPrepRepeat(ctx, children[1:])
 	case ".db":
 		return v.buildPrepByte(ctx, ASTStatementTypeDataByte, children[1:])
 	case ".dw":
@@ -848,7 +848,7 @@ func (v *progVisitor) buildPrepTemplate(ctx *parser.Prep_instructionContext, chi
 	}
 }
 
-func (v *progVisitor) buildPrepRepeate(ctx *parser.Prep_instructionContext, children []antlr.Tree) interface{} {
+func (v *progVisitor) buildPrepRepeat(ctx *parser.Prep_instructionContext, children []antlr.Tree) interface{} {
 	if len(children) != 6 {
 		v.statementStructureError(ctx.GetStart().GetLine())
 		return nil
@@ -890,7 +890,7 @@ func (v *progVisitor) buildPrepRepeate(ctx *parser.Prep_instructionContext, chil
 
 	_, _, _, _ = name, startValue, endValue, body
 	return ASTStatement{
-		Type:     ASTStatementTypePrepRepeate,
+		Type:     ASTStatementTypePrepRepeat,
 		Operands: operands,
 		SrcPointer: SrcPointer{
 			Name: v.srcName,

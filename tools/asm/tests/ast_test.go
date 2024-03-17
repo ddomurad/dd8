@@ -788,7 +788,7 @@ func TestThatCanParseSource(t *testing.T) {
 		assertAST(t, &pkg.AST{
 			Statements: []pkg.ASTStatement{
 				{
-					Type: pkg.ASTStatementTypePrepRepeate,
+					Type: pkg.ASTStatementTypePrepRepeat,
 					Name: "",
 					Operands: pkg.ASTOperands{
 						nameOperand("i"),
