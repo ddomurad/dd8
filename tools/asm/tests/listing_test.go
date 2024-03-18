@@ -65,4 +65,20 @@ func Test_ListingGeneration(t *testing.T) {
     7                   
 `)
 	})
+	t.Run("list_repeat_single_line", func(t *testing.T) {
+		assertListing(t, `.rep i,0,2 {
+  ldai i
+}`,
+			`Line  Loc   Code         Source
+    1                   @repeat i=0
+    1  0000  a900        ldai i
+    1                   @repeat i=1
+    1  0002  a901        ldai i
+    1                   @repeat i=2
+    1  0004  a902        ldai i
+    1                   .rep i,0,2 {
+    2                     ldai i
+    3                   }
+`)
+	})
 }
