@@ -1,7 +1,7 @@
 v 4
-file . "./ic_selector.vhdl" "dfa92968c775b50f01a906adac4e035105f8c0ed" "20240106205213.239":
-  entity ic_selector at 1( 0) + 0 on 93;
-  architecture rtl of ic_selector at 20( 444) + 0 on 94;
-file . "./ic_selector_tb.vhdl" "2671c8b7e3863d3701c5f3cbcd7edcc3d1b8844a" "20240106205213.261":
-  entity ic_selector_tb at 1( 0) + 0 on 95;
-  architecture behav of ic_selector_tb at 9( 127) + 0 on 96;
+file . "./board_ctrl_tb.vhdl" "f3a24f6a1a9fff177dea6f610803f7bf411b267d" "20240322163932.724":
+  entity board_ctrl_tb at 1( 0) + 0 on 95;
+  architecture behav of board_ctrl_tb at 9( 125) + 0 on 96;
+file . "./board_ctrl.vhdl" "afb8e51e3482af464c9413b715d181da1bce1c71" "20240322163932.718":
+  entity board_ctrl at 1( 0) + 0 on 93;
+  architecture rtl of board_ctrl at 26( 617) + 0 on 94;

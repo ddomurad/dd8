@@ -2,11 +2,11 @@ STD = --std=08
 
 all: build run
 build:
-	ghdl -a $(STD) ./ic_selector.vhdl 
-	ghdl -a $(STD) ./ic_selector_tb.vhdl 
-	ghdl -e $(STD) ic_selector
-	ghdl -e $(STD) ic_selector_tb
+	ghdl -a $(STD) ./board_ctrl.vhdl
+	ghdl -a $(STD) ./board_ctrl_tb.vhdl
+	ghdl -e $(STD) board_ctrl
+	ghdl -e $(STD) board_ctrl_tb
 run:
-	ghdl -r $(STD) ic_selector_tb --vcd=ic_selector_tb.vcd
+	ghdl -r $(STD) board_ctrl_tb --vcd=board_ctrl_tb.vcd
 wave:
-	gtkwave ic_selector_tb.vcd 
+	gtkwave board_ctrl_tb.vcd 
