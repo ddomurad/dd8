@@ -73,12 +73,13 @@ func Test_ListingGeneration(t *testing.T) {
     1                   @repeat i=0
     1  0000  a900        ldai i
     1                   @repeat i=1
-    1  0002  a901        ldai i
+    1  0002  a901    
     1                   @repeat i=2
-    1  0004  a902        ldai i
-    1                   .rep i,0,2 {
+    1  0004  a902    
+    1                   @repeat i=0 to 2 {
     2                     ldai i
     3                   }
+    4                   
 `)
 	})
 }

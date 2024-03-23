@@ -304,7 +304,7 @@ func AssembleRepeat(s ASTStatement, context *AssemblyContext, args ASTOperands) 
 			context.SourceListing.InsertVirtualLine(
 				s.SrcPointer.Name,
 				s.SrcPointer.Line,
-				fmt.Sprintf("@repeat %s=%d to %d", vname, vstart, vend))
+				fmt.Sprintf("@repeat %s=%d to %d {", vname, vstart, vend))
 		}
 
 		context.SourceListing.ClearOverride()
