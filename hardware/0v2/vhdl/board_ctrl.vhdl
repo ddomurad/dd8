@@ -26,15 +26,19 @@ end entity board_ctrl;
 architecture rtl of board_ctrl is
   signal i_ce_uart : std_logic;
 begin
-    ce_rom_b <= '0'; -- we select only the rom
-    ce_ram_b <= '1';
-    ce_uart_b <= '1';
-    we_b <= '1';  -- we never write in this test
+    ce_ram_b <= a(15); -- 0x0000 - 0x7FFF
+    ce_uart_b <= not a(15) or a(14); -- 0x8000 - 0xBFFF
+    ce_rom_b <= not (a(15) and a(14)); -- 0xE000 - 0xFFFF
+
     oe_b <= not (rw and clk);
+    we_b <= not clk or rw;
+
+    clk_aux <= clk;
+    clk2 <= clk;
+
     r0 <= '0';
     r1 <= '0';
     r2 <= '0';
     r3 <= '0';
-    clk_aux <= clk;
-    clk2 <= clk;
+
 end architecture rtl;
