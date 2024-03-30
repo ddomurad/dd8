@@ -23,9 +23,9 @@ Ready message:
 
 Monitor output 
 every clock cycle the address bus and data buss are monitored and dumped on the serial port
-"ro ra kb lc oe we AAAA DD\n" 
+"oe we ro c1 c2 c3 AAAA DD\n" 
 where AAAA (address) is a 16 bit hexadecimal number and DD (data) is a 8-bit hexadecimal number
-ro, ra, kb, lc, oe, and we describe active control signals
+oe, we, ro, c1, c2, and c3 describe active control signals, where c1-c3 are custom signals
 
 Command result
 "!ok\n" - for success

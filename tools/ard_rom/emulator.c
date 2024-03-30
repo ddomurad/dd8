@@ -37,27 +37,6 @@ volatile uint8_t brk_set = 0;
 
 char monitor_buffer[16];
 void write_monitor(uint8_t ctrl, uint16_t addr, uint8_t data) {
-  if (ctrl & (1 << CTRL_CE_ROM_PIN)) {
-    uart_write("   ", 3);
-  } else {
-    uart_write("ro ", 3);
-  }
-  if (ctrl & (1 << CTRL_CE_RAM_PIN)) {
-    uart_write("   ", 3);
-  } else {
-    uart_write("ra ", 3);
-  }
-  if (ctrl & (1 << CTRL_CE_KB_PIN)) {
-    uart_write("   ", 3);
-  } else {
-    uart_write("kb ", 3);
-  }
-  if (ctrl & (1 << CTRL_CE_LCD_PIN)) {
-    uart_write("ld ", 3);
-  } else {
-    uart_write("   ", 3);
-  }
-
   if (ctrl & (1 << CTRL_OE_PIN)) {
     uart_write("   ", 3);
   } else {
@@ -68,6 +47,29 @@ void write_monitor(uint8_t ctrl, uint16_t addr, uint8_t data) {
   } else {
     uart_write("we ", 3);
   }
+
+  if (ctrl & (1 << CTRL_CE_ROM_PIN)) {
+    uart_write("   ", 3);
+  } else {
+    uart_write("ro ", 3);
+  }
+
+  if (ctrl & (1 << CTRL_C1)) {
+    uart_write("   ", 3);
+  } else {
+    uart_write("c1 ", 3);
+  }
+  if (ctrl & (1 << CTRL_C2)) {
+    uart_write("   ", 3);
+  } else {
+    uart_write("c2 ", 3);
+  }
+  if (ctrl & (1 << CTRL_C3)) {
+    uart_write("c3 ", 3);
+  } else {
+    uart_write("   ", 3);
+  }
+
 
   sprintf(monitor_buffer, "%04X %02X", addr, data);
   uart_writeln(monitor_buffer, 16);

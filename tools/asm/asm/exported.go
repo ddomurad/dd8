@@ -27,6 +27,6 @@ func (s *Exported) String(filter string) string {
 			out += fmt.Sprintf("\t%s := 0x%04X\n", lname, laddr)
 		}
 	}
-	out += ")"
+	out += ")\n"
 	return out
 }
