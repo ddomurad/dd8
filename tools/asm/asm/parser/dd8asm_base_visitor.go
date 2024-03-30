@@ -24,11 +24,11 @@ func (v *BaseDD8ASMVisitor) VisitTmpl_block(ctx *Tmpl_blockContext) interface{} 
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseDD8ASMVisitor) VisitPrep_def_args(ctx *Prep_def_argsContext) interface{} {
+func (v *BaseDD8ASMVisitor) VisitPrep_def_arg_lines(ctx *Prep_def_arg_linesContext) interface{} {
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseDD8ASMVisitor) VisitPrep_def_arg_lines(ctx *Prep_def_arg_linesContext) interface{} {
+func (v *BaseDD8ASMVisitor) VisitPrep_def_args(ctx *Prep_def_argsContext) interface{} {
 	return v.VisitChildren(ctx)
 }
 
@@ -57,6 +57,10 @@ func (v *BaseDD8ASMVisitor) VisitExpr(ctx *ExprContext) interface{} {
 }
 
 func (v *BaseDD8ASMVisitor) VisitStr(ctx *StrContext) interface{} {
+	return v.VisitChildren(ctx)
+}
+
+func (v *BaseDD8ASMVisitor) VisitRune(ctx *RuneContext) interface{} {
 	return v.VisitChildren(ctx)
 }
 

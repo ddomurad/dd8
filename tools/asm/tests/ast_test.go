@@ -83,6 +83,30 @@ func regOperand(v pkg.ASTRegister) pkg.ASTOperand {
 	return pkg.ASTOperand{Value: v}
 }
 
+func numArrayOperand(v ...pkg.ASTNumber) pkg.ASTOperand {
+	arr := make(pkg.ASTArray, len(v))
+	for i, n := range v {
+		arr[i] = n
+	}
+	return pkg.ASTOperand{Value: arr}
+}
+
+func strArrayOperand(v ...pkg.ASTString) pkg.ASTOperand {
+	arr := make(pkg.ASTArray, len(v))
+	for i, n := range v {
+		arr[i] = n
+	}
+	return pkg.ASTOperand{Value: arr}
+}
+
+func anyArrayOperand(v ...any) pkg.ASTOperand {
+	arr := make(pkg.ASTArray, len(v))
+	for i, n := range v {
+		arr[i] = n
+	}
+	return pkg.ASTOperand{Value: arr}
+}
+
 func blockOperand(v ...pkg.ASTStatement) pkg.ASTOperand {
 	return pkg.ASTOperand{Value: pkg.ASTBlock{Statements: v}}
 }
@@ -483,6 +507,127 @@ func TestThatCanParseSource(t *testing.T) {
 		}, ast)
 	})
 
+	t.Run("prep_def_arrays", func(t *testing.T) {
+		ast := pkg.ParseSrc("", `
+      .def TEST := <10, 15>
+      .def (
+        TEST2 := <1, 2, 3>
+        TEST3 := <"hello", "world", "!">
+        TEST4 := <1, "test">
+        TEST5 := <1*2, TEST2*TEST3>
+      )
+      `)
+		require.False(t, ast.Errors.HasErrors())
+		assertAST(t, &pkg.AST{
+			Statements: []pkg.ASTStatement{
+				{
+					Type:     pkg.ASTStatementTypePrepDefine,
+					Name:     "TEST",
+					Operands: pkg.ASTOperands{numArrayOperand(10, 15)},
+				},
+				{
+					Type:     pkg.ASTStatementTypePrepDefine,
+					Name:     "TEST2",
+					Operands: pkg.ASTOperands{numArrayOperand(1, 2, 3)},
+				},
+				{
+					Type:     pkg.ASTStatementTypePrepDefine,
+					Name:     "TEST3",
+					Operands: pkg.ASTOperands{strArrayOperand("hello", "world", "!")},
+				},
+				{
+					Type:     pkg.ASTStatementTypePrepDefine,
+					Name:     "TEST4",
+					Operands: pkg.ASTOperands{anyArrayOperand(pkg.ASTNumber(1), pkg.ASTString("test"))},
+				},
+				{
+					Type: pkg.ASTStatementTypePrepDefine,
+					Name: "TEST5",
+					Operands: pkg.ASTOperands{anyArrayOperand(
+						expr(pkg.ASTNumber(1), "*", pkg.ASTNumber(2)),
+						expr(nameExpresion("TEST2"), "*", nameExpresion("TEST3")),
+					)},
+				},
+			},
+		}, ast)
+	})
+
+	t.Run("prep_def_lenght_of_array", func(t *testing.T) {
+		ast := pkg.ParseSrc("", `
+        opcode TEST_ARRAY.len
+      `)
+		require.False(t, ast.Errors.HasErrors())
+		assertAST(t, &pkg.AST{
+			Statements: []pkg.ASTStatement{
+				{
+					Type:     pkg.ASTStatementTypeInstruction,
+					OpCode:   "opcode",
+					Operands: []pkg.ASTOperand{exprOperand(nameExpresion("TEST_ARRAY"), ".len", nil)},
+				},
+			},
+		}, ast)
+	})
+
+	t.Run("prep_def_arrays_usage", func(t *testing.T) {
+		ast := pkg.ParseSrc("", `
+      opcode1 TEST[0]
+      opcode2 TEST[1]
+      opcode3 TEST[OTER[2*ELSE]]*TEST[2]
+      `)
+
+		require.False(t, ast.Errors.HasErrors())
+		assertAST(t, &pkg.AST{
+			Statements: []pkg.ASTStatement{
+				{
+					Type:     pkg.ASTStatementTypeInstruction,
+					OpCode:   "opcode1",
+					Operands: []pkg.ASTOperand{exprOperand(nameExpresion("TEST"), "[]", pkg.ASTNumber(0))},
+				},
+				{
+					Type:     pkg.ASTStatementTypeInstruction,
+					OpCode:   "opcode2",
+					Operands: []pkg.ASTOperand{exprOperand(nameExpresion("TEST"), "[]", pkg.ASTNumber(1))},
+				},
+				{
+					Type:   pkg.ASTStatementTypeInstruction,
+					OpCode: "opcode3",
+					Operands: []pkg.ASTOperand{
+						exprOperand(
+							expr(nameExpresion("TEST"), "[]", expr(nameExpresion("OTER"), "[]", expr(pkg.ASTNumber(2), "*", nameExpresion("ELSE")))),
+							"*",
+							expr(nameExpresion("TEST"), "[]", pkg.ASTNumber(2)),
+						),
+					},
+				},
+			},
+		}, ast)
+	})
+
+	t.Run("prep_ml_def_with_empty_lines", func(t *testing.T) {
+		ast := pkg.ParseSrc("", `
+      .def (
+      TEST := 10
+    
+        TEST-100 := 0b1001_1100 
+      )
+      `)
+		require.False(t, ast.Errors.HasErrors())
+		assertAST(t, &pkg.AST{
+			Statements: []pkg.ASTStatement{
+				{
+					Type:     pkg.ASTStatementTypePrepDefine,
+					Name:     "TEST",
+					Operands: pkg.ASTOperands{numOperand(10)},
+				},
+				{
+					Type:     pkg.ASTStatementTypePrepDefine,
+					Name:     "TEST-100",
+					Operands: pkg.ASTOperands{numOperand(0b1001_1100)},
+				},
+			},
+		}, ast)
+	})
+
 	t.Run(".byte", func(t *testing.T) {
 		ast := pkg.ParseSrc("", `
       .byte
@@ -555,6 +700,7 @@ func TestThatCanParseSource(t *testing.T) {
       .db 1 + 2 * 3
       .db 1 * 2 - 3
       .db ~1
+      .db 'd'
       `)
 		require.False(t, ast.Errors.HasErrors())
 		assertAST(t, &pkg.AST{
@@ -601,6 +747,12 @@ func TestThatCanParseSource(t *testing.T) {
 					Type: pkg.ASTStatementTypeDataByte,
 					Operands: pkg.ASTOperands{exprOperand(
 						nil, "~", pkg.ASTNumber(1))},
+				},
+				{
+					Type: pkg.ASTStatementTypeDataByte,
+					Operands: pkg.ASTOperands{
+						numOperand(100),
+					},
 				},
 			},
 		}, ast)
@@ -800,6 +952,58 @@ func TestThatCanParseSource(t *testing.T) {
 								OpCode: "opcode",
 								Operands: pkg.ASTOperands{
 									exprOperand(pkg.ASTName("i"), "", nil),
+								},
+							},
+						),
+					},
+				},
+			},
+		}, ast)
+	})
+
+	t.Run("code_block_test", func(t *testing.T) {
+		ast := pkg.ParseSrc("", `
+      {
+        opcode i
+        opcode j
+        {
+          test k 
+        }
+      }
+      `)
+		require.False(t, ast.Errors.HasErrors())
+		assertAST(t, &pkg.AST{
+			Statements: []pkg.ASTStatement{
+				{
+					Type: pkg.ASTStatementTypePrepBlock,
+					Name: "",
+					Operands: pkg.ASTOperands{
+						blockOperand(
+							pkg.ASTStatement{
+								Type:   pkg.ASTStatementTypeInstruction,
+								OpCode: "opcode",
+								Operands: pkg.ASTOperands{
+									exprOperand(pkg.ASTName("i"), "", nil),
+								},
+							},
+							pkg.ASTStatement{
+								Type:   pkg.ASTStatementTypeInstruction,
+								OpCode: "opcode",
+								Operands: pkg.ASTOperands{
+									exprOperand(pkg.ASTName("j"), "", nil),
+								},
+							},
+							pkg.ASTStatement{
+								Type: pkg.ASTStatementTypePrepBlock,
+								Operands: pkg.ASTOperands{
+									blockOperand(
+										pkg.ASTStatement{
+											Type:   pkg.ASTStatementTypeInstruction,
+											OpCode: "test",
+											Operands: pkg.ASTOperands{
+												exprOperand(pkg.ASTName("k"), "", nil),
+											},
+										}),
 								},
 							},
 						),

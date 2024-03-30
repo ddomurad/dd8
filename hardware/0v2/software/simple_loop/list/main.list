@@ -1,0 +1,37 @@
+Line  Loc   Code         Source
+    1                   .inc "bios.asm"
+    2                   
+    3                   .def (
+    4                     ENTRY := 0x1000
+    5                     DATA := 0x2000
+    6                     MSG := "Hello, Papupa!\n"
+    7                   )
+    8                   
+    9                   .org ENTRY
+   10  1000  2017f0    jsr serial_init
+   11                   
+   12                   init_send:
+   13  1003  a200      ldxi 0x00 
+   14                   
+   15                   send_loop:
+   16  1005  bd0020    lda MSG_DATA, x
+   17  1008  18        clc
+   18  1009  f0f8      beq init_send
+   19  100b  8500      sta TMP_VAR_0
+   20  100d  2025f0    jsr serial_write_char
+   21  1010  e8        inx
+   22  1011  4c0510    jmp send_loop
+   23                   
+   24                   
+   25                   .org DATA 
+   26  2000  48656c6c  MSG_DATA: .db MSG, 0x00
+   26  2004  6f2c2050
+   26  2008  61707570
+   26  200c  61210a00
+   27                   
+   28                   
+   29                   ; .org 0x9000
+   30                   ; serial_init:
+   31                   ; serial_write_char:
+   32                   ; rts
+   33                   

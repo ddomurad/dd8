@@ -23,11 +23,11 @@
 #define CTRL_DDR        DDRK
 #define CTRL_PORT       PORTK
 #define CTRL_PINS       PINK
-#define CTRL_CE_ROM_PIN PINK0
-#define CTRL_CE_RAM_PIN PINK1
-#define CTRL_CE_KB_PIN  PINK2
-#define CTRL_CE_LCD_PIN PINK3
-#define CTRL_OE_PIN     PINK4
-#define CTRL_WE_PIN     PINK5
+#define CTRL_OE_PIN     PINK0
+#define CTRL_WE_PIN     PINK1
+#define CTRL_CE_ROM_PIN PINK2
+#define CTRL_C1 PINK3
+#define CTRL_C2 PINK4
+#define CTRL_C3 PINK5
 
 #endif //__DEF_H

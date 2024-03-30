@@ -14,6 +14,8 @@ import (
 func main() {
 	outFile := flag.String("out", "", "output file")
 	listDir := flag.String("list", "", "source listing dir")
+	exportFile := flag.String("eout", "", "export labels output file")
+	exportFilter := flag.String("eflt", "", "export labels name regex filter")
 
 	flag.Parse()
 	tail := flag.Args()
@@ -40,7 +42,7 @@ func main() {
 
 	reader := pkg.NewFileSourceReader("./" + worksparceDir)
 
-	byteCode, sourceListing, aerr, err := pkg.AssembleSrc(intpuFile, reader, assemblers.OpcodeAssemblerW65C02S, *listDir != "")
+	byteCode, sourceListing, exported, aerr, err := pkg.AssembleSrc(intpuFile, reader, assemblers.OpcodeAssemblerW65C02S, *listDir != "", *exportFile != "")
 
 	if err != nil {
 		os.Stderr.WriteString(err.Error())
@@ -65,6 +67,16 @@ func main() {
 	if *listDir != "" {
 		writer := pkg.NewFileSourceWriter("./" + *listDir)
 		err := sourceListing.Write(writer)
+		if err != nil {
+			os.Stderr.WriteString(err.Error())
+			os.Stderr.WriteString("\n")
+			os.Exit(1)
+		}
+	}
+
+	if *exportFile != "" {
+		writer := pkg.NewFileSourceWriter("./" + worksparceDir)
+		err := exported.Write(*exportFile, writer, *exportFilter)
 		if err != nil {
 			os.Stderr.WriteString(err.Error())
 			os.Stderr.WriteString("\n")

@@ -123,5 +123,12 @@ some_label:
 
 .db "\x00"*20 ; repeat 0x00 byte 20 times
 
+; using a array item is simple as 
+.db TEST_ARRAY[0] ; will use the first item of the TEST_ARRAY
+.db TEST_ARRAY_3[TEST_ARRAY[0]] ; item indexes can also be expressions
+jmp TEST_ARRAY_3[0] ; this will jump to the address stored in the first item of the TEST_ARRAY_3
+.db TEST_ARRAY_3.len ; the length of the array is also available
+.db TEST_ARRAY_3[TEST_ARRAY_3.len -1] ; this will use the last item of the TEST_ARRAY_3
+
 ; execute a defined template
 @other_template("test string")

@@ -18,6 +18,10 @@ func NewContextMap[T any]() ContextMap[T] {
 	}
 }
 
+func GetContextName(ptr SrcPointer) string {
+	return ptr.String()
+}
+
 func (d *ContextMap[T]) PushContext(ctx string) {
 	d.ctx = append(d.ctx, ctx)
 }
@@ -30,6 +34,7 @@ func (d *ContextMap[T]) PopContext(ctx string) {
 }
 
 func (d *ContextMap[T]) Set(name string, value T) {
+	// todo: refactor this, the first element of ctx is always the globalContext
 	topCtx := globalContext
 	if len(d.ctx) > 0 {
 		topCtx = d.ctx[len(d.ctx)-1]
@@ -50,4 +55,15 @@ func (c *ContextMap[T]) Get(name string) (v T, ok bool) {
 	}
 
 	return v, false
+}
+
+func (d *ContextMap[T]) SetOnce(name string, value T) {
+	if _, ok := d.Get(name); !ok {
+		d.Set(name, value)
+	}
+}
+
+func (d *ContextMap[T]) List() map[string]T {
+	topCtx := d.ctx[len(d.ctx)-1]
+	return d.values[topCtx]
 }

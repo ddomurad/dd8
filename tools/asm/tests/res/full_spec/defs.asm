@@ -41,3 +41,9 @@
 
 
 .def i := "some i value" ; preprocessor constants can also be single charas long
+
+.def (
+  TEST_ARRAY := <1, 2, 3> ; it is possible to define arrays of constants
+  TEST_ARRAY_2 := <TEST_ARRAY[1], NEW_CONST*2> ; arrays can be used in other constant definitions
+  TEST_ARRAY_3 := <my_var_1, my_var_2> ; arrays can also contain labels
+)
