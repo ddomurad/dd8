@@ -1,0 +1,12 @@
+Line  Loc   Code         Source
+    1                   ; exported labels
+    2                   .def (
+    3                   	serial_init := 0xF017
+    4                   	serial_read_char := 0xF02F
+    5                   	TMP_VAR_0 := 0x0000
+    6                   	TMP_VAR_2 := 0x0002
+    7                   	TMP_BYTE := 0x0008
+    8                   	serial_write_char := 0xF025
+    9                   	TMP_VAR_1 := 0x0001
+   10                   )
+   11                   
