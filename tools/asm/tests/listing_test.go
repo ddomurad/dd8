@@ -14,7 +14,7 @@ func assertListing(t *testing.T, src string, expectedListing string) {
 	require.False(t, ast.Errors.HasErrors())
 	listing := asm.NewSourceListing()
 	listing.AddSource("test.asm", src)
-	_, err := asm.Assemble(ast, assemblers.OpcodeAssemblerW65C02S, listing)
+	_, _, err := asm.Assemble(ast, assemblers.OpcodeAssemblerW65C02S, listing)
 	require.Nil(t, err)
 	actuallListing := listing.FileListings["test.asm"].String(listing.FileListings)
 	require.Equal(t, expectedListing, actuallListing)

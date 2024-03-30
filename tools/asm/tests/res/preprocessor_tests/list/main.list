@@ -1,0 +1,42 @@
+Line  Loc   Code         Source
+    1                   .def (
+    2                     ZPAGE := 0x0000
+    3                     ENTRY := 0xe000
+    4                     LIB_CODE := 0xf000
+    5                   
+    6                     ARGS := <0x0000, 0x0001, 0x0002> ; function call args
+    7                   )
+    8                   
+    9                   .tmpl call_func (fname, args) {
+   10                     .rep i, 0, args.len-1 {
+   11                       ldai args[i]
+   12                       sta ARGS[i]
+   13                     }
+   14                     jsr fname
+   15                   }
+   16                   
+   17                   .org ZPAGE
+   18                   ; ARG_0: .byte
+   19                   ; ARG_1: .byte
+   20                   ; ARG_2: .byte
+   21                   ; ARG_3: .byte
+   22                   
+   23                   
+   24                   .org ENTRY
+   25                   @call_func(fname={test_function <nil> }, args=[16 32])
+   25                   @repeat i=0
+   25  e000  a910          ldai args[i]
+   25  e002  8500          sta ARGS[i]
+   25                   @repeat i=1
+   25  e004  a920          ldai args[i]
+   25  e006  8501          sta ARGS[i]
+   25  e008  2000f0      jsr fname
+   26                   
+   27                   .org LIB_CODE
+   28                   
+   29                   test_function: {
+   30  f000  a600        ldx ARGS[0] 
+   31  f002  a401        ldy ARGS[1]
+   32  f004  60          rts
+   33                   }
+   34                   

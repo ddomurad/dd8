@@ -13,6 +13,7 @@ type ASTNumber int64
 type ASTRegister string
 type ASTString string
 type ASTName string
+type ASTArray []any
 type ASTExpr struct {
 	Left, Right any
 	Operation   string
@@ -39,6 +40,11 @@ func (o ASTOperand) String(actx AssemblyContext) (ASTString, bool) {
 
 func (o ASTOperand) Register(actx AssemblyContext) (ASTRegister, bool) {
 	return EvaluateExprTo[ASTRegister](o, actx)
+}
+
+func (o ASTOperand) Array() (ASTArray, bool) {
+	v, ok := o.Value.(ASTArray)
+	return v, ok
 }
 
 func (o ASTOperand) Name() (ASTName, bool) {
@@ -110,8 +116,26 @@ func EvaluateExpr(expr ASTExpr, actx AssemblyContext) (any, bool) {
 
 	ln, lnok := lv.(ASTNumber)
 	ls, lsok := lv.(ASTString)
+	la, laok := lv.(ASTArray)
 	rn, rnok := rv.(ASTNumber)
 	rs, rsok := rv.(ASTString)
+
+	if laok && rnok && expr.Operation == "[]" {
+		aind := int(rn)
+		if aind < 0 || aind >= len(la) {
+			return 0, false
+		}
+		av := la[aind]
+		exp, isExpr := av.(ASTExpr)
+		if isExpr {
+			return EvaluateExpr(exp, actx)
+		}
+		return av, true
+	}
+
+	if laok && expr.Operation == ".len" {
+		return ASTNumber(len(la)), true
+	}
 
 	if lsok && rnok {
 		switch expr.Operation {
@@ -245,6 +269,7 @@ const (
 	ASTStatementTypePrepDefine      ASTStatementType = ".def"
 	ASTStatementTypePrepTemplateDef ASTStatementType = ".tmpl"
 	ASTStatementTypePrepRepeat      ASTStatementType = ".rep"
+	ASTStatementTypePrepBlock       ASTStatementType = "@{"
 	ASTStatementTypePrepTemplateUse ASTStatementType = "@"
 	ASTStatementTypeDataByte        ASTStatementType = ".db"
 	ASTStatementTypeDataWord        ASTStatementType = ".dw"
@@ -468,12 +493,40 @@ func (v *progVisitor) VisitArglist_lines(ctx *parser.Arglist_linesContext) inter
 
 func (v *progVisitor) VisitArgument(ctx *parser.ArgumentContext) interface{} {
 	children := ctx.GetChildren()
-	if len(children) != 1 {
-		v.statementStructureError(ctx.GetStart().GetLine())
-		return nil
+	if len(children) == 1 {
+		cr := v.Visit(children[0].(antlr.ParseTree))
+		return ASTOperand{Value: cr}
 	}
-	cr := v.Visit(children[0].(antlr.ParseTree))
-	return ASTOperand{Value: cr}
+
+	if len(children) == 3 {
+		t0, ok0 := children[0].(antlr.TerminalNode)
+		t2, ok2 := children[2].(antlr.TerminalNode)
+
+		if !ok0 || !ok2 {
+			v.statementStructureError(ctx.GetStart().GetLine())
+			return nil
+		}
+		if t0.GetText() != "<" || t2.GetText() != ">" {
+			v.statementStructureError(ctx.GetStart().GetLine())
+			return nil
+		}
+
+		cr := v.Visit(children[1].(antlr.ParseTree))
+		operands, ok := cr.(ASTOperands)
+		if !ok {
+			v.statementStructureError(ctx.GetStart().GetLine())
+			return nil
+		}
+
+		array := make(ASTArray, len(operands))
+		for i, op := range operands {
+			array[i] = op.Value
+		}
+		return ASTOperand{Value: array}
+	}
+
+	v.statementStructureError(ctx.GetStart().GetLine())
+	return nil
 }
 
 func (v *progVisitor) VisitExpr(ctx *parser.ExprContext) interface{} {
@@ -523,6 +576,13 @@ func (v *progVisitor) VisitExpr(ctx *parser.ExprContext) interface{} {
 		}
 	}
 
+	if len(operands) == 2 && operation == "]" {
+		return ASTExpr{
+			Left:      operands[0],
+			Right:     operands[1],
+			Operation: "[]",
+		}
+	}
 	if len(operands) == 2 && operation != "" {
 		return ASTExpr{
 			Left:      operands[0],
@@ -537,7 +597,7 @@ func (v *progVisitor) VisitExpr(ctx *parser.ExprContext) interface{} {
 			Operation: operation,
 		}
 	}
-	if len(operands) == 1 && (operation == ".l" || operation == ".h") {
+	if len(operands) == 1 && (operation == ".l" || operation == ".h" || operation == ".len") {
 		return ASTExpr{
 			Left:      operands[0],
 			Right:     nil,
@@ -600,6 +660,16 @@ func (v *progVisitor) VisitNum(ctx *parser.NumContext) interface{} {
 	return ASTNumber(num)
 }
 
+func (v *progVisitor) VisitRune(ctx *parser.RuneContext) interface{} {
+	str := ctx.RUNE().GetText()
+	if len(str) != 3 {
+		v.statementStructureError(ctx.GetStart().GetLine())
+		return nil
+	}
+
+	return ASTNumber(str[1])
+}
+
 func (v *progVisitor) VisitName(ctx *parser.NameContext) interface{} {
 	return ASTName(ctx.NAME().GetText())
 }
@@ -642,6 +712,8 @@ func (v *progVisitor) VisitPrep_instruction(ctx *parser.Prep_instructionContext)
 		return v.buildPrepDefine(ctx, children[1:])
 	case ".tmpl":
 		return v.buildPrepTemplate(ctx, children[1:])
+	case "{":
+		return v.buildPrepBlock(ctx, children[1:])
 	case "@":
 		return v.buildPrepTemplateUsage(ctx, children[1:])
 	case ".rep":
@@ -766,6 +838,23 @@ func (v *progVisitor) buildPrepDefine(ctx *parser.Prep_instructionContext, child
 	return defs
 }
 
+func (v *progVisitor) buildPrepBlock(ctx *parser.Prep_instructionContext, children []antlr.Tree) interface{} {
+	body := ASTBlock{
+		Statements: v.visitStatmentChildren(ctx.BaseParserRuleContext, children),
+	}
+
+	return ASTStatement{
+		Type: ASTStatementTypePrepBlock,
+		Operands: []ASTOperand{
+			{Value: body},
+		},
+		SrcPointer: SrcPointer{
+			Name: v.srcName,
+			Line: ctx.GetStart().GetLine(),
+		},
+	}
+}
+
 func (v *progVisitor) buildPrepTemplateUsage(ctx *parser.Prep_instructionContext, children []antlr.Tree) interface{} {
 	var nameNode interface{}
 	var arguments interface{}
@@ -888,7 +977,6 @@ func (v *progVisitor) buildPrepRepeat(ctx *parser.Prep_instructionContext, child
 		return nil
 	}
 
-	_, _, _, _ = name, startValue, endValue, body
 	return ASTStatement{
 		Type:     ASTStatementTypePrepRepeat,
 		Operands: operands,

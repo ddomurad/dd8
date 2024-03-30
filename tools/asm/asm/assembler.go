@@ -5,8 +5,6 @@ import (
 	"reflect"
 	"sort"
 	"strings"
-
-	"github.com/google/uuid"
 )
 
 type ByteCode map[int]byte
@@ -172,22 +170,20 @@ func sprintOperands(actx AssemblyContext, ops ASTOperands, names ...ASTName) str
 			out += fmt.Sprintf("%s=", (names)[i])
 		}
 
-		if v, ok := op.Number(actx); ok {
+		if v, ok := op.Value.(ASTNumber); ok {
 			out += fmt.Sprintf("0x%x", v)
-		} else if v, ok := op.String(actx); ok {
+		} else if v, ok := op.Value.(ASTString); ok {
 			vs := strings.ReplaceAll(string(v), "\n", "\\n")
 			out += fmt.Sprintf("\"%v\"", vs)
-		} else if v, ok := op.Register(actx); ok {
-			out += fmt.Sprintf("%v", v)
 		} else {
-			out += fmt.Sprintf("%v", v)
+			out += fmt.Sprint(op.Value)
 		}
 	}
 	return out
 }
 
 func AssembleTemplate(s ASTStatement, context *AssemblyContext, tmpl Template, args ASTOperands) *AssemblerError {
-	rndCtxName := uuid.New().String()
+	ctxName := GetContextName(s.SrcPointer)
 	if len(tmpl.Arguments) != len(args) {
 		return toAssemblyError(ASTStatement{}, fmt.Sprintf("template expected %d arguments, got: %d", len(tmpl.Arguments), len(args)))
 	}
@@ -197,8 +193,8 @@ func AssembleTemplate(s ASTStatement, context *AssemblyContext, tmpl Template, a
 		srcListingOverriden = context.SourceListing.OverrideLine(s.SrcPointer.Name, s.SrcPointer.Line)
 	}
 
-	context.Deffinitions.PushContext(rndCtxName)
-	context.Labels.PushContext(rndCtxName)
+	context.Deffinitions.PushContext(ctxName)
+	context.Labels.PushContext(ctxName)
 
 	for i, arg := range tmpl.Arguments {
 		expr, ok := args.Expr(i)
@@ -221,8 +217,8 @@ func AssembleTemplate(s ASTStatement, context *AssemblyContext, tmpl Template, a
 		)
 	}
 	err := AssempleStatements(context, tmpl.TemplateBlock.Statements)
-	context.Deffinitions.PopContext(rndCtxName)
-	context.Labels.PopContext(rndCtxName)
+	context.Deffinitions.PopContext(ctxName)
+	context.Labels.PopContext(ctxName)
 
 	if srcListingOverriden {
 		context.SourceListing.ClearOverride()
@@ -263,9 +259,9 @@ func AssembleRepeat(s ASTStatement, context *AssemblyContext, args ASTOperands) 
 
 	i := vstart
 	for {
-		rndCtxName := uuid.New().String()
-		context.Deffinitions.PushContext(rndCtxName)
-		context.Labels.PushContext(rndCtxName)
+		ctxName := GetContextName(s.SrcPointer)
+		context.Deffinitions.PushContext(ctxName)
+		context.Labels.PushContext(ctxName)
 
 		context.Deffinitions.Set(string(vname), ASTNumber(i))
 
@@ -278,8 +274,8 @@ func AssembleRepeat(s ASTStatement, context *AssemblyContext, args ASTOperands) 
 
 		err := AssempleStatements(context, vblock.Statements)
 
-		context.Deffinitions.PopContext(rndCtxName)
-		context.Labels.PopContext(rndCtxName)
+		context.Deffinitions.PopContext(ctxName)
+		context.Labels.PopContext(ctxName)
 
 		if err != nil {
 			return err
@@ -313,7 +309,31 @@ func AssembleRepeat(s ASTStatement, context *AssemblyContext, args ASTOperands) 
 	return nil
 }
 
+func AssembleInlineBlock(s ASTStatement, context *AssemblyContext, args ASTOperands) *AssemblerError {
+	if len(args) != 1 {
+		return toAssemblyError(s, "repeat expected 1 argument")
+	}
+
+	vblock, ok := args[0].Block()
+	if !ok {
+		return toAssemblyError(s, "repeat expected a code block")
+	}
+
+	ctxName := GetContextName(s.SrcPointer)
+	context.Deffinitions.PushContext(ctxName)
+	context.Labels.PushContext(ctxName)
+
+	err := AssempleStatements(context, vblock.Statements)
+
+	context.Deffinitions.PopContext(ctxName)
+	context.Labels.PopContext(ctxName)
+
+	return err
+}
+
 func AssempleStatements(context *AssemblyContext, statements []ASTStatement) *AssemblerError {
+	discoverLabels(context, statements)
+
 	for _, s := range statements {
 		if s.Type == ASTStatementTypeLabel {
 			context.Labels.Set(s.Name, context.ProgramCounter)
@@ -393,6 +413,12 @@ func AssempleStatements(context *AssemblyContext, statements []ASTStatement) *As
 				return err
 			}
 			continue
+		} else if s.Type == ASTStatementTypePrepBlock {
+			err := AssembleInlineBlock(s, context, s.Operands)
+			if err != nil {
+				return err
+			}
+			continue
 		}
 
 		if s.Type != ASTStatementTypeInstruction {
@@ -417,7 +443,15 @@ func AssempleStatements(context *AssemblyContext, statements []ASTStatement) *As
 	return nil
 }
 
-func Assemble(ast *AST, opcodeAssembler OpcodeAssembler, sourceListing *SourceListing) (ByteCode, *AssemblerError) {
+func discoverLabels(context *AssemblyContext, statements []ASTStatement) {
+	for _, s := range statements {
+		if s.Type == ASTStatementTypeLabel {
+			context.Labels.SetOnce(s.Name, 0x00)
+		}
+	}
+}
+
+func Assemble(ast *AST, opcodeAssembler OpcodeAssembler, sourceListing *SourceListing) (ByteCode, AssemblyContext, *AssemblerError) {
 	context := AssemblyContext{
 		ProgramCounter:  0,
 		Labels:          NewContextMap[int](),
@@ -428,12 +462,6 @@ func Assemble(ast *AST, opcodeAssembler OpcodeAssembler, sourceListing *SourceLi
 		PassCnt:         0,
 		OpcodeAssembler: opcodeAssembler,
 		SourceListing:   sourceListing,
-	}
-
-	for _, s := range ast.Statements {
-		if s.Type == ASTStatementTypeLabel {
-			context.Labels.Set(s.Name, 0x00)
-		}
 	}
 
 	for {
@@ -448,11 +476,11 @@ func Assemble(ast *AST, opcodeAssembler OpcodeAssembler, sourceListing *SourceLi
 
 		err := AssempleStatements(&context, ast.Statements)
 		if err != nil {
-			return nil, err
+			return nil, context, err
 		}
 
 		if reflect.DeepEqual(context.PrevByteCode, context.ByteCode) {
-			return context.ByteCode, nil
+			return context.ByteCode, context, nil
 		}
 
 		context.PrevByteCode = context.ByteCode
@@ -464,22 +492,29 @@ func Assemble(ast *AST, opcodeAssembler OpcodeAssembler, sourceListing *SourceLi
 	}
 }
 
-func AssembleSrc(srcName string, reader SourceReader, opcoOpcodeAssembler OpcodeAssembler, createListing bool) (ByteCode, *SourceListing, *AssemblerError, error) {
+func AssembleSrc(srcName string, reader SourceReader, opcoOpcodeAssembler OpcodeAssembler, createListing bool, exportLabels bool) (ByteCode, *SourceListing, *Exported, *AssemblerError, error) {
 	var sourceListing *SourceListing
+	var export *Exported
+
 	if createListing {
 		sourceListing = NewSourceListing()
 	}
 
 	ast, err := CompileAST(srcName, sourceListing, reader)
 	if err != nil {
-		return nil, nil, nil, err
+		return nil, nil, nil, nil, err
 	}
 
 	PreprocessAllIncludes(ast, sourceListing, reader)
 	if ast.Errors.HasErrors() {
-		return nil, nil, &ast.Errors, nil
+		return nil, nil, nil, &ast.Errors, nil
 	}
 
-	bc, aerr := Assemble(ast, opcoOpcodeAssembler, sourceListing)
-	return bc, sourceListing, aerr, err
+	bc, ctx, aerr := Assemble(ast, opcoOpcodeAssembler, sourceListing)
+	if exportLabels {
+		export = &Exported{
+			Labels: ctx.Labels.List(),
+		}
+	}
+	return bc, sourceListing, export, aerr, err
 }

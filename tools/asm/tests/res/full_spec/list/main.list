@@ -138,9 +138,16 @@ Line  Loc   Code         Source
   124  8122  00000000
   124  8126  00000000
   125                   
-  126                   ; execute a defined template
-  127                   @other_template(var="test string")
-  127  812a  74657374    .db var
-  127  812e  20737472
-  127  8132  696e67  
-  128                   
+  126                   ; using a array item is simple as 
+  127  812a  01        .db TEST_ARRAY[0] ; will use the first item of the TEST_ARRAY
+  128  812b  01        .db TEST_ARRAY_3[TEST_ARRAY[0]] ; item indexes can also be expressions
+  129  812c  4c0000    jmp TEST_ARRAY_3[0] ; this will jump to the address stored in the first item of the TEST_ARRAY_3
+  130  812f  02        .db TEST_ARRAY_3.len ; the length of the array is also available
+  131  8130  01        .db TEST_ARRAY_3[TEST_ARRAY_3.len -1] ; this will use the last item of the TEST_ARRAY_3
+  132                   
+  133                   ; execute a defined template
+  134                   @other_template(var="test string")
+  134  8131  74657374    .db var
+  134  8135  20737472
+  134  8139  696e67  
+  135                   

@@ -23,7 +23,7 @@ func assertAssembler(t *testing.T, src string, expected []byte) {
 		fmt.Printf("AST ERROR: %s at line %d\n", e.Msg, e.Line)
 	}
 	require.False(t, ast.Errors.HasErrors())
-	bcode, err := pkg.Assemble(ast, assemblers.OpcodeAssemblerW65C02S, nil)
+	bcode, _, err := pkg.Assemble(ast, assemblers.OpcodeAssemblerW65C02S, nil)
 	require.Nil(t, err)
 	assertByteCodeWithArray(t, expected, bcode)
 }
@@ -32,7 +32,7 @@ func assertAssemblerBC(t *testing.T, src string, expected pkg.ByteCode) {
 	src += "\n"
 	ast := pkg.ParseSrc("test.asm", src)
 	require.False(t, ast.Errors.HasErrors())
-	bcode, err := pkg.Assemble(ast, assemblers.OpcodeAssemblerW65C02S, nil)
+	bcode, _, err := pkg.Assemble(ast, assemblers.OpcodeAssemblerW65C02S, nil)
 	require.Nil(t, err)
 	require.Equal(t, expected, bcode)
 }
@@ -623,6 +623,31 @@ func TestThatCanBuildBinaryCode(t *testing.T) {
       `, []byte{0xaa, 0x55})
 	})
 
+	t.Run("expr_with_const_arrays_tests", func(t *testing.T) {
+		assertAssembler(t, `
+        .def TEST := <0x11,1,0x33>
+        .db TEST[0]
+        .db TEST[1+2 - TEST[1]]
+      `, []byte{0x11, 0x33})
+	})
+
+	t.Run("expr_with_const_arrays_and_labels", func(t *testing.T) {
+		assertAssembler(t, `
+        .def TEST := <test_label_1, test_label_2>
+        test_label_1:
+          jmp TEST[0]
+        test_label_2:
+          jmp TEST[1]
+      `, []byte{0x4c, 0x00, 0x00, 0x4c, 0x03, 0x00})
+	})
+
+	t.Run("expr_array_len", func(t *testing.T) {
+		assertAssembler(t, `
+        .def TEST := <1,2,3,4,5>
+        .db TEST.len
+      `, []byte{0x05})
+	})
+
 	t.Run("use_labels_in_statements", func(t *testing.T) {
 		bc := pkg.ByteCode{}
 		_ = bc.SetBytes(0x1000, []byte{0xea, 0xea, 0xa9, 0x01})
@@ -782,6 +807,45 @@ func TestThatCanBuildBinaryCode(t *testing.T) {
         }
       `, []byte{
 			10, 9, 8, 7, 6, 5, 4, 3,
+		})
+	})
+
+	t.Run("inl_block_test", func(t *testing.T) {
+		assertAssembler(t, `
+      {
+        .db 0x10
+      }
+      `, []byte{
+			0x10,
+		})
+	})
+
+	t.Run("inl_block_priv_labels", func(t *testing.T) {
+		assertAssembler(t, `
+      .org 0x0000
+      loop:
+      .db 0x10
+      {
+        loop:
+        .db 0xaa 
+        jmp loop
+      }
+      jmp loop
+      `, []byte{
+			0x10, 0xaa, 0x4c, 0x01, 0x00, 0x4c, 0x00, 0x00,
+		})
+	})
+
+	t.Run("inl_block_priv_labels_rev", func(t *testing.T) {
+		assertAssembler(t, `
+      {
+        jmp return
+        .db 0xaa 
+      return:
+        rts
+      }
+      `, []byte{
+			0x4c, 0x04, 0x00, 0xaa, 0x60,
 		})
 	})
 }

@@ -27,7 +27,7 @@ Line  Loc   Code         Source
    22                   ; ldai 0x10  ; CONST_1
    23                   
    24                   ; you cal also use expressions as template arguments
-   25                   @some_template(i=0xc8, j=0xfc, k="this is\n	a test "string"")
+   25                   @some_template(i={{TEST_NUMBER_1 <nil> } 2 *}, j={{RST_VEC_ORG <nil> } <nil> .l}, k={TEST_STR_1 <nil> })
    25  1007  a9c8        ldai i ; arguments are actually just local definitions
    25  1009  85fc        sta j
    25  100b  74686973    .db k
@@ -58,7 +58,7 @@ Line  Loc   Code         Source
    44                   }
    45                   
    46                   @nested_template_with_labels(arg=0x10)
-   46                   @sub_template(arg2=0x20)
+   46                   @sub_template(arg2={{arg <nil> } 2 *})
    46  1025  a920            ldai arg2
    46  1027  4c2510          jmp loop ; infinite loop, just an example
    46  102a  4c2510        jmp loop ; infinite loop, just an example
@@ -87,7 +87,7 @@ Line  Loc   Code         Source
    54                   @repeat i=8
    54  1041  0810        .db i, i*2
    54  1043  a908        ldai i
-   54                   @repeat i=3 to 8
+   54                   @repeat i=3 to 8 {
    55                     .db i, i*2
    56                     ldai i
    57                   }
@@ -117,7 +117,7 @@ Line  Loc   Code         Source
    72  104d  a902    
    72                   @repeat i=0
    72  104f  a900    
-   72                   @repeat i=5 to 0
+   72                   @repeat i=5 to 0 {
    73                     ldai i*2
    74                   }
    75                   ; this will expand to:
@@ -143,15 +143,15 @@ Line  Loc   Code         Source
    95                   
    96                   @nested_template_with_repeat_and_labels(st=0x0, en=0x2)
    96                   @repeat i=0
-   96                   @sub_template(s1=0x0)
+   96                   @sub_template(s1={i <nil> })
    96  1051  a900          ldai s1 
    96  1053  4c5110        jmp loop
    96                   @repeat i=1
-   96                   @sub_template(s1=0x1)
+   96                   @sub_template(s1={i <nil> })
    96  1056  a901          ldai s1 
    96  1058  4c5610        jmp loop
    96                   @repeat i=2
-   96                   @sub_template(s1=0x2)
+   96                   @sub_template(s1={i <nil> })
    96  105b  a902          ldai s1 
    96  105d  4c5b10        jmp loop
    97                   
