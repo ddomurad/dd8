@@ -1,107 +1,175 @@
 package sim
 
-type Signal byte
-type Bus8 uint8
-type Bus16 uint16
+import (
+	"errors"
+	"testing"
 
-const (
-// Low   Signal = 0
-// High  Signal = 1
-// Float Signal = 'z'
-// PullUp   Signal = 'h'
-// PullDown Signal = 'l'
+	"github.com/stretchr/testify/require"
+	"golang.org/x/exp/constraints"
 )
 
-type IPort interface {
-	IsDiven() bool
-	Reset()
+type IntPortType interface {
+	constraints.Integer
 }
 
-type Port[T Signal | Bus8 | Bus16] struct {
-	signal    T
-	drivernBy Device
+type PortType interface {
+	IntPortType | bool
 }
 
-func (p *Port[T]) Drive(d Device, v T) {
-	if p.drivernBy != nil && p.drivernBy != d {
-		panic("port is already driven by other device")
+type IPort[T PortType] interface {
+	Read() (T, bool)
+	Write(value T)
+
+	// Size() int
+}
+
+type Port[T PortType] struct {
+	connection *PortConnection[T]
+}
+
+type SignalPort = Port[bool]
+type Bus8Port = Port[uint8]
+type Bus12Port = Port[uint16]
+type Bus13Port = Port[uint16]
+type Bus14Port = Port[uint16]
+type Bus15Port = Port[uint16]
+type Bus16Port = Port[uint16]
+
+func (p *Port[T]) Read() (T, bool) {
+	// note: this will crash iw the port is not connected
+	// this is fine for now
+	return p.connection.value, p.connection.driver != nil
+}
+
+func (p *Port[T]) Write(value T) {
+	// note: this will crash iw the port is not connected
+	// this is fine for now
+	p.connection.value = value
+
+	if p.connection.driver != p && p.connection.driver != nil {
+		p.connection.multipleDrivers = true
+	}
+	if p.connection.driver != p {
+		p.connection.changed = true
+	}
+	p.connection.driver = p
+}
+
+type IPortConnection interface {
+	OnNewStep()
+	BeforeSubStep()
+	UpdateSubStep() bool
+}
+
+type PortConnection[T PortType] struct {
+	Ports []*Port[T]
+
+	value     T
+	lastValue T
+	changed   bool
+
+	driver          *Port[T]
+	multipleDrivers bool
+}
+
+func NewConnection[T PortType](ports ...*Port[T]) IPortConnection {
+	connection := &PortConnection[T]{
+		Ports: ports,
 	}
 
-	p.drivernBy = d
-	p.signal = v
+	for _, p := range connection.Ports {
+		p.connection = connection
+	}
+
+	return connection
 }
 
-func (p *Port[T]) Read() T {
-	return p.signal
+func (c *PortConnection[T]) OnNewStep() {
+	c.changed = true
+	c.driver = nil
 }
 
-func (p *Port[T]) IsDiven() bool {
-	return p.drivernBy != nil
+func (c *PortConnection[T]) BeforeSubStep() {
+	c.multipleDrivers = false
+	c.changed = false
 }
 
-func (p *Port[T]) Reset() {
-	p.drivernBy = nil
+func (c *PortConnection[T]) UpdateSubStep() bool {
+	if c.driver != nil {
+		if c.value != c.lastValue {
+			c.changed = true
+			c.lastValue = c.value
+		}
+	}
+
+	return c.changed
 }
 
-type SignalPort = Port[Signal]
-type Bus8Port = Port[Bus8]
-type Bus16Port = Port[Bus16]
-
-func NewSignalPort() *SignalPort {
-	return &SignalPort{}
-}
-
-func NewSignal8Port() *Bus8Port {
-	return &Bus8Port{}
-}
-
-func NewSignal16Port() *Bus16Port {
-	return &Bus16Port{}
-}
-
-type Board struct {
-	Devices []Device
-	Ports   []IPort
+type IDevice interface {
+	OnNewStep()
+	UpdateSubStep()
+	OnStepFinished()
 }
 
 type Simulation struct {
-	Board *Board
+	Devices     []IDevice
+	Connections []IPortConnection
 }
 
-type Device interface {
-	Init()
-	Update(sim *Simulation) bool
-}
-
-func NewSimulation(board *Board) *Simulation {
-	return &Simulation{Board: board}
-}
-
-func (s *Simulation) Init() {
-	for _, d := range s.Board.Devices {
-		d.Init()
-	}
-	for _, p := range s.Board.Ports {
-		p.Reset()
+func NewSimulation(devices []IDevice, connections []IPortConnection) *Simulation {
+	return &Simulation{
+		Devices:     devices,
+		Connections: connections,
 	}
 }
 
-func (s *Simulation) Update(maxCycles int) bool {
-	for i := 0; i < maxCycles; i++ {
-		updated := false
-		for _, d := range s.Board.Devices {
-			updated = updated || d.Update(s)
+func (s *Simulation) Step() error {
+	for _, c := range s.Connections {
+		c.OnNewStep()
+	}
+
+	for _, d := range s.Devices {
+		d.OnNewStep()
+	}
+
+	for i := 0; ; i++ {
+		for _, c := range s.Connections {
+			c.BeforeSubStep()
 		}
 
-		if !updated {
-			return true
+		for _, d := range s.Devices {
+			d.UpdateSubStep()
+		}
+
+		signalChange := false
+		for _, c := range s.Connections {
+			signalChange = c.UpdateSubStep() || signalChange
+		}
+		if !signalChange {
+			break
+		}
+
+		if i > 10 {
+			return errors.New("simulation did not converge")
 		}
 	}
-	return false
+
+	for _, d := range s.Devices {
+		d.OnStepFinished()
+	}
+	return nil
 }
 
-func (s *Simulation) Reset() {
-	for _, p := range s.Board.Ports {
-		p.Reset()
+func (s *Simulation) RunTill(t *testing.T, condition func() bool, maxSteps int) {
+	for i := 0; i < maxSteps; i++ {
+		err := s.Step()
+		require.NoError(t, err)
+		if condition() {
+			err := s.Step()
+			require.NoError(t, err)
+			return
+		}
 	}
+
+	require.Fail(t, "condition not met")
 }

@@ -22,4 +22,13 @@
 #define CLK_PINS PINB
 #define CLK_PIN  PINB0
 
+
+
+/*
+ * Memory Lock (MLB)  1
+ * Read/Write RWB     2
+ * Reset RESB         3
+ * Synchorize with opcode SYNC 4
+ * Vector Pull VSS    5
+ * */
 #endif //__DEF_H
