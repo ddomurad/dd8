@@ -9,4 +9,5 @@ const (
 	OpCode_STA  uint8 = 0x8d
 	OpCode_STZ  uint8 = 0x9c
 	OpCode_LDAI uint8 = 0xa9
+	OpCode_BEQ  uint8 = 0xf0
 )

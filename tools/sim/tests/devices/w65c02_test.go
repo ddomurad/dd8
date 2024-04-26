@@ -332,6 +332,28 @@ func Test_W65C02Device(t *testing.T) {
 		assert.Equal(t, uint8(0x01), sim.board.CPU_DEV.Core.State.P, "P")
 	})
 
+	// fixme: this test is not complete
+	// more branching tests needed
+	t.Run("beq_branch", func(t *testing.T) {
+		sim := buildTestSimulation(map[uint16][]uint8{
+			0xf000: {0xf0, 0x10, 0x18, 0x19},
+			0xf012: {0x18, 0x19},
+		})
+		sim.board.CPU_DEV.Core.State.SetSR(w65c02.SR_ZERO, true)
+		sim.AssertSets(t, [][]int{
+			{0, 1, 0xf000, 0x00, 1, 1},
+			{1, 1, 0xf000, 0xf0, 1, 1},
+
+			{0, 1, 0xf001, 0xf0, 0, 1},
+			{1, 1, 0xf001, 0x10, 0, 1},
+
+			{0, 1, 0xf002, 0x10, 0, 1},
+			{1, 1, 0xf002, 0x18, 0, 1},
+
+			{0, 1, 0xf003, 0x18, 1, 1},
+			{1, 1, 0xf003, 0x20, 1, 1},
+		})
+	})
 }
 
 // clk, rwb, addr, data, sync, mlb

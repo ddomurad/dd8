@@ -156,6 +156,8 @@ func (m *W65C02Core) updateClkLow() {
 		m.handle_RTS()
 	case OPCode_AND:
 		m.handle_AND()
+	case OpCode_BEQ:
+		m.handle_BEQ()
 	default:
 		panic(fmt.Sprintf("unexpected opcode, %x", m.State.opCode))
 	}
@@ -325,6 +327,34 @@ func (m *W65C02Core) handle_AND() {
 		m.A = m.State.PC
 		m.State.A = m.State.A & m.D_buf
 		m.State.UpdateSR_ZN(m.State.A)
+		m.State.TCU = 0
+		m.State.nextTCU = 1
+	default:
+		panic("unexpected TCU")
+	}
+}
+
+func (m *W65C02Core) handle_BEQ() {
+	switch m.State.TCU {
+	case 1:
+		m.A = m.State.PC
+		m.State.nextPC = m.State.PC + 1
+		m.State.nextTCU = 2
+	case 2:
+		m.A = m.State.PC
+		m.State.operand = uint16(m.D_buf)
+		m.State.nextPC = m.State.PC + 1
+		m.State.nextTCU = 3
+	case 3:
+		m.A = m.State.operand | uint16(m.D_buf)<<8
+		m.State.nextPC = m.State.PC
+		m.State.nextTCU = 4
+	case 4:
+		if m.State.GetSR(SR_ZERO) {
+			m.State.PC = m.State.operand | uint16(m.D_buf)<<8
+		}
+		m.State.nextPC = m.State.PC + 1
+		m.A = m.State.PC
 		m.State.TCU = 0
 		m.State.nextTCU = 1
 	default:
