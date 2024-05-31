@@ -1,0 +1,18 @@
+[
+  {
+    "arguments": [
+      "/usr/bin/avr-gcc",
+      "-Wall",
+      "-O3",
+      "-mmcu=atmega1280",
+      "-c",
+      "-DF_CPU=16000000",
+      "-o",
+      "out/main.o",
+      "main.c"
+    ],
+    "directory": "/home/work/proj/dd8/hardware/0v2/ard/v_ram_setup",
+    "file": "/home/work/proj/dd8/hardware/0v2/ard/v_ram_setup/main.c",
+    "output": "/home/work/proj/dd8/hardware/0v2/ard/v_ram_setup/out/main.o"
+  }
+]
