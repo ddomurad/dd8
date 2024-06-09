@@ -1,0 +1,42 @@
+module dma(
+  input wire clk,
+  input wire [3:0] reg_sel, 
+  input wire [7:0] reg_data,
+  input wire reg_we
+);
+
+reg [7:0] src_offset_0;
+reg [7:0] src_offset_1;
+reg src_offset_2;
+reg [7:0] dst_offset_0;
+reg [7:0] dst_offset_1;
+reg dst_offset_2;
+reg [7:0] row_width_0;
+reg [7:0] cols_number_0;
+reg cols_number_1;
+
+always @ (posedge clk) begin
+  if (reg_we) begin 
+    case (reg_sel)
+     4'h0 : src_offset_0 = reg_data;
+      4'h1 : src_offset_1 = reg_data;
+      4'h2 : src_offset_2 = reg_data[0];
+
+      4'h3 : dst_offset_0 = reg_data;
+      4'h4 : dst_offset_1 = reg_data;
+      4'h5 : dst_offset_2 = reg_data[0];
+
+      4'h6 : row_width_0 = reg_data;
+
+      4'h7 : cols_number_0 = reg_data;
+      4'h8 : cols_number_1 = reg_data[0];
+
+      // 4'h9 : begin 
+      //   dir = reg_data[0]; 
+      //   status = reg_data[1]; 
+      // end 
+    endcase 
+  end
+end
+
+endmodule

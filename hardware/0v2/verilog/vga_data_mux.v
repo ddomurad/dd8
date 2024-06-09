@@ -5,10 +5,10 @@ module vga_data_mux (
 );
 
 reg [7:0] r_data;
-assign o_data = en ? (sw ? r_data[7:4] : r_data[3:0]) : 0;
+assign o_data = en ? (sw ? r_data[7:4] : r_data[3:0]) : 3'b111;
 
 always @ (posedge clk) begin 
   if (sw)
-    r_data <= data; //todo: vs '='
+    r_data <= ~data; //todo: vs '='
 end
 endmodule
