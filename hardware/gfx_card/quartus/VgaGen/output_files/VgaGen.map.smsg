@@ -1,0 +1,4 @@
+Info (10281): Verilog HDL Declaration information at VgaGen.v(83): object "CTRL_ENABLE" differs only in case from object "ctrl_enable" in the same scope
+Info (10281): Verilog HDL Declaration information at VgaGen.v(84): object "CTRL_DOUBLE_RES" differs only in case from object "ctrl_double_res" in the same scope
+Info (10281): Verilog HDL Declaration information at VgaGen.v(61): object "H_CNT_RST" differs only in case from object "h_cnt_rst" in the same scope
+Info (10281): Verilog HDL Declaration information at VgaGen.v(62): object "V_CNT_RST" differs only in case from object "v_cnt_rst" in the same scope

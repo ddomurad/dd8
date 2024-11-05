@@ -66,7 +66,8 @@ VL_INLINE_OPT void Vsprite_render___024root___nba_sequent__TOP__0(Vsprite_render
     Vsprite_render__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
     VL_DEBUG_IF(VL_DBG_MSGF("+    Vsprite_render___024root___nba_sequent__TOP__0\n"); );
     // Body
-    if (((IData)(vlSelf->i_cs) & (IData)(vlSelf->i_we))) {
+    if ((((IData)(vlSelf->i_cs) & (IData)(vlSelf->i_we)) 
+         & (IData)(vlSelf->off_src_line))) {
         if ((0U == (IData)(vlSelf->i_addr))) {
             vlSelf->dma__DOT___i_addr = ((0x7f00U & (IData)(vlSelf->dma__DOT___i_addr)) 
                                          | (IData)(vlSelf->i_data));

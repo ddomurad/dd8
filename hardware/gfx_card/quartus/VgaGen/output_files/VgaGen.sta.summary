@@ -1,0 +1,29 @@
+------------------------------------------------------------
+TimeQuest Timing Analyzer Summary
+------------------------------------------------------------
+
+Type  : Setup 'i_clk'
+Slack : 3.720
+TNS   : 0.000
+
+Type  : Setup 'i_ctrl_w_b'
+Slack : 28.720
+TNS   : 0.000
+
+Type  : Hold 'i_clk'
+Slack : 3.000
+TNS   : 0.000
+
+Type  : Hold 'i_ctrl_w_b'
+Slack : 42.720
+TNS   : 0.000
+
+Type  : Minimum Pulse Width 'i_clk'
+Slack : 14.860
+TNS   : 0.000
+
+Type  : Minimum Pulse Width 'i_ctrl_w_b'
+Slack : 34.720
+TNS   : 0.000
+
+------------------------------------------------------------

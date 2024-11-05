@@ -1,0 +1,135 @@
+[*]
+[*] GTKWave Analyzer v3.3.118 (w)1999-2023 BSI
+[*] Sat Nov  2 12:00:02 2024
+[*]
+[dumpfile] "/home/work/proj/dd8/hardware/gfx_card/src/out/vga_dma_tb.vcd"
+[dumpfile_mtime] "Sat Nov  2 11:59:55 2024"
+[dumpfile_size] 110415
+[savefile] "/home/work/proj/dd8/hardware/gfx_card/src/vga_dma_tb.gtkw"
+[timestart] 1080300
+[size] 1878 1358
+[pos] -1 -1
+*-15.917194 1313400 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] VgaDmaTb.
+[treeopen] VgaDmaTb.vgaDmaInst.
+[sst_width] 305
+[signals_width] 262
+[sst_expanded] 1
+[sst_vpaned_height] 421
+@c00200
+-glue
+@28
+VgaDmaTb.reg_clk
+@800200
+-interface
+@28
+VgaDmaTb.reg_vga_ce_b
+VgaDmaTb.reg_ram_ce_b
+VgaDmaTb.reg_ram_re_b
+VgaDmaTb.reg_ram_we_b
+@22
+VgaDmaTb.reg_data[7:0]
+@1000200
+-interface
+@c00200
+-vga_gen
+@28
+VgaDmaTb.reg_free_vbus_b
+VgaDmaTb.reg_vga_active_b
+@1401200
+-vga_gen
+@c00200
+-other
+@28
+VgaDmaTb.dma_active
+VgaDmaTb.vga_ce_b
+VgaDmaTb.cram_ce_b
+VgaDmaTb.cram_oe_b
+VgaDmaTb.cram_we_b
+@22
+VgaDmaTb.cram_data[7:0]
+@28
+VgaDmaTb.vram_we_b
+@22
+VgaDmaTb.vram_addr[15:0]
+@28
+VgaDmaTb.vram_addr15_b
+@22
+VgaDmaTb.vram_data[7:0]
+VgaDmaTb.ctrlBusOutput[7:0]
+VgaDmaTb.ctrlBusInput[7:0]
+@1401200
+-other
+-glue
+@800200
+-dma
+-interface
+@28
+VgaDmaTb.vgaDmaInst.i_clk
+VgaDmaTb.vgaDmaInst.i_src_ce_b
+VgaDmaTb.vgaDmaInst.i_src_ce2_b
+VgaDmaTb.vgaDmaInst.o_src_re_b
+VgaDmaTb.vgaDmaInst.io_src_we_b
+@22
+VgaDmaTb.vgaDmaInst.io_src_addr[12:0]
+[color] 7
+VgaDmaTb.vgaDmaInst.i_src_data[7:0]
+@28
+VgaDmaTb.vgaDmaInst.o_dst_we_b
+@22
+VgaDmaTb.vgaDmaInst.o_dst_addr[15:0]
+VgaDmaTb.vgaDmaInst.o_dst_data[7:0]
+@28
+VgaDmaTb.vgaDmaInst.o_active
+VgaDmaTb.vgaDmaInst.i_free_vbus_b
+@1000200
+-interface
+@800200
+-other
+@28
+VgaDmaTb.vgaDmaInst.skip_cpy
+@22
+VgaDmaTb.vgaDmaInst.reg_active
+@1000200
+-other
+-dma
+@800200
+-cram
+@22
+VgaDmaTb.vgaDmaInst.reg_ctrl_src_addr[12:0]
+@28
+VgaDmaTb.cram32Inst.i_ce_b
+VgaDmaTb.cram32Inst.i_re_b
+VgaDmaTb.cram32Inst.i_we_b
+@22
+VgaDmaTb.cram32Inst.i_addr[14:0]
+VgaDmaTb.cram32Inst.io_data[7:0]
+VgaDmaTb.cram32Inst.int_data[7:0]
+@1000200
+-cram
+@800200
+-vram0
+@28
+VgaDmaTb.vram32Inst1.i_ce_b
+VgaDmaTb.vram32Inst1.i_re_b
+VgaDmaTb.vram32Inst1.i_we_b
+@22
+VgaDmaTb.vram32Inst1.i_addr[14:0]
+VgaDmaTb.vram32Inst1.io_data[7:0]
+VgaDmaTb.vram32Inst1.int_data[7:0]
+@1000200
+-vram0
+@c00200
+-vram1
+@28
+VgaDmaTb.vram32Inst2.i_ce_b
+VgaDmaTb.vram32Inst2.i_re_b
+VgaDmaTb.vram32Inst2.i_we_b
+@22
+VgaDmaTb.vram32Inst2.i_addr[14:0]
+VgaDmaTb.vram32Inst2.io_data[7:0]
+VgaDmaTb.vram32Inst2.int_data[7:0]
+@1401200
+-vram1
+[pattern_trace] 1
+[pattern_trace] 0

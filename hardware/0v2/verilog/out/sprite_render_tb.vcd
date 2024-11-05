@@ -1,0 +1,553 @@
+$date
+	Sat Jun 22 22:34:05 2024
+$end
+$version
+	Icarus Verilog
+$end
+$timescale
+	1ns
+$end
+$scope module sprite_render_tb $end
+$var wire 8 ! s_data [7:0] $end
+$var wire 1 " s_re $end
+$var wire 15 # s_addr [14:0] $end
+$var wire 1 $ r_we $end
+$var wire 10 % r_addr [9:0] $end
+$var reg 1 & clk $end
+$var reg 2 ' i_addr [1:0] $end
+$var reg 1 ( i_clk $end
+$var reg 1 ) i_cs $end
+$var reg 8 * i_data [7:0] $end
+$var reg 1 + i_we $end
+$var reg 9 , line_n [8:0] $end
+$scope module dut $end
+$var wire 1 & clk $end
+$var wire 2 - i_addr [1:0] $end
+$var wire 1 ( i_clk $end
+$var wire 1 ) i_cs $end
+$var wire 8 . i_data [7:0] $end
+$var wire 1 / i_wait $end
+$var wire 1 + i_we $end
+$var wire 9 0 line_n [8:0] $end
+$var wire 1 1 off_src_line $end
+$var wire 8 2 s_data [7:0] $end
+$var wire 1 3 s_we $end
+$var wire 1 " s_re $end
+$var wire 15 4 s_addr [14:0] $end
+$var wire 1 $ r_we $end
+$var wire 10 5 r_addr [9:0] $end
+$var wire 8 6 _y_diff [7:0] $end
+$var wire 1 7 _write_state $end
+$var wire 1 8 _valid_pixel $end
+$var wire 9 9 _spr_w_addr [8:0] $end
+$var wire 8 : _rnd_line [7:0] $end
+$var wire 1 ; _line_reset $end
+$var reg 3 < _cpy_cnt [2:0] $end
+$var reg 15 = _i_addr [14:0] $end
+$var reg 1 > _last_rst $end
+$var reg 6 ? _spr_cnt [5:0] $end
+$var reg 32 @ _spr_reg [31:0] $end
+$var reg 3 A _state [2:0] $end
+$upscope $end
+$scope module spr_ram $end
+$var wire 15 B s_addr [14:0] $end
+$var wire 8 C s_data [7:0] $end
+$var wire 1 " s_re $end
+$upscope $end
+$scope begin $ivl_for_loop0 $end
+$var integer 32 D i [31:0] $end
+$upscope $end
+$scope begin $ivl_for_loop1 $end
+$var integer 32 E i [31:0] $end
+$upscope $end
+$scope begin $ivl_for_loop2 $end
+$var integer 32 F i [31:0] $end
+$upscope $end
+$scope begin $ivl_for_loop3 $end
+$var integer 32 G i [31:0] $end
+$upscope $end
+$scope begin $ivl_for_loop4 $end
+$var integer 32 H i [31:0] $end
+$upscope $end
+$upscope $end
+$enddefinitions $end
+#0
+$dumpvars
+bx H
+bx G
+bx F
+bx E
+b0 D
+bx C
+bx B
+b0 A
+b0 @
+b0 ?
+0>
+bx =
+b0 <
+0;
+b1010 :
+b0 9
+x8
+07
+b1010 6
+b1000000000 5
+bx 4
+03
+bx 2
+z1
+b10100 0
+0/
+b0 .
+b0 -
+b10100 ,
+0+
+b0 *
+0)
+0(
+b0 '
+0&
+b1000000000 %
+0$
+bx #
+x"
+bx !
+$end
+#20
+bx 6
+b0xxxxxxxx @
+b1 D
+1&
+#30
+b1 A
+0&
+#40
+b1xxxxxxxxx %
+b1xxxxxxxxx 5
+bx 9
+b0xxxxxxxxxxxxxxxx @
+b10 D
+1&
+#50
+b10 A
+0&
+#60
+b0xxxxxxxxxxxxxxxxxxxxxxxx @
+b11 D
+1&
+#70
+b11 A
+0&
+#80
+bx @
+b100 D
+1&
+#90
+17
+b100 A
+0&
+#100
+x$
+b101 D
+1&
+#110
+0$
+b1 <
+0&
+#120
+x$
+b110 D
+1&
+#130
+0$
+b10 <
+0&
+#140
+x$
+b111 D
+1&
+#150
+0$
+b11 <
+0&
+#160
+x$
+b1000 D
+1&
+#170
+0$
+b100 <
+0&
+#180
+x$
+b1001 D
+1&
+#190
+0$
+b101 <
+0&
+#200
+x$
+b1010 D
+1&
+#210
+0$
+b110 <
+0&
+#220
+x$
+b1011 D
+1&
+#230
+0$
+b111 <
+0&
+#240
+x$
+b1100 D
+1&
+#250
+0$
+07
+b1 ?
+b0 A
+b0 <
+0&
+#260
+b1101 D
+1&
+#270
+b1 A
+0&
+#280
+b1110 D
+1&
+#290
+b10 A
+0&
+#300
+1;
+b0 E
+b10101 ,
+b10101 0
+b1111 D
+1&
+#310
+1>
+0&
+#320
+b1 E
+1&
+#330
+b11 A
+0&
+#340
+b10 E
+1&
+#350
+17
+b100 A
+0&
+#360
+x$
+b11 E
+1&
+#370
+0$
+b1 <
+0&
+#380
+x$
+b100 E
+1&
+#390
+0$
+b10 <
+0&
+#400
+x$
+b101 E
+1&
+#410
+0$
+b11 <
+0&
+#420
+x$
+b110 E
+1&
+#430
+0$
+b100 <
+0&
+#440
+x$
+b111 E
+1&
+#450
+0$
+b101 <
+0&
+#460
+x$
+b1000 E
+1&
+#470
+0$
+b110 <
+0&
+#480
+x$
+b1001 E
+1&
+#490
+0$
+b111 <
+0&
+#500
+x$
+b0xxxxxxxxx %
+b0xxxxxxxxx 5
+0;
+b1011 :
+b0 F
+b10110 ,
+b10110 0
+b1010 E
+1&
+#510
+0$
+07
+0>
+b0 ?
+b0 <
+b0 A
+0&
+#520
+b1 F
+1&
+#530
+b1 A
+0&
+#540
+b10 F
+1&
+#550
+b10 A
+0&
+#560
+b11 F
+1&
+#570
+b11 A
+0&
+#580
+b100 F
+1&
+#590
+17
+b100 A
+0&
+#600
+x$
+b101 F
+1&
+#610
+0$
+b1 <
+0&
+#620
+x$
+b110 F
+1&
+#630
+0$
+b10 <
+0&
+#640
+x$
+b111 F
+1&
+#650
+0$
+b11 <
+0&
+#660
+x$
+b1000 F
+1&
+#670
+0$
+b100 <
+0&
+#680
+x$
+b1001 F
+1&
+#690
+0$
+b101 <
+0&
+#700
+x$
+b1010 F
+1&
+#710
+0$
+b110 <
+0&
+#720
+x$
+b1011 F
+1&
+#730
+0$
+b111 <
+0&
+#740
+x$
+b1100 F
+1&
+#750
+0$
+07
+b1 ?
+b0 A
+b0 <
+0&
+#760
+b1101 F
+1&
+#770
+b1 A
+0&
+#780
+b1110 F
+1&
+#790
+b10 A
+0&
+#800
+1;
+b0 G
+b10111 ,
+b10111 0
+b1111 F
+1&
+#810
+1>
+0&
+#820
+b1 G
+1&
+#830
+b11 A
+0&
+#840
+b10 G
+1&
+#850
+17
+b100 A
+0&
+#860
+x$
+b11 G
+1&
+#870
+0$
+b1 <
+0&
+#880
+x$
+b100 G
+1&
+#890
+0$
+b10 <
+0&
+#900
+x$
+b101 G
+1&
+#910
+0$
+b11 <
+0&
+#920
+x$
+b110 G
+1&
+#930
+0$
+b100 <
+0&
+#940
+x$
+b111 G
+1&
+#950
+0$
+b101 <
+0&
+#960
+x$
+b1000 G
+1&
+#970
+0$
+b110 <
+0&
+#980
+x$
+b1001 G
+1&
+#990
+0$
+b111 <
+0&
+#1000
+07
+b1xxxxxxxxx %
+b1xxxxxxxxx 5
+0>
+b0 ?
+b0 <
+b0 A
+0;
+b1010 :
+b0 H
+b10100 ,
+b10100 0
+b1010 G
+0&
+#1020
+b1 H
+1&
+#1030
+b1 A
+0&
+#1040
+b10 H
+1&
+#1050
+b10 A
+0&
+#1060
+b11 H
+1&
+#1070
+b11 A
+0&
+#1080
+b100 H
+1&
+#1090
+17
+b100 A
+0&
+#1100
+x$
+b101 H
+1&

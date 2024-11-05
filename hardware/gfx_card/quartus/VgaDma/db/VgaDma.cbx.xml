@@ -1,0 +1,11 @@
+<?xml version="1.0" ?>
+<LOG_ROOT>
+	<PROJECT NAME="VgaDma">
+		<CBX_INST_ENTRY INSTANCE_NAME="|VgaDma|lpm_add_sub:Add1" CBX_FILE_NAME="add_sub_8kh.tdf"/>
+		<CBX_INST_ENTRY INSTANCE_NAME="|VgaDma|lpm_add_sub:Add3" CBX_FILE_NAME="add_sub_rnh.tdf"/>
+		<CBX_INST_ENTRY INSTANCE_NAME="|VgaDma|lpm_add_sub:Add5" CBX_FILE_NAME="add_sub_onh.tdf"/>
+		<CBX_INST_ENTRY INSTANCE_NAME="|VgaDma|lpm_counter:reg_x_cnt_rtl_0|lpm_constant:scdw" CBX_FILE_NAME="lpm_constant_j84.tdf"/>
+		<CBX_INST_ENTRY INSTANCE_NAME="|VgaDma|lpm_add_sub:Add0" CBX_FILE_NAME="add_sub_8kh.tdf"/>
+		<CBX_INST_ENTRY INSTANCE_NAME="|VgaDma|lpm_counter:reg_x_cnt_rtl_0|lpm_add_sub:add_sub" CBX_FILE_NAME="add_sub_40f.tdf"/>
+	</PROJECT>
+</LOG_ROOT>

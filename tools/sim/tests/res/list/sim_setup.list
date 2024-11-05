@@ -1,9 +1,0 @@
-Line  Loc   Code         Source
-    1                   ; .org UART
-    2                   ; .db 0x61, 0x08
-    3                   ;
-    4                   ; .org 0x0000
-    5                   ; jmp PRG_ENTER
-    6                   ;
-    7                   ;
-    8                   

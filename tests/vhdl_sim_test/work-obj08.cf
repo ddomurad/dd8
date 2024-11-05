@@ -1,7 +1,0 @@
-v 4
-file . "./board_ctrl.vhdl" "edb535938ccf2849761fd2da4de4a13f82b983e7" "20240424030638.400":
-  entity board_ctrl at 1( 0) + 0 on 625;
-  architecture rtl of board_ctrl at 27( 660) + 0 on 626;
-file . "./board_ctrl_tb.vhdl" "95b07c8ae48e20aed07764d826312346f70051a9" "20240424020528.029":
-  entity board_ctrl_tb at 1( 0) + 0 on 575;
-  architecture behav of board_ctrl_tb at 9( 125) + 0 on 576;

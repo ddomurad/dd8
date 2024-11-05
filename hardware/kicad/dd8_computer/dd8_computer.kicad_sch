@@ -1,0 +1,51 @@
+(kicad_sch
+	(version 20231120)
+	(generator "eeschema")
+	(generator_version "8.0")
+	(uuid "41c3c2d3-bf75-4b92-af13-15a2bece5929")
+	(paper "A3")
+	(lib_symbols)
+	(sheet
+		(at 190.5 122.174)
+		(size 47.244 44.196)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0.0000)
+		)
+		(uuid "5ca10587-b9c0-419c-a11d-abfc67c78ea3")
+		(property "Sheetname" "vga_module"
+			(at 190.5 121.4624 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "vga_module.kicad_sch"
+			(at 190.5 166.9546 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "dd8_computer"
+				(path "/41c3c2d3-bf75-4b92-af13-15a2bece5929"
+					(page "2")
+				)
+			)
+		)
+	)
+	(sheet_instances
+		(path "/"
+			(page "1")
+		)
+	)
+)

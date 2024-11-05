@@ -1,0 +1,34 @@
+[
+  {
+    "arguments": [
+      "/usr/bin/avr-gcc",
+      "-Wall",
+      "-O3",
+      "-mmcu=atmega1280",
+      "-c",
+      "-DF_CPU=16000000",
+      "-o",
+      "out/main.o",
+      "main.c"
+    ],
+    "directory": "/home/work/proj/dd8/hardware/gfx_card/pocs/ard",
+    "file": "/home/work/proj/dd8/hardware/gfx_card/pocs/ard/main.c",
+    "output": "/home/work/proj/dd8/hardware/gfx_card/pocs/ard/out/main.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/avr-gcc",
+      "-Wall",
+      "-O3",
+      "-mmcu=atmega1280",
+      "-c",
+      "-DF_CPU=16000000",
+      "-o",
+      "out/uart.o",
+      "uart.c"
+    ],
+    "directory": "/home/work/proj/dd8/hardware/gfx_card/pocs/ard",
+    "file": "/home/work/proj/dd8/hardware/gfx_card/pocs/ard/uart.c",
+    "output": "/home/work/proj/dd8/hardware/gfx_card/pocs/ard/out/uart.o"
+  }
+]
