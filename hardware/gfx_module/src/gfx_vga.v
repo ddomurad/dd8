@@ -25,7 +25,7 @@
   */
 
 
-module VgaGen (
+module GfxVga (
   input wire         i_clk, // 25.175 MHz clock signal 
 
   // chip control interface

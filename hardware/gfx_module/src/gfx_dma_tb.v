@@ -1,9 +1,9 @@
 `timescale 1ns / 100ps 
 
 `include "tb_defs.v"
-`include "vga_dma.v"
+`include "gfx_dma.v"
 
-module VgaDmaTb();
+module GfxDmaTb();
   localparam VTCLK = 39.721946;
   localparam UTCLK = VTCLK*2;
 
@@ -112,7 +112,7 @@ module VgaDmaTb();
   pullup(cram_we_b);
   pullup(vga_ce_b);
 
-  VgaDma vgaDmaInst (
+  GfxDma gfxDmaInst (
     .i_clk(clk),
     .i_clk2(reg_clk2),
 
@@ -153,8 +153,8 @@ module VgaDmaTb();
   end
 
   initial begin 
-    $dumpfile("./out/vga_dma_tb.vcd");
-    $dumpvars(0, VgaDmaTb);
+    $dumpfile("./out/gfx_dma_tb.vcd");
+    $dumpvars(0, GfxDmaTb);
 
     #UTCLK;
 

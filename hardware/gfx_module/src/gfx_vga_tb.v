@@ -1,9 +1,9 @@
 `timescale 1ns / 100ps 
 
 `include "tb_defs.v"
-`include "vga_gen.v"
+`include "gfx_vga.v"
 
-module VgaGenTb();
+module GfxVgaTb();
   localparam TCLK = 39.721946;
 
   reg reg_clk;
@@ -54,7 +54,7 @@ module VgaGenTb();
   DualPortRam #(
     .AddrWidth(10),
     .Delay(35),
-    .InitFile("./ram/palette_ram")
+    .InitFile("./ram/color_palette_ram")
   ) paletteRamInst (
     .i_ce_l_b(enabled_b),
     .i_rw_l_b(1'b1),
@@ -92,8 +92,8 @@ module VgaGenTb();
   assign vram2_cs = vaddr15_b;
 
 
-  VgaGen #(
-  ) vgaGenInst (
+  GfxVga #(
+  ) gfxVgaInst (
     .i_clk(reg_clk),
 
     .i_ctrl_ce_b(reg_ctrl_ce_b),
@@ -124,8 +124,8 @@ module VgaGenTb();
   end
 
   initial begin 
-    $dumpfile("./out/vga_gen_tb.vcd");
-    $dumpvars(0, VgaGenTb);
+    $dumpfile("./out/gfx_vga_tb.vcd");
+    $dumpvars(0, GfxVgaTb);
 
     reg_ctrl_ce_b = 1'b0;
     reg_ctrl_ce2 = 1'b1;
