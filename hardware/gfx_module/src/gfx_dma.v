@@ -6,10 +6,10 @@
   *
   * Registers:
   * ADDR  |  NAME        | DATA SIZE  | DESCRIPTION
-  * 0x00  |  SRC_ADDR_L  | 8 bit      | Source address low byte. X coord of upper left corner of the source location.
-  * 0x01  |  SRC_ADDR_H  | 5 bit      | Source address high byte. Y coord of upper left corner of the source location.
-  * 0x02  |  DST_ADDR_L  | 8 bit      | Destination address low byte. X coord of lower right corner of the destination location.
-  * 0x03  |  DST_ADDR_H  | 8 bit      | Destination address high byte. Y coord of lower right corner of the destination location.
+  * 0x00  |  SRC_ADDR_L  | 8 bit      | Source address low byte. X coordinate of upper left corner of the source location.
+  * 0x01  |  SRC_ADDR_H  | 5 bit      | Source address high byte. Y coordinate of upper left corner of the source location.
+  * 0x02  |  DST_ADDR_L  | 8 bit      | Destination address low byte. X coordinate of lower right corner of the destination location.
+  * 0x03  |  DST_ADDR_H  | 8 bit      | Destination address high byte. Y coordinate of lower right corner of the destination location.
   * 0x04  |  WIDTH       | 8 bit      | Width of the image to copy.
   * 0x05  |  HEIGHT      | 5 bit      | Height of the image to copy.
   * 0x06  |  MASK        | 8 bit      | Copy mask, bit 0-4 for X, bit 5-7 for Y. Can be used to repeat the same image multiple times.
@@ -19,17 +19,17 @@
   *
   * This module is intended to be programmed on the EPM7128S CPLD chip.
   *
-  * NOTE about some deisng choices:
+  * NOTE about some design choices:
   * - The DMA is designed to be used with the GfxVga module.
-  * - The DMA is designed to be simple and as fast as possible, and to be able to copy the
+  * - The DMA is designed to be simple and to be able to copy the
   *   data from the CPU RAM to the VRAM as fast as possible.
-  * - Because of the high CPLD utilization (127 out of 128 macrocells), some
-  *   some optimizations were made to reduce the utilization. For example, 
+  * - Because of the high CPLD utilization (127 out of 128 macrocells), 
+  *   some optimizations had to be made. For example:
   *   a) the synthesis tool better optimized a count-down counter + compare to zero + reset to register,
   *   than a count-up counter + compare to a register + reset to zero. 
-  *   b) the source address space was limited to 8Kb, to reduce the number of bits needed for the address.
-  *   paging was used to access up to 32Kb of the CPU RAM. Hovever, only 8Kb can be accessed at a time.
-  *   c) image repetition was implemented using the MASK register, the simlicity of the implementation allowed to save on macrocells utilization.
+  *   b) the source address space was limited to 8Kb, to reduce the number of registers used.
+  *   Paging was added to access up to 32Kb of the CPU RAM. However, only 8Kb can be accessed at a time.
+  *   c) image repetition was implemented using the MASK register, the simplicity of the implementation allowed to save on macrocells utilization.
   *
   *
   * NOTE about included delays:
@@ -63,10 +63,10 @@ module GfxDma(
 
 // Constants
 // control register addresses
- localparam CTRL_ADDR_SRC_ADDR_L = 3'h0,  // Source address low byte. X coord of upper left corner of the source location.
-            CTRL_ADDR_SRC_ADDR_H = 3'h1,  // Source address high byte. Y coord of upper left corner of the source location.
-            CTRL_ADDR_DST_ADDR_L = 3'h2,  // Destination address low byte. X coord of lower right corner of the destination location.
-            CTRL_ADDR_DST_ADDR_H = 3'h3,  // Destination address high byte. Y coord of lower right corner of the destination location.
+ localparam CTRL_ADDR_SRC_ADDR_L = 3'h0,  // Source address low byte. X coordinate of upper left corner of the source location.
+            CTRL_ADDR_SRC_ADDR_H = 3'h1,  // Source address high byte. Y coordinate of upper left corner of the source location.
+            CTRL_ADDR_DST_ADDR_L = 3'h2,  // Destination address low byte. X coordinate of lower right corner of the destination location.
+            CTRL_ADDR_DST_ADDR_H = 3'h3,  // Destination address high byte. Y coordinate of lower right corner of the destination location.
             CTRL_ADDR_WIDTH = 3'h4,       // Width of the image to copy.
             CTRL_ADDR_HEIGHT = 3'h5,      // Height of the image to copy.
             CTRL_ADDR_MASK = 3'h6,        // Copy mask, bit 0-4 for X, bit 5-7 for Y. Can be used to repeat the same image multiple times.
