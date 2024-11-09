@@ -79,6 +79,7 @@ module GfxDma(
   reg reg_active_clk1;               // reg_active delayed by one clock cycle
   reg reg_active_clk2;               // reg_active delayed by two clock cycles
   reg reg_ctrl_config;               // DMA configuration register, 1 for copy all pixels, 0 for copy only non-zero pixels
+  reg [1:0]  reg_ctrl_data_mask;     // can be used to set two most significant bits of the destination data
   reg [4:0]  reg_ctrl_cpy_x_mask;    // copy mask
   reg [2:0]  reg_ctrl_cpy_y_mask;    // copy mask
   reg [7:0]  reg_ctrl_src_x_origin;  // source X origin
@@ -141,7 +142,7 @@ module GfxDma(
 
     if (reg_active_clk1 && ~i_free_vbus_b) begin 
       #(8/3) reg_dst_addr_hold <= dst_addr_offset;  //hold the destination address
-      #(8/3) reg_dst_data_hold <= i_src_data;  //hold the destination data, will be written to the VRAM in the low phase of this clock cycle
+      #(8/3) reg_dst_data_hold <= i_src_data | {reg_ctrl_data_mask, 6'h00};  //hold the destination data, will be written to the VRAM in the low phase of this clock cycle
       
       // the DMA is copying the data column-wise, from bottom to top, from right to left
       if (reg_y_cnt == 8'h00)  begin
@@ -186,6 +187,7 @@ module GfxDma(
            reg_ctrl_src_addr[12:8] <= reg_ctrl_src_y_origin;
            // store the copy configuration
            reg_ctrl_config <= i_src_data[0];
+           reg_ctrl_data_mask <= i_src_data[2:1];
            // activate the DMA
            reg_active <= 1'h1;
          end

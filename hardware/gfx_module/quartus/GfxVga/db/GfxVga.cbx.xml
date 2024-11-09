@@ -1,0 +1,8 @@
+<?xml version="1.0" ?>
+<LOG_ROOT>
+	<PROJECT NAME="GfxVga">
+		<CBX_INST_ENTRY INSTANCE_NAME="|GfxVga|lpm_add_sub:Add1" CBX_FILE_NAME="add_sub_7kh.tdf"/>
+		<CBX_INST_ENTRY INSTANCE_NAME="|GfxVga|lpm_add_sub:Add2" CBX_FILE_NAME="add_sub_7kh.tdf"/>
+		<CBX_INST_ENTRY INSTANCE_NAME="|GfxVga|lpm_add_sub:Add3" CBX_FILE_NAME="add_sub_4ph.tdf"/>
+	</PROJECT>
+</LOG_ROOT>
