@@ -10,7 +10,7 @@
   * The output image can be shifted in the horizontal and vertical by two 8-bit registers.
   * When in high resolution mode, the image is shifted by 4 pixels (4 pixels per byte).
   *
-  * The o_rgb_data can be directly converted to VGA signals using a resistor ladder, or a DAC, 
+  * The o_pixel_data can be directly converted to VGA signals using a resistor ladder, or a DAC, 
   * or can be used to drive a color mapper RAM, however this will require additional logic. 
   *
   * It is highly recommended to strobe all VGA signals on the rising edge of the o_vga_latch signal.
@@ -49,7 +49,7 @@ module GfxVga (
   output wire        o_free_vbus_b,      // VRAM bus free and ready for DMA access
   output wire        o_vga_out_b,        // enable VGA color output, active during displaying the actual image
   output wire        o_vga_latch,        // VGA signal latch signal (latch strobe)
-  output wire [7:0]  o_rgb_data,         // RGB pixel output to palette ram
+  output wire [7:0]  o_pixel_data,       // pixel output to palette ram
   output wire [1:0]  o_palette,          // palette selector
   output wire        o_hsync,            // VGA horizontal sync signal
   output wire        o_vsync             // VGA vertical sync signal
@@ -105,8 +105,8 @@ module GfxVga (
   wire [9:0] h_cnt_shifted;  // shifted horizontal count; used for center the 512 pix image in a 640 resolution
   wire [15:0] vaddr;         // computed VRAM pixel address
   wire [15:0] vaddr_shifted; // vaddr shifted by reg_ctrl_x_shift and reg_ctrl_y_shift
-  wire [7:0] dbr_rgb;        // VRAM pixel mapped to a double resolution 
-  wire [7:0] dbr_rgb0, dbr_rgb1, dbr_rgb2, dbr_rgb3; 
+  wire [7:0] dbr_pixel;        // VRAM pixel mapped to a double resolution 
+  wire [7:0] dbr_pixel0, dbr_pixel1, dbr_pixel2, dbr_pixel3; 
   
   // Assign internal control signals from status register
   assign ctrl_enable     = reg_ctrl_status[CTRL_ENABLE];
@@ -133,13 +133,13 @@ module GfxVga (
   assign #(34/3) o_vaddr15_b = (active && ctrl_enable) ? ~vaddr_shifted[15] : 1'bz;
 
   // Double resolution mapping
-  assign dbr_rgb0 = {6'h00, reg_vdata[1:0]};
-  assign dbr_rgb1 = {6'h00, reg_vdata[3:2]};
-  assign dbr_rgb2 = {6'h00, reg_vdata[5:4]};
-  assign dbr_rgb3 = {6'h00, reg_vdata[7:6]};
-  assign dbr_rgb = reg_h_cnt[1] ? (reg_h_cnt[0] ? dbr_rgb0 : dbr_rgb3) : (reg_h_cnt[0] ? dbr_rgb2 : dbr_rgb1);
+  assign dbr_pixel0 = {6'h00, reg_vdata[1:0]};
+  assign dbr_pixel1 = {6'h00, reg_vdata[3:2]};
+  assign dbr_pixel2 = {6'h00, reg_vdata[5:4]};
+  assign dbr_pixel3 = {6'h00, reg_vdata[7:6]};
+  assign dbr_pixel = reg_h_cnt[1] ? (reg_h_cnt[0] ? dbr_pixel0 : dbr_pixel3) : (reg_h_cnt[0] ? dbr_pixel2 : dbr_pixel1);
 
-  assign #(17/3) o_rgb_data =  ctrl_double_res ? dbr_rgb : reg_vdata;
+  assign #(17/3) o_pixel_data =  ctrl_double_res ? dbr_pixel : reg_vdata;
 
   assign #(8/3) o_palette = reg_ctrl_palette; 
   assign #(17/3) o_vga_latch =  ctrl_double_res ? i_clk : ~reg_h_cnt[0];

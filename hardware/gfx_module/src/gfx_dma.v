@@ -6,14 +6,15 @@
   *
   * Registers:
   * ADDR  |  NAME        | DATA SIZE  | DESCRIPTION
-  * 0x00  |  SRC_ADDR_L  | 8 bit      | Source address low byte. X coordinate of upper left corner of the source location.
-  * 0x01  |  SRC_ADDR_H  | 5 bit      | Source address high byte. Y coordinate of upper left corner of the source location.
-  * 0x02  |  DST_ADDR_L  | 8 bit      | Destination address low byte. X coordinate of lower right corner of the destination location.
-  * 0x03  |  DST_ADDR_H  | 8 bit      | Destination address high byte. Y coordinate of lower right corner of the destination location.
-  * 0x04  |  WIDTH       | 8 bit      | Width of the image to copy.
-  * 0x05  |  HEIGHT      | 5 bit      | Height of the image to copy.
-  * 0x06  |  MASK        | 8 bit      | Copy mask, bit 0-4 for X, bit 5-7 for Y. Can be used to repeat the same image multiple times.
-  * 0x07  |  STATE       | 1 bit      | Start the DMA operation. Only first bit is used. 0 for copy only non-zero pixels, 1 for copy all pixels.
+  * 0x00  |  SRC_ADDR_L  | 8 bits     | Source address low byte. X coordinate of upper left corner of the source location.
+  * 0x01  |  SRC_ADDR_H  | 5 bits     | Source address high byte. Y coordinate of upper left corner of the source location.
+  * 0x02  |  DST_ADDR_L  | 8 bits     | Destination address low byte. X coordinate of lower right corner of the destination location.
+  * 0x03  |  DST_ADDR_H  | 8 bits     | Destination address high byte. Y coordinate of lower right corner of the destination location.
+  * 0x04  |  WIDTH       | 8 bits     | Width of the image to copy.
+  * 0x05  |  HEIGHT      | 5 bits     | Height of the image to copy.
+  * 0x06  |  MASK        | 8 bits     | Copy mask, bit 0-4 for X, bit 5-7 for Y. Can be used to repeat the same image multiple times.
+  * 0x07  |  STATE       | 3 bits     | Start the DMA operation. b[0]: 0 for copy only non-zero pixels, 1 for copy all pixels. b[2:1] sets reg_ctrl_data_mask. 
+  * 
   * 
   * TBD: Describe the MASK register in more detail.
   *

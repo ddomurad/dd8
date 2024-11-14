@@ -15,7 +15,7 @@ module GfxVgaTb();
   wire  vaddr15_b;
   wire [7:0] vdata;
   wire [7:0] cdata;
-  wire [7:0] rgb_data;
+  wire [7:0] pixel_data;
   wire [1:0] palette;
   wire       vga_latch;
   wire       vga_out_b;
@@ -59,7 +59,7 @@ module GfxVgaTb();
     .i_ce_l_b(enabled_b),
     .i_rw_l_b(1'b1),
     .i_oe_l_b(active_b),
-    .i_addr_l({palette, rgb_data}),
+    .i_addr_l({palette, piexel_data}),
     // .i_addr_l({palette, vdata}),
     .io_data_l(cdata),
 
@@ -105,7 +105,7 @@ module GfxVgaTb();
     .o_vaddr(vaddr),
     .i_vdata(vdata),
     .o_vaddr15_b(vaddr15_b),
-    .o_rgb_data(rgb_data),
+    .o_pixel_data(pixel_data),
     .o_palette(palette),
     .o_vga_latch(vga_latch),
     .o_vga_out_b(vga_out_b),

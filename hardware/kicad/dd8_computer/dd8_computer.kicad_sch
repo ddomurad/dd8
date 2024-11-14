@@ -17,7 +17,7 @@
 			(color 0 0 0 0.0000)
 		)
 		(uuid "5ca10587-b9c0-419c-a11d-abfc67c78ea3")
-		(property "Sheetname" "vga_module"
+		(property "Sheetname" "gfx_module"
 			(at 190.5 121.4624 0)
 			(effects
 				(font
@@ -26,7 +26,7 @@
 				(justify left bottom)
 			)
 		)
-		(property "Sheetfile" "vga_module.kicad_sch"
+		(property "Sheetfile" "gfx_module.kicad_sch"
 			(at 190.5 166.9546 0)
 			(effects
 				(font
@@ -34,6 +34,126 @@
 				)
 				(justify left top)
 			)
+		)
+		(pin "~{gfx_{ce}}" input
+			(at 190.5 157.48 180)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+			(uuid "2dad31db-e1a5-415b-9abd-6efe2bc6a33f")
+		)
+		(pin "data_{cpu}[0..7]" input
+			(at 190.5 134.62 180)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+			(uuid "9666d91f-a7f0-4dd6-ad41-df532fbb0567")
+		)
+		(pin "clk_{2}" input
+			(at 190.5 125.73 180)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+			(uuid "68da8d09-1876-491d-a929-455fa84a9403")
+		)
+		(pin "~{we_{cpu}}" input
+			(at 190.5 161.29 180)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+			(uuid "7f017dec-3ce3-4838-89fb-3e70209105de")
+		)
+		(pin "~{ramb0_{ce}}" input
+			(at 190.5 153.67 180)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+			(uuid "533278f8-3277-40e3-94b4-d0e501179419")
+		)
+		(pin "~{oe_{cpu}}" input
+			(at 190.5 163.83 180)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+			(uuid "dd64f2d8-05e7-409e-aee3-eb766b562e44")
+		)
+		(pin "addr_{cpu}[0..15]" input
+			(at 190.5 130.81 180)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+			(uuid "3a154775-9d6d-4b83-86d9-750f1188cab8")
+		)
+		(pin "~{plt_{cs}}" input
+			(at 190.5 149.86 180)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+			(uuid "558a445c-46e7-4067-aa5e-23a5e1b0aad7")
+		)
+		(pin "gfx_{fr_start}" output
+			(at 237.744 133.35 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+			(uuid "10d7941f-2c20-4404-b4ae-e81f63931972")
+		)
+		(pin "gfx_{fr_prog}" output
+			(at 237.744 137.16 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+			(uuid "58a59f49-cbfa-4458-a024-f4bfd00aeb3b")
+		)
+		(pin "gfx_{dma_act}" output
+			(at 237.744 144.78 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+			(uuid "1ffebb91-a84e-40f1-b838-ffa1139226f2")
+		)
+		(pin "gfx_{fr_end}" output
+			(at 237.744 140.97 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+			(uuid "e985131e-afe6-4d2a-8fcd-ad0acc0ca515")
 		)
 		(instances
 			(project "dd8_computer"
