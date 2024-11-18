@@ -11,7 +11,7 @@
   * 0x02  |  DST_ADDR_L  | 8 bits     | Destination address low byte. X coordinate of the lower right corner of the destination location.
   * 0x03  |  DST_ADDR_H  | 8 bits     | Destination address high byte. Y coordinate of the lower right corner of the destination location.
   * 0x04  |  WIDTH       | 8 bits     | Width of the image to copy.
-  * 0x05  |  HEIGHT      | 5 bits     | Height of the image to copy.
+  * 0x05  |  HEIGHT      | 8 bits     | Height of the image to copy.
   * 0x06  |  MASK        | 8 bits     | Copy mask, bit 0-4 for X, bit 5-7 for Y. Can be used to repeat the same image multiple times.
   * 0x07  |  STATE       | 3 bits     | Start the DMA operation. b[0]: 0 for copy only non-zero pixels, 1 for copy all pixels. b[2:1] sets reg_ctrl_data_mask. 
   * 
