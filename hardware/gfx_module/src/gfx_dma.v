@@ -7,7 +7,7 @@
   * Registers:
   * ADDR  |  NAME        | DATA SIZE  | DESCRIPTION
   * 0x00  |  SRC_ADDR_L  | 8 bits     | Source address low byte. X coordinate of the upper left corner of the source location.
-  * 0x01  |  SRC_ADDR_H  | 7 bits     | Source address high byte. Bits 4-0: Y coordinate of the upper left corner of the source location. Bits 6-5: 8K source RAM bank.
+  * 0x01  |  SRC_ADDR_H  | 7 bits     | Source address high byte. b[4:0] Y coordinate of the upper left corner of the source location. b[6:5] 8K source RAM bank.
   * 0x02  |  DST_ADDR_L  | 8 bits     | Destination address low byte. X coordinate of the lower right corner of the destination location.
   * 0x03  |  DST_ADDR_H  | 8 bits     | Destination address high byte. Y coordinate of the lower right corner of the destination location.
   * 0x04  |  WIDTH       | 8 bits     | Width of the image to copy.
