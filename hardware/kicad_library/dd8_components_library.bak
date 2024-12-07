@@ -207,6 +207,1012 @@
 			)
 		)
 	)
+	(symbol "71321LA"
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(property "Reference" "U"
+			(at 2.794 37.338 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "71321LA"
+			(at 6.604 34.798 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 15.24 -13.97 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 15.24 -13.97 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "HIGH SPEED2K X 8 DUAL-PORTSTATIC RAMWITH INTERRUPTS"
+			(at 17.526 48.768 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "ki_keywords" "1K Parallel Dual Port EEPROM"
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(symbol "71321LA_1_1"
+			(rectangle
+				(start -8.89 33.02)
+				(end 8.89 -38.1)
+				(stroke
+					(width 0)
+					(type default)
+				)
+				(fill
+					(type background)
+				)
+			)
+			(pin input inverted
+				(at -11.43 29.21 0)
+				(length 2.54)
+				(name "~{CE}_{L}"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "1"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin input line
+				(at -11.43 7.62 0)
+				(length 2.54)
+				(name "A_{3L}"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "10"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin input line
+				(at -11.43 5.08 0)
+				(length 2.54)
+				(name "A_{4L}"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "11"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin input line
+				(at -11.43 2.54 0)
+				(length 2.54)
+				(name "A_{5L}"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "12"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin input line
+				(at -11.43 0 0)
+				(length 2.54)
+				(name "A_{6L}"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "13"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin input line
+				(at -11.43 -2.54 0)
+				(length 2.54)
+				(name "A_{7L}"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "14"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin input line
+				(at -11.43 -5.08 0)
+				(length 2.54)
+				(name "A_{8L}"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "15"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin input line
+				(at -11.43 -7.62 0)
+				(length 2.54)
+				(name "A_{9L}"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "16"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin bidirectional line
+				(at -11.43 -13.97 0)
+				(length 2.54)
+				(name "IO_{0L}"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "17"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin bidirectional line
+				(at -11.43 -16.51 0)
+				(length 2.54)
+				(name "IO_{1L}"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "18"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin bidirectional line
+				(at -11.43 -19.05 0)
+				(length 2.54)
+				(name "IO_{2L}"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "19"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin input inverted
+				(at -11.43 26.67 0)
+				(length 2.54)
+				(name "R~{W}_{L}"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "2"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin bidirectional line
+				(at -11.43 -21.59 0)
+				(length 2.54)
+				(name "IO_{3L}"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "20"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin bidirectional line
+				(at -11.43 -24.13 0)
+				(length 2.54)
+				(name "IO_{4L}"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "21"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin bidirectional line
+				(at -11.43 -26.67 0)
+				(length 2.54)
+				(name "IO_{5L}"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "22"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin bidirectional line
+				(at -11.43 -29.21 0)
+				(length 2.54)
+				(name "IO_{6L}"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "23"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin bidirectional line
+				(at -11.43 -31.75 0)
+				(length 2.54)
+				(name "IO_{7L}"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "24"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin no_connect line
+				(at -11.43 -35.56 0)
+				(length 2.54)
+				(name "NC"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "25"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin power_in line
+				(at 0 -40.64 90)
+				(length 2.54)
+				(name "GND"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "26"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin bidirectional line
+				(at 11.43 -13.97 180)
+				(length 2.54)
+				(name "IO_{0R}"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "27"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin bidirectional line
+				(at 11.43 -16.51 180)
+				(length 2.54)
+				(name "IO_{1R}"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "28"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin bidirectional line
+				(at 11.43 -19.05 180)
+				(length 2.54)
+				(name "IO_{2R}"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "29"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin output inverted
+				(at -11.43 24.13 0)
+				(length 2.54)
+				(name "~{BUSY}_{L}"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "3"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin bidirectional line
+				(at 11.43 -21.59 180)
+				(length 2.54)
+				(name "IO_{3R}"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "30"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin bidirectional line
+				(at 11.43 -24.13 180)
+				(length 2.54)
+				(name "IO_{4R}"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "31"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin bidirectional line
+				(at 11.43 -26.67 180)
+				(length 2.54)
+				(name "IO_{5R}"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "32"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin bidirectional line
+				(at 11.43 -29.21 180)
+				(length 2.54)
+				(name "IO_{6R}"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "33"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin bidirectional line
+				(at 11.43 -31.75 180)
+				(length 2.54)
+				(name "IO_{7R}"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "34"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin no_connect line
+				(at 11.43 -35.56 180)
+				(length 2.54)
+				(name "NC"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "35"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin input line
+				(at 11.43 -7.62 180)
+				(length 2.54)
+				(name "A_{9R}"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "36"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin input line
+				(at 11.43 -5.08 180)
+				(length 2.54)
+				(name "A_{8R}"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "37"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin input line
+				(at 11.43 -2.54 180)
+				(length 2.54)
+				(name "A_{7R}"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "38"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin input line
+				(at 11.43 0 180)
+				(length 2.54)
+				(name "A_{6R}"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "39"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin output inverted
+				(at -11.43 21.59 0)
+				(length 2.54)
+				(name "~{INT}_{L}"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "4"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin input line
+				(at 11.43 2.54 180)
+				(length 2.54)
+				(name "A_{5R}"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "40"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin input line
+				(at 11.43 5.08 180)
+				(length 2.54)
+				(name "A_{4R}"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "41"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin input line
+				(at 11.43 7.62 180)
+				(length 2.54)
+				(name "A_{3R}"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "42"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin input line
+				(at 11.43 10.16 180)
+				(length 2.54)
+				(name "A_{2R}"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "43"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin input line
+				(at 11.43 12.7 180)
+				(length 2.54)
+				(name "A_{1R}"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "44"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin input line
+				(at 11.43 15.24 180)
+				(length 2.54)
+				(name "A_{0R}"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "45"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin input inverted
+				(at 11.43 19.05 180)
+				(length 2.54)
+				(name "~{OE}_{R}"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "46"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin input line
+				(at 11.43 -10.16 180)
+				(length 2.54)
+				(name "A_{10R}"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "47"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin output inverted
+				(at 11.43 21.59 180)
+				(length 2.54)
+				(name "~{INT}_{R}"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "48"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin output inverted
+				(at 11.43 24.13 180)
+				(length 2.54)
+				(name "~{BUSY}_{R}"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "49"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin input line
+				(at -11.43 -10.16 0)
+				(length 2.54)
+				(name "A_{10L}"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "5"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin input inverted
+				(at 11.43 26.67 180)
+				(length 2.54)
+				(name "R~{W}_{R}"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "50"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin input inverted
+				(at 11.43 29.21 180)
+				(length 2.54)
+				(name "~{CE}_{R}"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "51"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin power_in line
+				(at 0 35.56 270)
+				(length 2.54)
+				(name "VCC"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "52"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin input inverted
+				(at -11.43 19.05 0)
+				(length 2.54)
+				(name "~{OE}_{L}"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "6"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin input line
+				(at -11.43 15.24 0)
+				(length 2.54)
+				(name "A_{0L}"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "7"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin input line
+				(at -11.43 12.7 0)
+				(length 2.54)
+				(name "A_{1L}"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "8"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin input line
+				(at -11.43 10.16 0)
+				(length 2.54)
+				(name "A_{2L}"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "9"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+		)
+	)
 	(symbol "AS7C164A"
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -1065,7 +2071,7 @@
 					)
 				)
 			)
-			(pin input line
+			(pin input inverted
 				(at 10.16 -5.08 180)
 				(length 2.54)
 				(name "~{CE}"
@@ -1101,7 +2107,7 @@
 					)
 				)
 			)
-			(pin input line
+			(pin input inverted
 				(at 10.16 -7.62 180)
 				(length 2.54)
 				(name "~{OE}"
@@ -1191,7 +2197,7 @@
 					)
 				)
 			)
-			(pin input line
+			(pin input inverted
 				(at 10.16 -10.16 180)
 				(length 2.54)
 				(name "~{WE}"
@@ -4441,7 +5447,7 @@
 					)
 				)
 			)
-			(pin input line
+			(pin input inverted
 				(at -11.43 29.21 0)
 				(length 2.54)
 				(name "~{CE}_{L}"
@@ -4639,7 +5645,7 @@
 					)
 				)
 			)
-			(pin input line
+			(pin input inverted
 				(at -11.43 26.67 0)
 				(length 2.54)
 				(name "R~{W}_{L}"
@@ -4819,7 +5825,7 @@
 					)
 				)
 			)
-			(pin output line
+			(pin output inverted
 				(at -11.43 24.13 0)
 				(length 2.54)
 				(name "~{BUSY}_{L}"
@@ -5017,7 +6023,7 @@
 					)
 				)
 			)
-			(pin output line
+			(pin output inverted
 				(at -11.43 21.59 0)
 				(length 2.54)
 				(name "~{INT}_{L}"
@@ -5089,7 +6095,7 @@
 					)
 				)
 			)
-			(pin input line
+			(pin input inverted
 				(at 11.43 19.05 180)
 				(length 2.54)
 				(name "~{OE}_{R}"
@@ -5107,7 +6113,7 @@
 					)
 				)
 			)
-			(pin output line
+			(pin output inverted
 				(at 11.43 21.59 180)
 				(length 2.54)
 				(name "~{INT}_{R}"
@@ -5125,7 +6131,7 @@
 					)
 				)
 			)
-			(pin output line
+			(pin output inverted
 				(at 11.43 24.13 180)
 				(length 2.54)
 				(name "~{BUSY}_{R}"
@@ -5143,7 +6149,7 @@
 					)
 				)
 			)
-			(pin input line
+			(pin input inverted
 				(at 11.43 26.67 180)
 				(length 2.54)
 				(name "R~{W}_{R}"
@@ -5161,7 +6167,7 @@
 					)
 				)
 			)
-			(pin input line
+			(pin input inverted
 				(at 11.43 29.21 180)
 				(length 2.54)
 				(name "~{CE}_{R}"
@@ -5197,7 +6203,7 @@
 					)
 				)
 			)
-			(pin input line
+			(pin input inverted
 				(at -11.43 19.05 0)
 				(length 2.54)
 				(name "~{OE}_{L}"
@@ -5280,6 +6286,427 @@
 					)
 				)
 				(number "9"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+		)
+	)
+	(symbol "SN74AC245N"
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(property "Reference" "U"
+			(at 0 16.002 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "SN74AC245N"
+			(at 0 13.97 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 0 14.986 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 0 14.986 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 0 14.986 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(symbol "SN74AC245N_1_1"
+			(rectangle
+				(start -6.35 12.7)
+				(end 6.35 -17.78)
+				(stroke
+					(width 0)
+					(type default)
+				)
+				(fill
+					(type background)
+				)
+			)
+			(pin bidirectional line
+				(at -8.89 6.35 0)
+				(length 2.54)
+				(name "A1"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number ""
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin bidirectional line
+				(at -8.89 3.81 0)
+				(length 2.54)
+				(name "A2"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number ""
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin bidirectional line
+				(at -8.89 1.27 0)
+				(length 2.54)
+				(name "A3"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number ""
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin bidirectional line
+				(at -8.89 -1.27 0)
+				(length 2.54)
+				(name "A4"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number ""
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin bidirectional line
+				(at -8.89 -3.81 0)
+				(length 2.54)
+				(name "A5"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number ""
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin bidirectional line
+				(at -8.89 -6.35 0)
+				(length 2.54)
+				(name "A6"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number ""
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin bidirectional line
+				(at -8.89 -8.89 0)
+				(length 2.54)
+				(name "A7"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number ""
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin bidirectional line
+				(at -8.89 -11.43 0)
+				(length 2.54)
+				(name "A8"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number ""
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin bidirectional line
+				(at 8.89 3.81 180)
+				(length 2.54)
+				(name "B1"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number ""
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin bidirectional line
+				(at 8.89 1.27 180)
+				(length 2.54)
+				(name "B2"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number ""
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin bidirectional line
+				(at 8.89 -1.27 180)
+				(length 2.54)
+				(name "B3"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number ""
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin bidirectional line
+				(at 8.89 -3.81 180)
+				(length 2.54)
+				(name "B4"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number ""
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin bidirectional line
+				(at 8.89 -6.35 180)
+				(length 2.54)
+				(name "B5"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number ""
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin bidirectional line
+				(at 8.89 -8.89 180)
+				(length 2.54)
+				(name "B6"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number ""
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin bidirectional line
+				(at 8.89 -11.43 180)
+				(length 2.54)
+				(name "B7"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number ""
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin bidirectional line
+				(at 8.89 -13.97 180)
+				(length 2.54)
+				(name "B8"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number ""
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin input line
+				(at -8.89 10.16 0)
+				(length 2.54)
+				(name "DIR"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number ""
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin power_in line
+				(at -8.89 -15.24 0)
+				(length 2.54)
+				(name "GND"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number ""
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin power_in line
+				(at 8.89 10.16 180)
+				(length 2.54)
+				(name "VCC"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number ""
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin input inverted
+				(at 8.89 7.62 180)
+				(length 2.54)
+				(name "~{OE}"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number ""
 					(effects
 						(font
 							(size 1.27 1.27)
@@ -5420,7 +6847,7 @@
 					)
 				)
 			)
-			(pin output line
+			(pin tri_state line
 				(at 8.89 7.62 180)
 				(length 2.54)
 				(name "1Y1"
@@ -5438,7 +6865,7 @@
 					)
 				)
 			)
-			(pin output line
+			(pin tri_state line
 				(at 8.89 5.08 180)
 				(length 2.54)
 				(name "1Y2"
@@ -5456,7 +6883,7 @@
 					)
 				)
 			)
-			(pin output line
+			(pin tri_state line
 				(at 8.89 2.54 180)
 				(length 2.54)
 				(name "1Y3"
@@ -5474,7 +6901,7 @@
 					)
 				)
 			)
-			(pin output line
+			(pin tri_state line
 				(at 8.89 0 180)
 				(length 2.54)
 				(name "1Y4"
@@ -5564,7 +6991,7 @@
 					)
 				)
 			)
-			(pin output line
+			(pin tri_state line
 				(at 8.89 -6.35 180)
 				(length 2.54)
 				(name "2Y1"
@@ -5582,7 +7009,7 @@
 					)
 				)
 			)
-			(pin output line
+			(pin tri_state line
 				(at 8.89 -8.89 180)
 				(length 2.54)
 				(name "2Y2"
@@ -5600,7 +7027,7 @@
 					)
 				)
 			)
-			(pin output line
+			(pin tri_state line
 				(at 8.89 -11.43 180)
 				(length 2.54)
 				(name "2Y3"
@@ -5618,7 +7045,7 @@
 					)
 				)
 			)
-			(pin output line
+			(pin tri_state line
 				(at 8.89 -13.97 180)
 				(length 2.54)
 				(name "2Y4"
@@ -5672,7 +7099,7 @@
 					)
 				)
 			)
-			(pin input line
+			(pin input inverted
 				(at -8.89 7.62 0)
 				(length 2.54)
 				(name "~{1OE}"
@@ -5690,7 +7117,7 @@
 					)
 				)
 			)
-			(pin input line
+			(pin input inverted
 				(at -8.89 -7.62 0)
 				(length 2.54)
 				(name "~{2OE}"
@@ -5778,7 +7205,7 @@
 					(type background)
 				)
 			)
-			(pin input line
+			(pin input inverted
 				(at -8.89 7.62 0)
 				(length 2.54)
 				(name "~{OE}"
@@ -5814,7 +7241,7 @@
 					)
 				)
 			)
-			(pin input line
+			(pin input clock
 				(at -8.89 5.08 0)
 				(length 2.54)
 				(name "CLK"
@@ -6217,7 +7644,7 @@
 					)
 				)
 			)
-			(pin input line
+			(pin input clock
 				(at -12.7 34.29 0)
 				(length 2.54)
 				(name "CLK"
@@ -6235,7 +7662,7 @@
 					)
 				)
 			)
-			(pin input line
+			(pin input clock
 				(at -12.7 31.75 0)
 				(length 2.54)
 				(name "CLK_{2}"
@@ -7099,7 +8526,7 @@
 					)
 				)
 			)
-			(pin tri_state line
+			(pin tri_state inverted
 				(at 11.43 -6.35 180)
 				(length 2.54)
 				(name "~{DA_{15}}"
@@ -7117,7 +8544,7 @@
 					)
 				)
 			)
-			(pin output line
+			(pin output inverted
 				(at 11.43 -33.02 180)
 				(length 2.54)
 				(name "~{D_{WE}}"
@@ -7135,7 +8562,7 @@
 					)
 				)
 			)
-			(pin input line
+			(pin input inverted
 				(at 11.43 -35.56 180)
 				(length 2.54)
 				(name "~{FREE_VBUS}"
@@ -7153,7 +8580,7 @@
 					)
 				)
 			)
-			(pin input line
+			(pin input inverted
 				(at -12.7 -35.56 0)
 				(length 2.54)
 				(name "~{S_{CE2}}"
@@ -7171,7 +8598,7 @@
 					)
 				)
 			)
-			(pin input line
+			(pin input inverted
 				(at -12.7 -33.02 0)
 				(length 2.54)
 				(name "~{S_{CE}}"
@@ -7189,7 +8616,7 @@
 					)
 				)
 			)
-			(pin tri_state line
+			(pin tri_state inverted
 				(at -12.7 -38.1 0)
 				(length 2.54)
 				(name "~{S_{RE}}"
@@ -7207,7 +8634,7 @@
 					)
 				)
 			)
-			(pin bidirectional line
+			(pin bidirectional inverted
 				(at -12.7 -40.64 0)
 				(length 2.54)
 				(name "~{S_{WE}}"
@@ -7276,7 +8703,7 @@
 		)
 		(symbol "dd8_gfx_vga_1_1"
 			(rectangle
-				(start -9.906 35.814)
+				(start -10.16 35.56)
 				(end 10.16 -55.88)
 				(stroke
 					(width 0)
@@ -7466,7 +8893,7 @@
 					)
 				)
 			)
-			(pin input line
+			(pin input clock
 				(at -12.7 33.02 0)
 				(length 2.54)
 				(name "CLK"
@@ -7650,42 +9077,6 @@
 				(at -12.7 -38.1 0)
 				(length 2.54)
 				(name "PD_{7}"
-					(effects
-						(font
-							(size 1.27 1.27)
-						)
-					)
-				)
-				(number ""
-					(effects
-						(font
-							(size 1.27 1.27)
-						)
-					)
-				)
-			)
-			(pin output line
-				(at -12.7 -41.91 0)
-				(length 2.54)
-				(name "PLT_{0}"
-					(effects
-						(font
-							(size 1.27 1.27)
-						)
-					)
-				)
-				(number ""
-					(effects
-						(font
-							(size 1.27 1.27)
-						)
-					)
-				)
-			)
-			(pin output line
-				(at -12.7 -44.45 0)
-				(length 2.54)
-				(name "PLT_{1}"
 					(effects
 						(font
 							(size 1.27 1.27)
@@ -8132,7 +9523,7 @@
 					)
 				)
 			)
-			(pin output line
+			(pin output inverted
 				(at 12.7 -44.45 180)
 				(length 2.54)
 				(name "VGA_LATCH"
@@ -8168,7 +9559,7 @@
 					)
 				)
 			)
-			(pin output line
+			(pin output inverted
 				(at 12.7 -36.83 180)
 				(length 2.54)
 				(name "~{ACTIVE}"
@@ -8186,7 +9577,7 @@
 					)
 				)
 			)
-			(pin input line
+			(pin input inverted
 				(at -12.7 0 0)
 				(length 2.54)
 				(name "~{C_{CE}}"
@@ -8204,7 +9595,7 @@
 					)
 				)
 			)
-			(pin input line
+			(pin input inverted
 				(at -12.7 -5.08 0)
 				(length 2.54)
 				(name "~{C_{WE}}"
@@ -8222,7 +9613,7 @@
 					)
 				)
 			)
-			(pin output line
+			(pin output inverted
 				(at 12.7 -34.29 180)
 				(length 2.54)
 				(name "~{ENABLED}"
@@ -8240,7 +9631,7 @@
 					)
 				)
 			)
-			(pin output line
+			(pin output inverted
 				(at -12.7 -15.24 0)
 				(length 2.54)
 				(name "~{FRAME_END}"
@@ -8258,7 +9649,7 @@
 					)
 				)
 			)
-			(pin output line
+			(pin output inverted
 				(at -12.7 -12.7 0)
 				(length 2.54)
 				(name "~{FRAME_PROG}"
@@ -8276,7 +9667,7 @@
 					)
 				)
 			)
-			(pin output line
+			(pin output inverted
 				(at -12.7 -10.16 0)
 				(length 2.54)
 				(name "~{FRAME_START}"
@@ -8294,7 +9685,7 @@
 					)
 				)
 			)
-			(pin output line
+			(pin output inverted
 				(at 12.7 -39.37 180)
 				(length 2.54)
 				(name "~{FREE_VBUSS}"
@@ -8312,7 +9703,7 @@
 					)
 				)
 			)
-			(pin tri_state line
+			(pin tri_state inverted
 				(at 12.7 -7.62 180)
 				(length 2.54)
 				(name "~{VA_{15}}"
@@ -8330,7 +9721,7 @@
 					)
 				)
 			)
-			(pin output line
+			(pin output inverted
 				(at 12.7 -41.91 180)
 				(length 2.54)
 				(name "~{VGA_OUT}"
