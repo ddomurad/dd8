@@ -59,7 +59,8 @@ module GfxDma(
   output [7:0] o_dst_data,  // destination VRAM data
   
   input i_free_vbus_b, // VRAM bus free and ready for DMA access, should be connected with GfxVga.o_free_vbus_b
-  output o_active      // DMA active signal, can be used to detach part of the CPU RAM from CPU buss
+  output o_active,      // DMA active signal, can be used to detach part of the CPU RAM from CPU buss
+  output o_addr_sel
 );
 
 // Constants
@@ -80,6 +81,7 @@ module GfxDma(
   reg reg_active_clk1;               // reg_active delayed by one clock cycle
   reg reg_active_clk2;               // reg_active delayed by two clock cycles
   reg reg_ctrl_config;               // DMA configuration register, 1 for copy all pixels, 0 for copy only non-zero pixels
+  reg reg_free_vbus_b;
   reg [1:0]  reg_ctrl_data_mask;     // can be used to set two most significant bits of the destination data
   reg [4:0]  reg_ctrl_cpy_x_mask;    // copy mask
   reg [2:0]  reg_ctrl_cpy_y_mask;    // copy mask
@@ -123,7 +125,7 @@ module GfxDma(
     reg_dst_data_hold = 8'h00;
   end
   
-  assign dst_out_enabled = reg_active_clk2 && ~i_free_vbus_b; // determine if the destination output should be enabled
+  assign dst_out_enabled = reg_active_clk2 && ~reg_free_vbus_b; // determine if the destination output should be enabled
   assign skip_cpy = reg_ctrl_config == CFG_CPY_NON_ZERO && reg_dst_data_hold  == 8'h00; // determine if the copying should be skipped
   
   assign #(8/3) io_src_addr = reg_active_clk1 ? reg_ctrl_src_addr : 13'hz; 
@@ -132,12 +134,14 @@ module GfxDma(
   assign #(15/3) io_src_we_b = reg_active_clk1 ? 1'h1 : 1'hz;
   
   assign dst_addr_offset = {reg_ctrl_dst_y_origin - reg_y_cnt, reg_ctrl_dst_x_origin - reg_x_cnt}; // calculate the destination address offset
-  assign #(0) o_dst_addr =  dst_out_enabled ? reg_dst_addr_hold : 16'hz; 
+  assign #(0) o_dst_addr =  reg_dst_addr_hold;
   assign #(0) o_dst_data = dst_out_enabled ? reg_dst_data_hold  : 8'hz;
   assign #(18/3) o_dst_we_b = ~dst_out_enabled | skip_cpy | i_clk2;  // write to the VRAM in the low phase of the clock cycle
   assign #(8/3) o_active = reg_active;
+  assign #(15/3) o_addr_sel = reg_free_vbus_b;
   
   always @ (posedge i_clk)  begin
+    reg_free_vbus_b <= i_free_vbus_b;
     reg_active_clk2 <= reg_active_clk1;
     reg_active_clk1 <= reg_active;
 

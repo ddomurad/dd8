@@ -2,6 +2,7 @@
 
 `include "tb_defs.v"
 `include "gfx_vga.v"
+`include "gfx_addr_mux.v"
 
 module GfxVgaTb();
   localparam TCLK = 39.721946;
@@ -12,6 +13,7 @@ module GfxVgaTb();
   reg [7:0] reg_ctrl_data;
   
   wire [15:0] vaddr;
+  wire [15:0] vaddr_mux;
   wire  vaddr15_b;
   wire [7:0] vdata;
   wire [7:0] cdata;
@@ -22,7 +24,7 @@ module GfxVgaTb();
   wire free_vbus_b;
 
   wire hsync, vsync;
-  wire enabled_b, active_b;
+  wire enabled_b;
 
   wire [7:0] latch_cdata;
 
@@ -34,7 +36,7 @@ module GfxVgaTb();
     .Delay(15)
   ) vram32Inst1 (
     .i_ce_b(vram1_cs),
-    .i_re_b(active_b),
+    .i_re_b(1'b0),
     .i_we_b(1'b1),
     .i_addr(vaddr[14:0]),
     .io_data(vdata)
@@ -45,7 +47,7 @@ module GfxVgaTb();
     .Delay(15)
   ) vram32Inst2 (
     .i_ce_b(vram2_cs),
-    .i_re_b(active_b),
+    .i_re_b(1'b0),
     .i_we_b(1'b1),
     .i_addr(vaddr[14:0]),
     .io_data(vdata)
@@ -58,8 +60,8 @@ module GfxVgaTb();
   ) paletteRamInst (
     .i_ce_l_b(enabled_b),
     .i_rw_l_b(1'b1),
-    .i_oe_l_b(active_b),
-    .i_addr_l({palette, piexel_data}),
+    .i_oe_l_b(1'b0),
+    .i_addr_l({palette, pixel_data}),
     // .i_addr_l({palette, vdata}),
     .io_data_l(cdata),
 
@@ -92,8 +94,7 @@ module GfxVgaTb();
   assign vram2_cs = vaddr15_b;
 
 
-  GfxVga #(
-  ) gfxVgaInst (
+  GfxVga gfxVgaInst (
     .i_clk(reg_clk),
 
     .i_ctrl_ce_b(reg_ctrl_ce_b),
@@ -104,7 +105,6 @@ module GfxVgaTb();
 
     .o_vaddr(vaddr),
     .i_vdata(vdata),
-    .o_vaddr15_b(vaddr15_b),
     .o_pixel_data(pixel_data),
     .o_palette(palette),
     .o_vga_latch(vga_latch),
@@ -112,8 +112,24 @@ module GfxVgaTb();
     .o_hsync(hsync),
     .o_vsync(vsync),
     .o_enabled_b(enabled_b),
-    .o_active_b(active_b),
     .o_free_vbus_b(free_vbus_b)
+  );
+
+  GfxAddrMux gfxAddrMuxInst0(
+   .i_addr_sel(1'b0),
+   .i_dma_addr({8'ha}),
+   .i_vga_addr(vaddr[7:0]),
+
+   .o_addr(vaddr_mux[7:0])
+  );
+
+  GfxAddrMux gfxAddrMuxInst1(
+   .i_addr_sel(1'b0),
+   .i_dma_addr({8'ha}),
+   .i_vga_addr(vaddr[15:8]),
+
+   .o_addr(vaddr_mux[15:8]),
+   .o_addr7_b(vaddr15_b)
   );
 
   always begin 

@@ -37,12 +37,10 @@ module GfxVga (
 
   // vram interface
   output wire [15:0] o_vaddr,     // 64Kb video RAM pixel address
-  output wire        o_vaddr15_b, // 32Kb bank selector aux signal
   input wire  [7:0]  i_vdata,     // video RAM pixel data
 
   // other control and status signals
   output wire        o_enabled_b,        // goes low when the VGA is enabled 
-  output wire        o_active_b,         // VGA dump active 
   output wire        o_frame_start_b,    // goes low for the whole duration of first visible scan-line (0). Can be used to trigger an interrupt
   output wire        o_frame_progress_b, // goes low for the whole duration of every 32nd scan-line. Can be used to trigger an interrupt 
   output wire        o_frame_end_b,      // goes low for the whole duration of the first invisible scan-line (480). Can be used to trigger an interrupt
@@ -68,8 +66,6 @@ module GfxVga (
   localparam ACTIVE_V_END      = 10'd480; // chip active signal end; for each frame; relative to the shifted h_cnt
   localparam FRAME_START_LINE  = 10'd000; // frame start interrupt signal 
   localparam FRAME_END_LINE    = 10'd480; // frame end interrupt signal
-  localparam FREE_VBUS_START   = 10'd62;  // free VRAM bus signal start 
-  localparam FREE_VBUS_END     = 10'd580; // free VRAM bus signal end
   localparam VGA_OUT_START     = 10'd68;  // VGA output enabled start; 
   localparam VGA_OUT_END       = 10'd579; // VGA output enabled end; 
 
@@ -120,17 +116,15 @@ module GfxVga (
   assign #(17/3) o_vsync = (reg_v_cnt < VSYNC_START) || (reg_v_cnt >= VSYNC_END);
 
   assign #(17/3) o_enabled_b = !ctrl_enable; 
-  assign #(18/3) o_active_b = (h_cnt_shifted >= ACTIVE_H_END) || (reg_v_cnt >= ACTIVE_V_END);
+  assign active = (h_cnt_shifted < ACTIVE_H_END) && (reg_v_cnt < ACTIVE_V_END);
   
-  assign active = !o_active_b;
-  assign #(26/3) o_free_vbus_b = (reg_h_cnt >= FREE_VBUS_START && reg_h_cnt <= FREE_VBUS_END) && ctrl_enable && reg_v_cnt < ACTIVE_V_END;
+  assign #(19/3) o_free_vbus_b = active && reg_h_cnt[0];
 
   // Video address calculation with shifting
   assign vaddr = ctrl_double_res ? {reg_v_cnt[8:0], h_cnt_shifted[8:2]} : {reg_v_cnt[8:1], h_cnt_shifted[8:1]};
   assign vaddr_shifted = {(vaddr[15:8] + reg_ctrl_y_shift), (vaddr[7:0] + reg_ctrl_x_shift)};
  
   assign #(36/3) o_vaddr = (active && ctrl_enable) ? vaddr_shifted: 16'hzzzz;
-  assign #(34/3) o_vaddr15_b = (active && ctrl_enable) ? ~vaddr_shifted[15] : 1'bz;
 
   // Double resolution mapping
   assign dbr_pixel0 = {6'h00, reg_vdata[1:0]};
@@ -143,7 +137,7 @@ module GfxVga (
 
   assign #(8/3) o_palette = reg_ctrl_palette; 
   assign #(17/3) o_vga_latch =  ctrl_double_res ? i_clk : ~reg_h_cnt[0];
-  assign #(18/3) o_vga_out_b = (reg_h_cnt < VGA_OUT_START || reg_h_cnt > VGA_OUT_END) || ~ctrl_enable;
+  assign #(17/3) o_vga_out_b = (reg_h_cnt < VGA_OUT_START || reg_h_cnt > VGA_OUT_END) || ~ctrl_enable;
   
   assign #(17/3) o_frame_start_b = reg_v_cnt != FRAME_START_LINE || ~ctrl_enable;
   assign #(17/3) o_frame_progress_b = reg_v_cnt[4:0] != 5'h0 || ~ctrl_enable;
@@ -186,12 +180,13 @@ module GfxVga (
     end 
   end
 
-  // i_vdata_delayed has been introduced for simulation purposes
+  // i_vdata_delayed has been introduced for simulation purposes only
+  // just to add a simulation delay
   wire [7:0] i_vdata_delayed;
-  assign #(20/3) i_vdata_delayed = i_vdata;
+  assign #(9/3) i_vdata_delayed = i_vdata; 
 
   always @ (posedge i_clk) begin 
-    if (ctrl_enable && active) begin 
+    if (ctrl_enable && active) begin  //note: we don't take this delays into account during simulation
       if (reg_h_cnt[0]) begin
         #(3) reg_vdata <= i_vdata_delayed; 
       end

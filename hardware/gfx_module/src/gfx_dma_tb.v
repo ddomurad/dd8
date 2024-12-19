@@ -21,7 +21,6 @@ module GfxDmaTb();
   reg reg_vga_ce_b;
   reg reg_ram_ce_b;
 
-
   wire clk;
   wire [12:0] cram_addr;
   wire [7:0] cram_data;
@@ -36,7 +35,7 @@ module GfxDmaTb();
   wire vram_we_b;
 
   wire dma_active;
-
+  wire dma_addr_sel;
 
   Ram #( // according to AS7C256B datasheet
     .AddrWidth(15),
@@ -129,7 +128,8 @@ module GfxDmaTb();
     .o_dst_data(vram_data),
 
     .i_free_vbus_b(reg_free_vbus_b),
-    .o_active(dma_active) 
+    .o_active(dma_active),
+    .o_addr_sel(dma_addr_sel)
   );
 
   always begin 
