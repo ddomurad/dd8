@@ -12,10 +12,8 @@ module Ram #(
   inout wire [7:0] io_data
 );
   reg [7:0] reg_mem [0:(1<<AddrWidth)-1];
-  wire [7:0] int_data;
 
-  assign #Delay int_data = reg_mem[i_addr];
-  assign io_data = ~i_re_b && ~i_ce_b ? int_data : 8'hzz;
+  assign #Delay io_data = ~i_re_b && ~i_ce_b ? reg_mem[i_addr] : 8'hzz;
 
   integer i;
   initial begin 
@@ -101,35 +99,29 @@ module DLatch #(
 
 endmodule
 
-module BussDriver #(
-  parameter BusWidth = 8
+module BusDriver #(
+  parameter BusWidth = 8,
+  parameter Delay = 5
 )(
   input i_oe_b,
   input [BusWidth-1:0] i_a,
   output [BusWidth-1:0] o_y
 ); 
-  assign o_y = i_oe_b ? {BusWidth{1'hz}} : i_a;
+  assign #(Delay) o_y = i_oe_b ? {BusWidth{1'hz}} : i_a;
 endmodule
 
-module BidBussDriver #(
-  parameter BusWidth = 8
+module BidBusDriver #(
+  parameter BusWidth = 8,
+  parameter Delay = 5
 )(
   input i_oe_b,
-  input i_re_b,
+  input i_dir,
   inout [BusWidth-1:0] io_a,
-  inout [BusWidth-1:0] io_y
+  inout [BusWidth-1:0] io_b
 );
-  // signal dir a -> y
-  BussDriver #(BusWidth) inst1( 
-    .i_oe_b(!i_re_b | i_oe_b),
-    .i_a(io_a),
-    .o_y(io_y)
-  );
-  // signal dir y -> a
-  BussDriver #(BusWidth) inst2(
-    .i_oe_b(i_re_b | i_oe_b),
-    .i_a(io_y),
-    .o_y(io_a)
-  );
+
+  //i_dir 0: a<-b, 1: a->b
+  assign #(Delay) io_a = (i_oe_b || i_dir) ? {BusWidth{1'hz}} : io_b;
+  assign #(Delay) io_b = (i_oe_b || !i_dir) ? {BusWidth{1'hz}} : io_a;
 
 endmodule
