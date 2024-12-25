@@ -15,7 +15,7 @@
   *
   * It is highly recommended to strobe all VGA signals on the rising edge of the o_vga_latch signal.
   *
-  * This module is intended to be programmed on the EPM7128S CPLD chip.
+  * This module is intended to be programmed on the EPM7128S-15ns CPLD chip.
   *
   * NOTE about included delays:
   * - The delays are included for simulation purposes only. Synthesis tools will ignore them.
@@ -30,7 +30,6 @@ module GfxVga (
 
   // chip control interface
   input wire         i_ctrl_ce_b,  // chip enabled
-  input wire         i_ctrl_ce2,   // chip enabled aux
   input wire         i_ctrl_w_b,   // control write signal
   input wire  [1:0]  i_ctrl_addr,  // control register address
   input wire  [7:0]  i_ctrl_data,  // control data
@@ -44,7 +43,7 @@ module GfxVga (
   output wire        o_frame_start_b,    // goes low for the whole duration of first visible scan-line (0). Can be used to trigger an interrupt
   output wire        o_frame_progress_b, // goes low for the whole duration of every 32nd scan-line. Can be used to trigger an interrupt 
   output wire        o_frame_end_b,      // goes low for the whole duration of the first invisible scan-line (480). Can be used to trigger an interrupt
-  output wire        o_free_vbus_b,      // VRAM bus free and ready for DMA access
+  output wire        o_free_vbus,        // VRAM bus free and ready for DMA access
   output wire        o_vga_out_b,        // enable VGA color output, active during displaying the actual image
   output wire        o_vga_latch,        // VGA signal latch signal (latch strobe)
   output wire [7:0]  o_pixel_data,       // pixel output to palette ram
@@ -118,7 +117,7 @@ module GfxVga (
   assign #(17/3) o_enabled_b = !ctrl_enable; 
   assign active = (h_cnt_shifted < ACTIVE_H_END) && (reg_v_cnt < ACTIVE_V_END);
   
-  assign #(19/3) o_free_vbus_b = active && reg_h_cnt[0];
+  assign #(19/3) o_free_vbus = ~active || reg_h_cnt[0];
 
   // Video address calculation with shifting
   assign vaddr = ctrl_double_res ? {reg_v_cnt[8:0], h_cnt_shifted[8:2]} : {reg_v_cnt[8:1], h_cnt_shifted[8:1]};
@@ -155,7 +154,7 @@ module GfxVga (
 
 
   always @ (negedge i_ctrl_w_b) begin 
-    if (~i_ctrl_ce_b && i_ctrl_ce2) begin 
+    if (~i_ctrl_ce_b) begin 
       case (i_ctrl_addr)
         CTRL_ADDR_STATUS: reg_ctrl_status  <= i_ctrl_data[1:0];
         CTRL_ADDR_X_SHIFT: reg_ctrl_x_shift  <= i_ctrl_data;

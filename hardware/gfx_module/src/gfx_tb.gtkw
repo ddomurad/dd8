@@ -1,0 +1,191 @@
+[*]
+[*] GTKWave Analyzer v3.3.120 (w)1999-2024 BSI
+[*] Sun Dec 22 14:39:01 2024
+[*]
+[dumpfile] "/home/work/proj/dd8/hardware/gfx_module/src/out/gfx_tb.vcd"
+[dumpfile_mtime] "Sun Dec 22 14:23:04 2024"
+[dumpfile_size] 370654
+[savefile] "/home/work/proj/dd8/hardware/gfx_module/src/gfx_tb.gtkw"
+[timestart] 21645000
+[size] 2050 1358
+[pos] -1 -1
+*-18.677271 23497000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] GfxTb.
+[sst_width] 273
+[signals_width] 254
+[sst_expanded] 1
+[sst_vpaned_height] 421
+@28
+GfxTb.clk
+GfxTb.reg_clk2
+@c00200
+-cbus
+@28
+GfxTb.reg_cbus_dma_ce_b
+GfxTb.reg_cbus_plt_ce_b
+GfxTb.reg_cbus_dram_ce_b
+GfxTb.reg_cbus_vga_ce_b
+GfxTb.reg_cbus_re_b
+GfxTb.reg_cbus_we_b
+@22
+GfxTb.reg_cbus_addr[12:0]
+@28
+GfxTb.reg_cbus_bank_sel[1:0]
+@22
+GfxTb.reg_cbus_data[7:0]
+@1401200
+-cbus
+@c00200
+-vga_sig
+@28
+GfxTb.vga_signal_hsync
+GfxTb.vga_signal_vsync
+@22
+GfxTb.vga_signal_rgb[7:0]
+@1401200
+-vga_sig
+@800200
+-vga
+@28
+GfxTb.gfxVgaInst.i_clk
+@22
+GfxTb.gfxVgaInst.o_vaddr[15:0]
+GfxTb.gfxVgaInst.i_vdata[7:0]
+GfxTb.gfxVgaInst.o_pixel_data[7:0]
+@28
+GfxTb.gfxVgaInst.o_palette[1:0]
+GfxTb.gfxVgaInst.o_enabled_b
+[color] 2
+GfxTb.gfxVgaInst.o_free_vbus
+GfxTb.gfxVgaInst.o_vga_latch
+GfxTb.gfxVgaInst.o_vga_out_b
+@c00200
+-int
+@22
+GfxTb.gfxVgaInst.reg_vdata[7:0]
+@1401200
+-int
+@1000200
+-vga
+@800200
+>-200
+-dma
+@28
+>-200
+[color] 3
+GfxTb.gfxDmaInst.i_clk
+>-200
+GfxTb.gfxDmaInst.i_clk2
+>-200
+GfxTb.gfxDmaInst.i_src_ce_b
+>-200
+GfxTb.gfxDmaInst.o_src_re_b
+>-200
+GfxTb.gfxDmaInst.io_src_we_b
+@22
+>-200
+GfxTb.gfxDmaInst.io_src_addr[12:0]
+@28
+>-200
+GfxTb.gfxDmaInst.o_src_ram_page[1:0]
+@22
+>-200
+GfxTb.gfxDmaInst.i_src_data[7:0]
+@28
+>-200
+GfxTb.gfxDmaInst.o_dst_we_b
+@22
+>-200
+GfxTb.gfxDmaInst.o_dst_addr[15:0]
+>-200
+GfxTb.gfxDmaInst.o_dst_data[7:0]
+@28
+>-200
+GfxTb.gfxDmaInst.o_addr_sel
+>-200
+GfxTb.gfxDmaInst.o_active
+@1000200
+>-200
+-dma
+@800200
+>0
+-addmux
+-addmux0
+@28
+[color] 5
+GfxTb.gfxAddrMuxInst0.i_addr_sel
+@22
+GfxTb.gfxAddrMuxInst0.i_dma_addr[7:0]
+GfxTb.gfxAddrMuxInst0.i_vga_addr[7:0]
+[color] 7
+GfxTb.gfxAddrMuxInst0.o_addr[7:0]
+@1000200
+-addmux0
+@c00200
+-addmux1
+@28
+GfxTb.gfxAddrMuxInst1.i_addr_sel
+@22
+GfxTb.gfxAddrMuxInst1.i_dma_addr[7:0]
+GfxTb.gfxAddrMuxInst1.i_vga_addr[7:0]
+GfxTb.gfxAddrMuxInst1.o_addr[7:0]
+@28
+GfxTb.gfxAddrMuxInst1.o_addr7_b
+@1401200
+-addmux1
+@1000200
+-addmux
+@800200
+-vram
+-vram0
+@28
+GfxTb.vram32Inst0.i_ce_b
+@29
+GfxTb.vram32Inst0.i_re_b
+@28
+GfxTb.vram32Inst0.i_we_b
+@22
+GfxTb.vram32Inst0.i_addr[14:0]
+GfxTb.vram32Inst0.io_data[7:0]
+@1000200
+-vram0
+@c00200
+-vram1
+@28
+GfxTb.vram32Inst1.i_ce_b
+GfxTb.vram32Inst1.i_re_b
+GfxTb.vram32Inst1.i_we_b
+@22
+GfxTb.vram32Inst1.i_addr[14:0]
+GfxTb.vram32Inst1.io_data[7:0]
+@1401200
+-vram1
+@1000200
+-vram
+@c00200
+-dram
+@28
+GfxTb.dram32Inst0.i_ce_b
+GfxTb.dram32Inst0.i_re_b
+GfxTb.dram32Inst0.i_we_b
+@22
+GfxTb.dram32Inst0.i_addr[14:0]
+GfxTb.dram32Inst0.io_data[7:0]
+@1401200
+-dram
+@c00200
+-inspect
+@28
+GfxTb.reg_clk2
+[color] 3
+GfxTb.clk
+GfxTb.gfxVgaInst.o_free_vbus
+[color] 5
+GfxTb.gfxDmaInst.o_addr_sel
+@22
+[color] 7
+GfxTb.gfxAddrMuxInst0.o_addr[7:0]
+@1401200
+-inspect
+[pattern_trace] 1
+[pattern_trace] 0

@@ -1,13 +1,7 @@
 CPU clock at 10Mhz 
 
 I/O:
-  W65C51N:  
-    - 2x UART 
-  W65C22: 
-    - 2x 8bit GPIO 
-    - 2x 16bit Timer 
-
-  - SD CARD
+  SPI bus: ()
 
 Memory mapping 
 
@@ -18,33 +12,24 @@ Memory mapping
 |       | 0100-01FF | 15ns       | Stack                     |
 | 32k   | 0200-7FFF |            | General purpose RAM       |
 +-------+-----------+------------+---------------------------+
-| 8k    | 8000-9FFF | 8k SRAM    | General purpose RAM       |
-|       |           | 15ns       |                           |
+| 8k    | 8000-9FFF | 32k SRAM   | 4x8k paged SRAM           |
+|       |           | 15ns       | GFX DMA access            |
 +-------+-----------+------------+---------------------------+
-| 8k    | A000-BFFF | 128k SRAM  | 16x8k banked SRAM         |
+| 8k    | A000-BFFF | 8k SRAM    | General purpose RAM       |
+|       |           | 15ns       | PCM DMA - possibly        |
+|       |           |            |                           |
+|       |           | 512k SRAM  |  64x8k 55ns SRAM          |
 |       |           | 55ns       |                           |
 +-------+-----------+------------+---------------------------+
-| 8k    | C000-DFFF | 8k SRAM    | Co-processor main memory  |
-|       |           | 15ns       |                           |
+| 8k    | C000-DFFF | 8k SRAM    | General purpose RAM       |
+|       |           | IO         | VGA, SPI, UART, Sound,    |
+|       |           |            | keyboard                  |
+|       |           | 1K RAM     | 1K palette RAM 35ns       |
+|       |           |            | etc...                    |
 +-------+-----------+------------+---------------------------+
-|       | E000-E000 |            |   bank_ctrl 1 (1 bit)     |
-|       | E001-E001 |            |   board sw. 1 (1 bit)     |
-|       | E002-E002 |            |   co-proc ctrl 1 (1bit)   |
-|       | E003-E003 |            |                           |
-|       | E004-E007 |            |   UART 4 (2 bit)          |
-|       | E008-E00B |            |   SPI 4 (2 bits)*         |
-|       | E00C-E00F |            |                           |
-|       | E010-E01F |            |   I/O 16 (4bit)           |
-|       |           |            |                           |
 | 8k    | E000-FFFF |8k ROM 150ns| system & utility routines |
 +-------+-----------+------------+---------------------------+
 
-TODO: better IO asigment between main cpu and co-processor
 
 
-Memory chips used:
-1x AS7C256B-15PIN - SRAM 32k*8, 15ns 
-2x AS7C164A-15PCN - SRAM 8k*8,  15ns 
-1x AS6C1008-55PCN - SRAM 128k*8, 55ns
-1x AT28C64B15PU - ROM, 8k*8, 150ns
 

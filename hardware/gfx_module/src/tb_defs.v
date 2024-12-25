@@ -3,7 +3,9 @@
 module Ram #(
   parameter AddrWidth = 16,
   parameter InitFile = "",
-  parameter Delay = 0
+  parameter Delay = 0,
+  parameter HZDelay1 = 0,
+  parameter HZDelay2 = 6
 )(
   input wire i_ce_b,
   input wire i_re_b,
@@ -12,7 +14,6 @@ module Ram #(
   inout wire [7:0] io_data
 );
   reg [7:0] reg_mem [0:(1<<AddrWidth)-1];
-
   assign #Delay io_data = ~i_re_b && ~i_ce_b ? reg_mem[i_addr] : 8'hzz;
 
   integer i;

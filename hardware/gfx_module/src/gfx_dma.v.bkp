@@ -49,6 +49,7 @@ module GfxDma(
 
   // src side interface, used to read the source data from the CPU RAM and to setup the control registers
   input i_src_ce_b,            // source RAM chip or DMA chip enable
+  output o_src_re_b,           // source RAM read enable
   inout io_src_we_b,           // source RAM or DMA chip write enable
   inout [12:0] io_src_addr,    // when inactive, the address is used to select the control register, when DMA is active, the address is used to select the source RAM address
   output [1:0] o_src_ram_page, // source RAM page select, 4x8Kb
@@ -135,6 +136,7 @@ module GfxDma(
   
   assign #(8/3) io_src_addr = reg_active_clk1 ? reg_src_addr : 13'hz; 
   assign #(8/3) o_src_ram_page = reg_active_clk1 ? reg_ctrl_src_ram_page : 2'hz;
+  assign #(17/3) o_src_re_b = reg_active_clk1 ? 1'h0 : 1'hz;  //todo: replace with ordinary pullups / pulldowns
   assign #(15/3) io_src_we_b = reg_active_clk1 ? 1'h1 : 1'hz; //although we need de src_we for internal registers
                                                               //we could also consider allow for reading ?
 
@@ -145,7 +147,6 @@ module GfxDma(
   assign #(18/3) o_dst_we_b = ~dst_out_enabled || skip_cpy || i_clk2 ;  // write to the VRAM in the low phase of the clock cycle
   assign #(8/3) o_active = reg_active;
   assign #(15/3) o_addr_sel = reg_free_vbus;
-
   
   always @ (posedge i_clk)  begin
     reg_free_vbus <= i_free_vbus;
