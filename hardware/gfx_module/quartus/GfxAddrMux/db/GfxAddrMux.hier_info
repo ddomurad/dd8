@@ -1,0 +1,39 @@
+|GfxAddrMux
+i_addr_sel => o_addr.OUTPUTSELECT
+i_addr_sel => o_addr.OUTPUTSELECT
+i_addr_sel => o_addr.OUTPUTSELECT
+i_addr_sel => o_addr.OUTPUTSELECT
+i_addr_sel => o_addr.OUTPUTSELECT
+i_addr_sel => o_addr.OUTPUTSELECT
+i_addr_sel => o_addr.OUTPUTSELECT
+i_addr_sel => o_addr.OUTPUTSELECT
+i_addr_sel => o_addr7_b.OUTPUTSELECT
+i_dma_addr[0] => o_addr.DATAB
+i_dma_addr[1] => o_addr.DATAB
+i_dma_addr[2] => o_addr.DATAB
+i_dma_addr[3] => o_addr.DATAB
+i_dma_addr[4] => o_addr.DATAB
+i_dma_addr[5] => o_addr.DATAB
+i_dma_addr[6] => o_addr.DATAB
+i_dma_addr[7] => o_addr.DATAB
+i_dma_addr[7] => o_addr7_b.IN0
+i_vga_addr[0] => o_addr.DATAA
+i_vga_addr[1] => o_addr.DATAA
+i_vga_addr[2] => o_addr.DATAA
+i_vga_addr[3] => o_addr.DATAA
+i_vga_addr[4] => o_addr.DATAA
+i_vga_addr[5] => o_addr.DATAA
+i_vga_addr[6] => o_addr.DATAA
+i_vga_addr[7] => o_addr.DATAA
+i_vga_addr[7] => o_addr7_b.IN0
+o_addr[0] <= o_addr.DB_MAX_OUTPUT_PORT_TYPE
+o_addr[1] <= o_addr.DB_MAX_OUTPUT_PORT_TYPE
+o_addr[2] <= o_addr.DB_MAX_OUTPUT_PORT_TYPE
+o_addr[3] <= o_addr.DB_MAX_OUTPUT_PORT_TYPE
+o_addr[4] <= o_addr.DB_MAX_OUTPUT_PORT_TYPE
+o_addr[5] <= o_addr.DB_MAX_OUTPUT_PORT_TYPE
+o_addr[6] <= o_addr.DB_MAX_OUTPUT_PORT_TYPE
+o_addr[7] <= o_addr.DB_MAX_OUTPUT_PORT_TYPE
+o_addr7_b <= o_addr7_b.DB_MAX_OUTPUT_PORT_TYPE
+
+

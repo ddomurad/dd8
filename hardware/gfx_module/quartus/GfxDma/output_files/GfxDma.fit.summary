@@ -1,4 +1,4 @@
-Fitter Status : Successful - Sat Nov 09 18:48:50 2024
+Fitter Status : Successful - Thu Dec 26 10:18:46 2024
 Quartus II 32-bit Version : 13.0.1 Build 232 06/12/2013 SP 1 SJ Web Edition
 Revision Name : GfxDma
 Top-level Entity Name : GfxDma
@@ -6,4 +6,4 @@ Family : MAX7000S
 Device : EPM7128SLC84-15
 Timing Models : Final
 Total macrocells : 127 / 128 ( 99 % )
-Total pins : 60 / 68 ( 88 % )
+Total pins : 61 / 68 ( 90 % )

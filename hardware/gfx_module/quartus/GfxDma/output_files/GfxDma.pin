@@ -64,84 +64,84 @@ Pin Name/Usage               : Location  : Dir.   : I/O Standard      : Voltage 
 GND+                         : 1         :        :                   :         :           :                
 i_src_data[5]                : 2         : input  : TTL               :         :           : N              
 VCCINT                       : 3         : power  :                   : 5.0V    :           :                
-i_free_vbus_b                : 4         : input  : TTL               :         :           : N              
-io_src_addr[6]               : 5         : bidir  : TTL               :         :           : N              
-io_src_addr[5]               : 6         : bidir  : TTL               :         :           : N              
+i_src_ce_b                   : 4         : input  : TTL               :         :           : N              
+RESERVED                     : 5         :        :                   :         :           :                
+io_src_addr[7]               : 6         : bidir  : TTL               :         :           : N              
 GND                          : 7         : gnd    :                   :         :           :                
-o_src_ram_page[0]            : 8         : output : TTL               :         :           : N              
-o_dst_data[5]                : 9         : output : TTL               :         :           : N              
-io_src_addr[7]               : 10        : bidir  : TTL               :         :           : N              
-io_src_addr[2]               : 11        : bidir  : TTL               :         :           : N              
-io_src_addr[1]               : 12        : bidir  : TTL               :         :           : N              
+io_src_addr[6]               : 8         : bidir  : TTL               :         :           : N              
+o_dst_addr[9]                : 9         : output : TTL               :         :           : N              
+o_dst_addr[8]                : 10        : output : TTL               :         :           : N              
+o_dst_addr[10]               : 11        : output : TTL               :         :           : N              
+io_src_addr[2]               : 12        : bidir  : TTL               :         :           : N              
 VCCIO                        : 13        : power  :                   : 5.0V    :           :                
 TDI                          : 14        : input  : TTL               :         :           : N              
-i_src_data[4]                : 15        : input  : TTL               :         :           : N              
-RESERVED                     : 16        :        :                   :         :           :                
-RESERVED                     : 17        :        :                   :         :           :                
-o_dst_data[0]                : 18        : output : TTL               :         :           : N              
+RESERVED                     : 15        :        :                   :         :           :                
+i_src_data[6]                : 16        : input  : TTL               :         :           : N              
+i_src_data[4]                : 17        : input  : TTL               :         :           : N              
+RESERVED                     : 18        :        :                   :         :           :                
 GND                          : 19        : gnd    :                   :         :           :                
-i_src_data[3]                : 20        : input  : TTL               :         :           : N              
-io_src_addr[0]               : 21        : bidir  : TTL               :         :           : N              
-o_active                     : 22        : output : TTL               :         :           : N              
+RESERVED                     : 20        :        :                   :         :           :                
+o_active                     : 21        : output : TTL               :         :           : N              
+o_addr_sel                   : 22        : output : TTL               :         :           : N              
 TMS                          : 23        : input  : TTL               :         :           : N              
-i_src_ce2_b                  : 24        : input  : TTL               :         :           : N              
+i_src_data[2]                : 24        : input  : TTL               :         :           : N              
 RESERVED                     : 25        :        :                   :         :           :                
 VCCIO                        : 26        : power  :                   : 5.0V    :           :                
-i_clk2                       : 27        : input  : TTL               :         :           : N              
-o_dst_addr[2]                : 28        : output : TTL               :         :           : N              
-o_dst_addr[1]                : 29        : output : TTL               :         :           : N              
-io_src_addr[3]               : 30        : bidir  : TTL               :         :           : N              
+i_clk3                       : 27        : input  : TTL               :         :           : N              
+i_src_data[3]                : 28        : input  : TTL               :         :           : N              
+o_dst_data[0]                : 29        : output : TTL               :         :           : N              
+io_src_addr[5]               : 30        : bidir  : TTL               :         :           : N              
 io_src_addr[4]               : 31        : bidir  : TTL               :         :           : N              
 GND                          : 32        : gnd    :                   :         :           :                
-i_src_data[2]                : 33        : input  : TTL               :         :           : N              
-i_src_data[7]                : 34        : input  : TTL               :         :           : N              
-RESERVED                     : 35        :        :                   :         :           :                
-RESERVED                     : 36        :        :                   :         :           :                
-o_dst_addr[8]                : 37        : output : TTL               :         :           : N              
+o_dst_addr[4]                : 33        : output : TTL               :         :           : N              
+o_dst_addr[2]                : 34        : output : TTL               :         :           : N              
+o_dst_addr[1]                : 35        : output : TTL               :         :           : N              
+o_dst_addr[5]                : 36        : output : TTL               :         :           : N              
+o_dst_data[4]                : 37        : output : TTL               :         :           : N              
 VCCIO                        : 38        : power  :                   : 5.0V    :           :                
-o_dst_we_b                   : 39        : output : TTL               :         :           : N              
-o_dst_addr[9]                : 40        : output : TTL               :         :           : N              
-o_dst_addr[10]               : 41        : output : TTL               :         :           : N              
+o_dst_addr[0]                : 39        : output : TTL               :         :           : N              
+o_dst_addr[3]                : 40        : output : TTL               :         :           : N              
+io_src_we_b                  : 41        : bidir  : TTL               :         :           : N              
 GND                          : 42        : gnd    :                   :         :           :                
 VCCINT                       : 43        : power  :                   : 5.0V    :           :                
-o_dst_data[3]                : 44        : output : TTL               :         :           : N              
-o_dst_data[6]                : 45        : output : TTL               :         :           : N              
-o_dst_addr[3]                : 46        : output : TTL               :         :           : N              
+o_dst_data[6]                : 44        : output : TTL               :         :           : N              
+o_dst_addr[6]                : 45        : output : TTL               :         :           : N              
+io_src_addr[12]              : 46        : bidir  : TTL               :         :           : N              
 GND                          : 47        : gnd    :                   :         :           :                
-o_dst_addr[4]                : 48        : output : TTL               :         :           : N              
-o_dst_addr[7]                : 49        : output : TTL               :         :           : N              
-o_dst_addr[5]                : 50        : output : TTL               :         :           : N              
-io_src_addr[12]              : 51        : bidir  : TTL               :         :           : N              
-o_dst_data[2]                : 52        : output : TTL               :         :           : N              
+o_src_ram_page[0]            : 48        : output : TTL               :         :           : N              
+o_src_ram_page[1]            : 49        : output : TTL               :         :           : N              
+o_dst_addr[7]                : 50        : output : TTL               :         :           : N              
+o_dst_data[5]                : 51        : output : TTL               :         :           : N              
+i_src_data[7]                : 52        : input  : TTL               :         :           : N              
 VCCIO                        : 53        : power  :                   : 5.0V    :           :                
-o_src_ram_page[1]            : 54        : output : TTL               :         :           : N              
-i_src_data[1]                : 55        : input  : TTL               :         :           : N              
-i_src_data[6]                : 56        : input  : TTL               :         :           : N              
-o_dst_data[4]                : 57        : output : TTL               :         :           : N              
-RESERVED                     : 58        :        :                   :         :           :                
+i_src_data[0]                : 54        : input  : TTL               :         :           : N              
+io_src_addr[1]               : 55        : bidir  : TTL               :         :           : N              
+io_src_addr[3]               : 56        : bidir  : TTL               :         :           : N              
+o_dst_data[7]                : 57        : output : TTL               :         :           : N              
+i_clk2                       : 58        : input  : TTL               :         :           : N              
 GND                          : 59        : gnd    :                   :         :           :                
-io_src_we_b                  : 60        : bidir  : TTL               :         :           : N              
-o_dst_addr[6]                : 61        : output : TTL               :         :           : N              
+RESERVED                     : 60        :        :                   :         :           :                
+io_src_addr[0]               : 61        : bidir  : TTL               :         :           : N              
 TCK                          : 62        : input  : TTL               :         :           : N              
-io_src_addr[11]              : 63        : bidir  : TTL               :         :           : N              
-io_src_addr[10]              : 64        : bidir  : TTL               :         :           : N              
-io_src_addr[9]               : 65        : bidir  : TTL               :         :           : N              
+io_src_addr[8]               : 63        : bidir  : TTL               :         :           : N              
+io_src_addr[11]              : 64        : bidir  : TTL               :         :           : N              
+io_src_addr[10]              : 65        : bidir  : TTL               :         :           : N              
 VCCIO                        : 66        : power  :                   : 5.0V    :           :                
-io_src_addr[8]               : 67        : bidir  : TTL               :         :           : N              
-o_dst_addr[0]                : 68        : output : TTL               :         :           : N              
-o_src_re_b                   : 69        : output : TTL               :         :           : N              
-o_dst_data[1]                : 70        : output : TTL               :         :           : N              
+io_src_addr[9]               : 67        : bidir  : TTL               :         :           : N              
+o_dst_data[1]                : 68        : output : TTL               :         :           : N              
+o_dst_data[2]                : 69        : output : TTL               :         :           : N              
+i_src_data[1]                : 70        : input  : TTL               :         :           : N              
 TDO                          : 71        : output : TTL               :         :           : N              
 GND                          : 72        : gnd    :                   :         :           :                
 o_dst_addr[14]               : 73        : output : TTL               :         :           : N              
-o_dst_addr[13]               : 74        : output : TTL               :         :           : N              
-o_dst_addr[12]               : 75        : output : TTL               :         :           : N              
-o_dst_addr[11]               : 76        : output : TTL               :         :           : N              
-o_dst_addr[15]               : 77        : output : TTL               :         :           : N              
+o_dst_we_b                   : 74        : output : TTL               :         :           : N              
+o_dst_addr[11]               : 75        : output : TTL               :         :           : N              
+o_dst_addr[15]               : 76        : output : TTL               :         :           : N              
+o_dst_addr[12]               : 77        : output : TTL               :         :           : N              
 VCCIO                        : 78        : power  :                   : 5.0V    :           :                
-o_dst_data[7]                : 79        : output : TTL               :         :           : N              
-i_src_data[0]                : 80        : input  : TTL               :         :           : N              
-i_src_ce_b                   : 81        : input  : TTL               :         :           : N              
+o_dst_addr[13]               : 79        : output : TTL               :         :           : N              
+o_dst_data[3]                : 80        : output : TTL               :         :           : N              
+i_free_vbus                  : 81        : input  : TTL               :         :           : N              
 GND                          : 82        : gnd    :                   :         :           :                
-i_clk                        : 83        : input  : TTL               :         :           : N              
-GND+                         : 84        :        :                   :         :           :                
+i_clk                        : 83        : input  : TTL               :         :           : Y              
+user_reserve_1               : 84        : input  : TTL               :         :           : Y              

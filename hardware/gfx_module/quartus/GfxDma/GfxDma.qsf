@@ -53,3 +53,7 @@ set_global_assignment -name SDC_FILE GfxDma.sdc
 set_global_assignment -name VERILOG_FILE GfxDma.v
 set_global_assignment -name MAX7000_OPTIMIZATION_TECHNIQUE BALANCED
 set_global_assignment -name SYNTH_TIMING_DRIVEN_SYNTHESIS OFF
+set_global_assignment -name MAX7000_DEVICE_IO_STANDARD TTL
+set_location_assignment PIN_83 -to i_clk
+set_location_assignment PIN_84 -to user_reserve_1
+set_instance_assignment -name RESERVE_PIN AS_INPUT_TRI_STATED -to user_reserve_1

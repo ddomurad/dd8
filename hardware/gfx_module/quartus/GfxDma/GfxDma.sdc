@@ -43,7 +43,6 @@ create_clock -name {i_clk2} -period 38.000 -waveform { 0.000 19.000 } [get_ports
 
 
   
-  
 #**************************************************************
 # Create Generated Clock
 #**************************************************************
@@ -66,13 +65,13 @@ create_clock -name {i_clk2} -period 38.000 -waveform { 0.000 19.000 } [get_ports
 # Set Input Delay
 #**************************************************************
 
+set_input_delay  -add_delay  -clock [get_clocks {i_clk}]  0.000 [get_ports {i_clk3}]
 set_input_delay  -add_delay  -clock [get_clocks {i_clk}]  0.000 [get_ports {i_src_ce_b}]
-set_input_delay  -add_delay  -clock [get_clocks {i_clk}]  0.000 [get_ports {i_src_ce2_b}]
 set_input_delay  -add_delay  -clock [get_clocks {i_clk}]  0.000 [get_ports {io_src_we_b}]
 set_input_delay  -add_delay  -clock [get_clocks {i_clk}]  0.000 [get_ports {io_src_addr[*]}]
 set_input_delay  -add_delay  -clock [get_clocks {i_clk}]  0.000 [get_ports {i_src_data[*]}]
 
-set_input_delay  -add_delay  -clock [get_clocks {i_clk}]  0.000 [get_ports {i_free_vbus_b}]
+set_input_delay  -add_delay  -clock [get_clocks {i_clk}]  0.000 [get_ports {i_free_vbus}]
 
 
   
@@ -91,6 +90,7 @@ set_output_delay -add_delay  -clock [get_clocks {i_clk}]  0.000 [get_ports {o_ds
 set_output_delay -add_delay  -clock [get_clocks {i_clk}]  0.000 [get_ports {o_dst_data[*]}]
 
 set_output_delay -add_delay  -clock [get_clocks {i_clk}]  0.000 [get_ports {o_active}]
+set_output_delay -add_delay  -clock [get_clocks {i_clk}]  0.000 [get_ports {o_addr_sel}]
 
 
 #**************************************************************

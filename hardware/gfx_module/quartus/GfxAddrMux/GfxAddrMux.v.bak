@@ -1,0 +1,7 @@
+module GfxAddrMux(
+  inout i_addr_sel,
+  input [7:0] i_dma_addr,
+  input [7:0] i_vga_addr,
+  output [7:0] o_addr
+);
+endmodule

@@ -39,7 +39,7 @@ set_time_format -unit ns -decimal_places 3
 #**************************************************************
 
 create_clock -name {i_clk} -period 39.720 -waveform { 0.000 19.860 } [get_ports {i_clk}]
-create_clock -name {i_ctrl_w_b} -period 79.440 -waveform { 0.000 39.720 } [get_ports {i_ctrl_w_b}]
+create_clock -name {i_ctrl_we_b} -period 79.440 -waveform { 0.000 39.720 } [get_ports {i_ctrl_we_b}]
 
 #**************************************************************
 # Create Generated Clock
@@ -64,23 +64,23 @@ create_clock -name {i_ctrl_w_b} -period 79.440 -waveform { 0.000 39.720 } [get_p
 #**************************************************************
 set_input_delay -clock [get_clocks {i_clk}] 0.000 [get_ports {i_vdata[*]}]
 
-set_input_delay -clock [get_clocks {i_ctrl_w_b}] 0.000 [get_ports {i_ctrl_ce_b}]
-set_input_delay -clock [get_clocks {i_ctrl_w_b}] 0.000 [get_ports {i_ctrl_ce2}]
-set_input_delay -clock [get_clocks {i_ctrl_w_b}] 0.000 [get_ports {i_ctrl_w_b}]
-set_input_delay -clock [get_clocks {i_ctrl_w_b}] 0.000 [get_ports {i_ctrl_addr[*]}]
-set_input_delay -clock [get_clocks {i_ctrl_w_b}] 0.000 [get_ports {i_ctrl_data[*]}]
+set_input_delay -clock [get_clocks {i_ctrl_we_b}] 0.000 [get_ports {i_ctrl_ce_b}]
+set_input_delay -clock [get_clocks {i_ctrl_we_b}] 0.000 [get_ports {i_ctrl_we_b}]
+set_input_delay -clock [get_clocks {i_ctrl_we_b}] 0.000 [get_ports {i_ctrl_re_b}]
+set_input_delay -clock [get_clocks {i_ctrl_we_b}] 0.000 [get_ports {i_ctrl_addr[*]}]
+set_input_delay -clock [get_clocks {i_ctrl_we_b}] 0.000 [get_ports {i_ctrl_data[*]}]
 
 
 #**************************************************************
 # Set Output Delay
 #**************************************************************
-set_output_delay -add_delay  -clock [get_clocks {i_clk}]  0.000 [get_ports {o_active_b}]
+#set_output_delay -add_delay  -clock [get_clocks {i_clk}]  0.000 [get_ports {o_active_b}]
 
-set_output_delay -add_delay  -clock [get_clocks {i_clk}]  0.000 [get_ports {o_rgb_data[*]}]
+set_output_delay -add_delay  -clock [get_clocks {i_clk}]  0.000 [get_ports {o_pixel_data[*]}]
 set_output_delay -add_delay  -clock [get_clocks {i_clk}]  0.000 [get_ports {o_palette[*]}]
 set_output_delay -add_delay  -clock [get_clocks {i_clk}]  0.000 [get_ports {o_vga_latch}]
 set_output_delay -add_delay  -clock [get_clocks {i_clk}]  0.000 [get_ports {o_vga_out_b}]
-set_output_delay -add_delay  -clock [get_clocks {i_clk}]  0.000 [get_ports {o_free_vbus_b}]
+set_output_delay -add_delay  -clock [get_clocks {i_clk}]  0.000 [get_ports {o_free_vbus}]
 set_output_delay -add_delay  -clock [get_clocks {i_clk}]  0.000 [get_ports {o_enabled_b}]
 set_output_delay -add_delay  -clock [get_clocks {i_clk}]  0.000 [get_ports {o_frame_start_b}]
 set_output_delay -add_delay  -clock [get_clocks {i_clk}]  0.000 [get_ports {o_frame_progress_b}]
@@ -90,7 +90,6 @@ set_output_delay -add_delay  -clock [get_clocks {i_clk}]  0.000 [get_ports {o_hs
 set_output_delay -add_delay  -clock [get_clocks {i_clk}]  0.000 [get_ports {o_vsync}]
 
 set_output_delay -add_delay  -clock [get_clocks {i_clk}]  0.000 [get_ports {o_vaddr[*]}]
-set_output_delay -add_delay  -clock [get_clocks {i_clk}]  0.000 [get_ports {o_vaddr15_b}]
 
 #**************************************************************
 # Set Clock Groups

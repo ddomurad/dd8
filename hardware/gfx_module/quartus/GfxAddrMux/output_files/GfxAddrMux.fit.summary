@@ -1,0 +1,9 @@
+Fitter Status : Successful - Sun Dec 22 12:01:44 2024
+Quartus II 32-bit Version : 13.0.1 Build 232 06/12/2013 SP 1 SJ Web Edition
+Revision Name : GfxAddrMux
+Top-level Entity Name : GfxAddrMux
+Family : MAX7000S
+Device : EPM7064SLC44-10
+Timing Models : Final
+Total macrocells : 9 / 64 ( 14 % )
+Total pins : 30 / 36 ( 83 % )

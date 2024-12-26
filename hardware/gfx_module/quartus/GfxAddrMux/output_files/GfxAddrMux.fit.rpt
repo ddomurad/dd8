@@ -1,0 +1,347 @@
+Fitter report for GfxAddrMux
+Sun Dec 22 12:01:44 2024
+Quartus II 32-bit Version 13.0.1 Build 232 06/12/2013 Service Pack 1 SJ Web Edition
+
+
+---------------------
+; Table of Contents ;
+---------------------
+  1. Legal Notice
+  2. Fitter Summary
+  3. Fitter Settings
+  4. Pin-Out File
+  5. Fitter Resource Usage Summary
+  6. Input Pins
+  7. Output Pins
+  8. All Package Pins
+  9. I/O Standard
+ 10. Dedicated Inputs I/O
+ 11. Output Pin Default Load For Reported TCO
+ 12. Fitter Resource Utilization by Entity
+ 13. Non-Global High Fan-Out Signals
+ 14. Other Routing Usage Summary
+ 15. LAB Macrocells
+ 16. Logic Cell Interconnection
+ 17. Fitter Device Options
+ 18. Fitter Messages
+
+
+
+----------------
+; Legal Notice ;
+----------------
+Copyright (C) 1991-2013 Altera Corporation
+Your use of Altera Corporation's design tools, logic functions 
+and other software and tools, and its AMPP partner logic 
+functions, and any output files from any of the foregoing 
+(including device programming or simulation files), and any 
+associated documentation or information are expressly subject 
+to the terms and conditions of the Altera Program License 
+Subscription Agreement, Altera MegaCore Function License 
+Agreement, or other applicable license agreement, including, 
+without limitation, that your use is for the sole purpose of 
+programming logic devices manufactured by Altera and sold by 
+Altera or its authorized distributors.  Please refer to the 
+applicable agreement for further details.
+
+
+
++-----------------------------------------------------------------------------+
+; Fitter Summary                                                              ;
++---------------------------+-------------------------------------------------+
+; Fitter Status             ; Successful - Sun Dec 22 12:01:44 2024           ;
+; Quartus II 32-bit Version ; 13.0.1 Build 232 06/12/2013 SP 1 SJ Web Edition ;
+; Revision Name             ; GfxAddrMux                                      ;
+; Top-level Entity Name     ; GfxAddrMux                                      ;
+; Family                    ; MAX7000S                                        ;
+; Device                    ; EPM7064SLC44-10                                 ;
+; Timing Models             ; Final                                           ;
+; Total macrocells          ; 9 / 64 ( 14 % )                                 ;
+; Total pins                ; 30 / 36 ( 83 % )                                ;
++---------------------------+-------------------------------------------------+
+
+
++--------------------------------------------------------------------------------------------------------------+
+; Fitter Settings                                                                                              ;
++----------------------------------------------------------------------------+-----------------+---------------+
+; Option                                                                     ; Setting         ; Default Value ;
++----------------------------------------------------------------------------+-----------------+---------------+
+; Device                                                                     ; EPM7064SLC44-10 ;               ;
+; Use smart compilation                                                      ; Off             ; Off           ;
+; Enable parallel Assembler and TimeQuest Timing Analyzer during compilation ; On              ; On            ;
+; Enable compact report table                                                ; Off             ; Off           ;
+; Optimize Multi-Corner Timing                                               ; Off             ; Off           ;
+; Optimize Timing for ECOs                                                   ; Off             ; Off           ;
+; Regenerate full fit report during ECO compiles                             ; Off             ; Off           ;
+; Optimize IOC Register Placement for Timing                                 ; Normal          ; Normal        ;
+; Fitter Initial Placement Seed                                              ; 1               ; 1             ;
+; Slow Slew Rate                                                             ; Off             ; Off           ;
+; Fitter Effort                                                              ; Auto Fit        ; Auto Fit      ;
+; Force Fitter to Avoid Periphery Placement Warnings                         ; Off             ; Off           ;
++----------------------------------------------------------------------------+-----------------+---------------+
+
+
++--------------+
+; Pin-Out File ;
++--------------+
+The pin-out file can be found in E:/quartus/GfxAddrMux/output_files/GfxAddrMux.pin.
+
+
++-------------------------------------------------+
+; Fitter Resource Usage Summary                   ;
++------------------------------+------------------+
+; Resource                     ; Usage            ;
++------------------------------+------------------+
+; Logic cells                  ; 9 / 64 ( 14 % )  ;
+; Registers                    ; 0 / 64 ( 0 % )   ;
+; Number of pterms used        ; 18               ;
+; I/O pins                     ; 30 / 36 ( 83 % ) ;
+;     -- Clock pins            ; 0 / 2 ( 0 % )    ;
+;     -- Dedicated input pins  ; 2 / 2 ( 100 % )  ;
+;                              ;                  ;
+; Global signals               ; 0                ;
+; Shareable expanders          ; 0 / 64 ( 0 % )   ;
+; Parallel expanders           ; 0 / 60 ( 0 % )   ;
+; Cells using turbo bit        ; 9 / 64 ( 14 % )  ;
+; Maximum fan-out              ; 9                ;
+; Highest non-global fan-out   ; 9                ;
+; Total fan-out                ; 36               ;
+; Average fan-out              ; 0.92             ;
++------------------------------+------------------+
+
+
++-----------------------------------------------------------------------------------------------------------------------------------------------------+
+; Input Pins                                                                                                                                          ;
++---------------+-------+----------+-----+-----------------------+--------------------+--------+----------------+--------------+----------------------+
+; Name          ; Pin # ; I/O Bank ; LAB ; Combinational Fan-Out ; Registered Fan-Out ; Global ; Input Register ; I/O Standard ; Location assigned by ;
++---------------+-------+----------+-----+-----------------------+--------------------+--------+----------------+--------------+----------------------+
+; i_addr_sel    ; 1     ; --       ; --  ; 9                     ; 0                  ; no     ; no             ; TTL          ; User                 ;
+; i_dma_addr[0] ; 4     ; --       ; 1   ; 1                     ; 0                  ; no     ; no             ; TTL          ; User                 ;
+; i_dma_addr[1] ; 5     ; --       ; 1   ; 1                     ; 0                  ; no     ; no             ; TTL          ; User                 ;
+; i_dma_addr[2] ; 6     ; --       ; 1   ; 1                     ; 0                  ; no     ; no             ; TTL          ; User                 ;
+; i_dma_addr[3] ; 8     ; --       ; 1   ; 1                     ; 0                  ; no     ; no             ; TTL          ; User                 ;
+; i_dma_addr[4] ; 9     ; --       ; 1   ; 1                     ; 0                  ; no     ; no             ; TTL          ; User                 ;
+; i_dma_addr[5] ; 11    ; --       ; 1   ; 1                     ; 0                  ; no     ; no             ; TTL          ; User                 ;
+; i_dma_addr[6] ; 12    ; --       ; 1   ; 1                     ; 0                  ; no     ; no             ; TTL          ; User                 ;
+; i_dma_addr[7] ; 14    ; --       ; 2   ; 2                     ; 0                  ; no     ; no             ; TTL          ; User                 ;
+; i_vga_addr[0] ; 44    ; --       ; --  ; 1                     ; 0                  ; no     ; no             ; TTL          ; User                 ;
+; i_vga_addr[1] ; 41    ; --       ; 4   ; 1                     ; 0                  ; no     ; no             ; TTL          ; User                 ;
+; i_vga_addr[2] ; 40    ; --       ; 4   ; 1                     ; 0                  ; no     ; no             ; TTL          ; User                 ;
+; i_vga_addr[3] ; 39    ; --       ; 4   ; 1                     ; 0                  ; no     ; no             ; TTL          ; User                 ;
+; i_vga_addr[4] ; 37    ; --       ; 4   ; 1                     ; 0                  ; no     ; no             ; TTL          ; User                 ;
+; i_vga_addr[5] ; 36    ; --       ; 4   ; 1                     ; 0                  ; no     ; no             ; TTL          ; User                 ;
+; i_vga_addr[6] ; 34    ; --       ; 4   ; 1                     ; 0                  ; no     ; no             ; TTL          ; User                 ;
+; i_vga_addr[7] ; 33    ; --       ; 4   ; 2                     ; 0                  ; no     ; no             ; TTL          ; User                 ;
++---------------+-------+----------+-----+-----------------------+--------------------+--------+----------------+--------------+----------------------+
+
+
++-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Output Pins                                                                                                                                                                                   ;
++-----------+-------+----------+-----+-----------------+----------------+------------+---------------+--------------+----------------------+-------+----------------------+---------------------+
+; Name      ; Pin # ; I/O Bank ; LAB ; Output Register ; Slow Slew Rate ; Open Drain ; TRI Primitive ; I/O Standard ; Location assigned by ; Load  ; Output Enable Source ; Output Enable Group ;
++-----------+-------+----------+-----+-----------------+----------------+------------+---------------+--------------+----------------------+-------+----------------------+---------------------+
+; o_addr7_b ; 28    ; --       ; 3   ; no              ; no             ; no         ; no            ; TTL          ; User                 ; 10 pF ; -                    ; -                   ;
+; o_addr[0] ; 18    ; --       ; 2   ; no              ; no             ; no         ; no            ; TTL          ; User                 ; 10 pF ; -                    ; -                   ;
+; o_addr[1] ; 19    ; --       ; 2   ; no              ; no             ; no         ; no            ; TTL          ; User                 ; 10 pF ; -                    ; -                   ;
+; o_addr[2] ; 20    ; --       ; 2   ; no              ; no             ; no         ; no            ; TTL          ; User                 ; 10 pF ; -                    ; -                   ;
+; o_addr[3] ; 21    ; --       ; 2   ; no              ; no             ; no         ; no            ; TTL          ; User                 ; 10 pF ; -                    ; -                   ;
+; o_addr[4] ; 24    ; --       ; 3   ; no              ; no             ; no         ; no            ; TTL          ; User                 ; 10 pF ; -                    ; -                   ;
+; o_addr[5] ; 25    ; --       ; 3   ; no              ; no             ; no         ; no            ; TTL          ; User                 ; 10 pF ; -                    ; -                   ;
+; o_addr[6] ; 26    ; --       ; 3   ; no              ; no             ; no         ; no            ; TTL          ; User                 ; 10 pF ; -                    ; -                   ;
+; o_addr[7] ; 27    ; --       ; 3   ; no              ; no             ; no         ; no            ; TTL          ; User                 ; 10 pF ; -                    ; -                   ;
++-----------+-------+----------+-----+-----------------+----------------+------------+---------------+--------------+----------------------+-------+----------------------+---------------------+
+
+
++-------------------------------------------------------------------------------------------------------+
+; All Package Pins                                                                                      ;
++----------+------------+----------+----------------+--------+--------------+---------+-----------------+
+; Location ; Pad Number ; I/O Bank ; Pin Name/Usage ; Dir.   ; I/O Standard ; Voltage ; User Assignment ;
++----------+------------+----------+----------------+--------+--------------+---------+-----------------+
+; 1        ; 0          ; --       ; i_addr_sel     ; input  ; TTL          ;         ; Y               ;
+; 2        ; 1          ; --       ; GND+           ;        ;              ;         ;                 ;
+; 3        ; 2          ; --       ; VCC            ; power  ;              ;         ;                 ;
+; 4        ; 3          ; --       ; i_dma_addr[0]  ; input  ; TTL          ;         ; Y               ;
+; 5        ; 4          ; --       ; i_dma_addr[1]  ; input  ; TTL          ;         ; Y               ;
+; 6        ; 5          ; --       ; i_dma_addr[2]  ; input  ; TTL          ;         ; Y               ;
+; 7        ; 6          ; --       ; TDI            ; input  ; TTL          ;         ; N               ;
+; 8        ; 7          ; --       ; i_dma_addr[3]  ; input  ; TTL          ;         ; Y               ;
+; 9        ; 8          ; --       ; i_dma_addr[4]  ; input  ; TTL          ;         ; Y               ;
+; 10       ; 9          ; --       ; GND            ; gnd    ;              ;         ;                 ;
+; 11       ; 10         ; --       ; i_dma_addr[5]  ; input  ; TTL          ;         ; Y               ;
+; 12       ; 11         ; --       ; i_dma_addr[6]  ; input  ; TTL          ;         ; Y               ;
+; 13       ; 12         ; --       ; TMS            ; input  ; TTL          ;         ; N               ;
+; 14       ; 13         ; --       ; i_dma_addr[7]  ; input  ; TTL          ;         ; Y               ;
+; 15       ; 14         ; --       ; VCC            ; power  ;              ;         ;                 ;
+; 16       ; 15         ; --       ; RESERVED       ;        ;              ;         ;                 ;
+; 17       ; 16         ; --       ; RESERVED       ;        ;              ;         ;                 ;
+; 18       ; 17         ; --       ; o_addr[0]      ; output ; TTL          ;         ; Y               ;
+; 19       ; 18         ; --       ; o_addr[1]      ; output ; TTL          ;         ; Y               ;
+; 20       ; 19         ; --       ; o_addr[2]      ; output ; TTL          ;         ; Y               ;
+; 21       ; 20         ; --       ; o_addr[3]      ; output ; TTL          ;         ; Y               ;
+; 22       ; 21         ; --       ; GND            ; gnd    ;              ;         ;                 ;
+; 23       ; 22         ; --       ; VCC            ; power  ;              ;         ;                 ;
+; 24       ; 23         ; --       ; o_addr[4]      ; output ; TTL          ;         ; Y               ;
+; 25       ; 24         ; --       ; o_addr[5]      ; output ; TTL          ;         ; Y               ;
+; 26       ; 25         ; --       ; o_addr[6]      ; output ; TTL          ;         ; Y               ;
+; 27       ; 26         ; --       ; o_addr[7]      ; output ; TTL          ;         ; Y               ;
+; 28       ; 27         ; --       ; o_addr7_b      ; output ; TTL          ;         ; Y               ;
+; 29       ; 28         ; --       ; RESERVED       ;        ;              ;         ;                 ;
+; 30       ; 29         ; --       ; GND            ; gnd    ;              ;         ;                 ;
+; 31       ; 30         ; --       ; RESERVED       ;        ;              ;         ;                 ;
+; 32       ; 31         ; --       ; TCK            ; input  ; TTL          ;         ; N               ;
+; 33       ; 32         ; --       ; i_vga_addr[7]  ; input  ; TTL          ;         ; Y               ;
+; 34       ; 33         ; --       ; i_vga_addr[6]  ; input  ; TTL          ;         ; Y               ;
+; 35       ; 34         ; --       ; VCC            ; power  ;              ;         ;                 ;
+; 36       ; 35         ; --       ; i_vga_addr[5]  ; input  ; TTL          ;         ; Y               ;
+; 37       ; 36         ; --       ; i_vga_addr[4]  ; input  ; TTL          ;         ; Y               ;
+; 38       ; 37         ; --       ; TDO            ; output ; TTL          ;         ; N               ;
+; 39       ; 38         ; --       ; i_vga_addr[3]  ; input  ; TTL          ;         ; Y               ;
+; 40       ; 39         ; --       ; i_vga_addr[2]  ; input  ; TTL          ;         ; Y               ;
+; 41       ; 40         ; --       ; i_vga_addr[1]  ; input  ; TTL          ;         ; Y               ;
+; 42       ; 41         ; --       ; GND            ; gnd    ;              ;         ;                 ;
+; 43       ; 42         ; --       ; GND+           ;        ;              ;         ;                 ;
+; 44       ; 43         ; --       ; i_vga_addr[0]  ; input  ; TTL          ;         ; Y               ;
++----------+------------+----------+----------------+--------+--------------+---------+-----------------+
+Note: Pin directions (input, output or bidir) are based on device operating in user mode.
+
+
++--------------------------------------------------------------------------------------------------+
+; I/O Standard                                                                                     ;
++--------------+------------+----------------------+-------------------+-------------------+-------+
+; I/O Standard ; Input Vref ; Dedicated Input Pins ; Pins in I/O Bank1 ; Pins in I/O Bank2 ; Total ;
++--------------+------------+----------------------+-------------------+-------------------+-------+
+; TTL          ; -          ; 2                    ; 0                 ; 0                 ; 2     ;
++--------------+------------+----------------------+-------------------+-------------------+-------+
+
+
++-----------------------------------------------------------------------------+
+; Dedicated Inputs I/O                                                        ;
++---------------+-------+-------+-------+--------------+------------+---------+
+; Name          ; Pin # ; Type  ; VCCIO ; I/O Standard ; Input Vref ; Current ;
++---------------+-------+-------+-------+--------------+------------+---------+
+; i_addr_sel    ; 1     ; Input ; --    ; TTL          ; -          ; 0 mA    ;
+; i_vga_addr[0] ; 44    ; Input ; --    ; TTL          ; -          ; 0 mA    ;
++---------------+-------+-------+-------+--------------+------------+---------+
+
+
++-----------------------------------------------+
+; Output Pin Default Load For Reported TCO      ;
++--------------+-------+------------------------+
+; I/O Standard ; Load  ; Termination Resistance ;
++--------------+-------+------------------------+
+; TTL          ; 10 pF ; Not Available          ;
++--------------+-------+------------------------+
+Note: User assignments will override these defaults. The user specified values are listed in the Output Pins and Bidir Pins tables.
+
+
++-------------------------------------------------------------------------------------+
+; Fitter Resource Utilization by Entity                                               ;
++----------------------------+------------+------+---------------------+--------------+
+; Compilation Hierarchy Node ; Macrocells ; Pins ; Full Hierarchy Name ; Library Name ;
++----------------------------+------------+------+---------------------+--------------+
+; |GfxAddrMux                ; 9          ; 30   ; |GfxAddrMux         ; work         ;
++----------------------------+------------+------+---------------------+--------------+
+
+
++---------------------------------+
+; Non-Global High Fan-Out Signals ;
++---------------+-----------------+
+; Name          ; Fan-Out         ;
++---------------+-----------------+
+; i_addr_sel    ; 9               ;
+; i_vga_addr[7] ; 2               ;
+; i_dma_addr[7] ; 2               ;
+; i_vga_addr[6] ; 1               ;
+; i_vga_addr[5] ; 1               ;
+; i_vga_addr[4] ; 1               ;
+; i_vga_addr[3] ; 1               ;
+; i_vga_addr[2] ; 1               ;
+; i_vga_addr[1] ; 1               ;
+; i_vga_addr[0] ; 1               ;
+; i_dma_addr[6] ; 1               ;
+; i_dma_addr[5] ; 1               ;
+; i_dma_addr[4] ; 1               ;
+; i_dma_addr[3] ; 1               ;
+; i_dma_addr[2] ; 1               ;
+; i_dma_addr[1] ; 1               ;
+; i_dma_addr[0] ; 1               ;
+; o_addr~52     ; 1               ;
+; o_addr~49     ; 1               ;
+; o_addr~46     ; 1               ;
+; o_addr~43     ; 1               ;
+; o_addr~40     ; 1               ;
+; o_addr~37     ; 1               ;
+; o_addr~34     ; 1               ;
+; o_addr~31     ; 1               ;
+; o_addr~28     ; 1               ;
++---------------+-----------------+
+
+
++-------------------------------------------------+
+; Other Routing Usage Summary                     ;
++-----------------------------+-------------------+
+; Other Routing Resource Type ; Usage             ;
++-----------------------------+-------------------+
+; Output enables              ; 0 / 6 ( 0 % )     ;
+; PIA buffers                 ; 18 / 144 ( 13 % ) ;
++-----------------------------+-------------------+
+
+
++----------------------------------------------------------------------+
+; LAB Macrocells                                                       ;
++----------------------------------------+-----------------------------+
+; Number of Macrocells  (Average = 2.25) ; Number of LABs  (Total = 2) ;
++----------------------------------------+-----------------------------+
+; 0                                      ; 2                           ;
+; 1                                      ; 0                           ;
+; 2                                      ; 0                           ;
+; 3                                      ; 0                           ;
+; 4                                      ; 1                           ;
+; 5                                      ; 1                           ;
++----------------------------------------+-----------------------------+
+
+
++-------------------------------------------------------------------------+
+; Logic Cell Interconnection                                              ;
++-----+------------+------------------------------------------+-----------+
+; LAB ; Logic Cell ; Input                                    ; Output    ;
++-----+------------+------------------------------------------+-----------+
+;  B  ; LC21       ; i_addr_sel, i_dma_addr[0], i_vga_addr[0] ; o_addr[0] ;
+;  B  ; LC20       ; i_addr_sel, i_dma_addr[1], i_vga_addr[1] ; o_addr[1] ;
+;  B  ; LC19       ; i_addr_sel, i_dma_addr[2], i_vga_addr[2] ; o_addr[2] ;
+;  B  ; LC17       ; i_addr_sel, i_dma_addr[3], i_vga_addr[3] ; o_addr[3] ;
+;  C  ; LC33       ; i_addr_sel, i_dma_addr[4], i_vga_addr[4] ; o_addr[4] ;
+;  C  ; LC35       ; i_addr_sel, i_dma_addr[5], i_vga_addr[5] ; o_addr[5] ;
+;  C  ; LC36       ; i_addr_sel, i_dma_addr[6], i_vga_addr[6] ; o_addr[6] ;
+;  C  ; LC37       ; i_addr_sel, i_dma_addr[7], i_vga_addr[7] ; o_addr[7] ;
+;  C  ; LC40       ; i_addr_sel, i_dma_addr[7], i_vga_addr[7] ; o_addr7_b ;
++-----+------------+------------------------------------------+-----------+
+
+
++---------------------------------------------------------------+
+; Fitter Device Options                                         ;
++----------------------------------------------+----------------+
+; Option                                       ; Setting        ;
++----------------------------------------------+----------------+
+; Enable user-supplied start-up clock (CLKUSR) ; Off            ;
+; Enable device-wide reset (DEV_CLRn)          ; Off            ;
+; Enable device-wide output enable (DEV_OE)    ; Off            ;
+; Enable INIT_DONE output                      ; Off            ;
+; Configuration scheme                         ; Passive Serial ;
+; Security bit                                 ; Off            ;
+; Base pin-out file on sameframe device        ; Off            ;
++----------------------------------------------+----------------+
+
+
++-----------------+
+; Fitter Messages ;
++-----------------+
+Warning (20028): Parallel compilation is not licensed and has been disabled
+Info (119006): Selected device EPM7064SLC44-10 for design "GfxAddrMux"
+Info: Quartus II 32-bit Fitter was successful. 0 errors, 1 warning
+    Info: Peak virtual memory: 287 megabytes
+    Info: Processing ended: Sun Dec 22 12:01:44 2024
+    Info: Elapsed time: 00:00:01
+    Info: Total CPU time (on all processors): 00:00:01
+
+

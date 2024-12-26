@@ -61,87 +61,87 @@ CHIP  "GfxVga"  ASSIGNED TO AN: EPM7128SLC84-15
 
 Pin Name/Usage               : Location  : Dir.   : I/O Standard      : Voltage : I/O Bank  : User Assignment
 -------------------------------------------------------------------------------------------------------------
-i_ctrl_data[7]               : 1         : input  : TTL               :         :           : Y              
-i_ctrl_w_b                   : 2         : input  : TTL               :         :           : N              
+GND+                         : 1         :        :                   :         :           :                
+i_ctrl_we_b                  : 2         : input  : TTL               :         :           : N              
 VCCINT                       : 3         : power  :                   : 5.0V    :           :                
-i_ctrl_data[2]               : 4         : input  : TTL               :         :           : Y              
-o_vsync                      : 5         : output : TTL               :         :           : Y              
-i_ctrl_ce_b                  : 6         : input  : TTL               :         :           : Y              
+i_ctrl_ce_b                  : 4         : input  : TTL               :         :           : N              
+i_ctrl_addr[1]               : 5         : input  : TTL               :         :           : N              
+o_frame_end_b                : 6         : output : TTL               :         :           : N              
 GND                          : 7         : gnd    :                   :         :           :                
-o_frame_end_b                : 8         : output : TTL               :         :           : Y              
-i_vdata[6]                   : 9         : input  : TTL               :         :           : Y              
-o_free_vbus_b                : 10        : output : TTL               :         :           : Y              
-i_ctrl_data[4]               : 11        : input  : TTL               :         :           : Y              
-o_frame_start_b              : 12        : output : TTL               :         :           : N              
+o_free_vbus                  : 8         : output : TTL               :         :           : N              
+o_vsync                      : 9         : output : TTL               :         :           : N              
+o_frame_start_b              : 10        : output : TTL               :         :           : N              
+o_frame_progress_b           : 11        : output : TTL               :         :           : N              
+i_vdata[4]                   : 12        : input  : TTL               :         :           : N              
 VCCIO                        : 13        : power  :                   : 5.0V    :           :                
 TDI                          : 14        : input  : TTL               :         :           : N              
-o_hsync                      : 15        : output : TTL               :         :           : Y              
-o_vaddr[15]                  : 16        : output : TTL               :         :           : Y              
-o_vaddr15_b                  : 17        : output : TTL               :         :           : Y              
-o_vga_out_b                  : 18        : output : TTL               :         :           : Y              
+o_pixel_data[3]              : 15        : output : TTL               :         :           : N              
+i_vdata[0]                   : 16        : input  : TTL               :         :           : N              
+o_pixel_data[7]              : 17        : output : TTL               :         :           : N              
+o_pixel_data[1]              : 18        : output : TTL               :         :           : N              
 GND                          : 19        : gnd    :                   :         :           :                
-o_vaddr[0]                   : 20        : output : TTL               :         :           : Y              
-i_ctrl_data[6]               : 21        : input  : TTL               :         :           : Y              
-RESERVED                     : 22        :        :                   :         :           :                
+RESERVED                     : 20        :        :                   :         :           :                
+RESERVED                     : 21        :        :                   :         :           :                
+o_pixel_data[5]              : 22        : output : TTL               :         :           : N              
 TMS                          : 23        : input  : TTL               :         :           : N              
-o_vaddr[8]                   : 24        : output : TTL               :         :           : Y              
-o_enabled_b                  : 25        : output : TTL               :         :           : Y              
+i_vdata[7]                   : 24        : input  : TTL               :         :           : N              
+o_vaddr[12]                  : 25        : output : TTL               :         :           : N              
 VCCIO                        : 26        : power  :                   : 5.0V    :           :                
-o_vaddr[9]                   : 27        : output : TTL               :         :           : Y              
-o_vaddr[12]                  : 28        : output : TTL               :         :           : Y              
-i_ctrl_data[0]               : 29        : input  : TTL               :         :           : Y              
-i_ctrl_data[3]               : 30        : input  : TTL               :         :           : Y              
-i_ctrl_data[5]               : 31        : input  : TTL               :         :           : Y              
+o_vaddr[11]                  : 27        : output : TTL               :         :           : N              
+o_vaddr[10]                  : 28        : output : TTL               :         :           : N              
+o_vaddr[9]                   : 29        : output : TTL               :         :           : N              
+o_vaddr[14]                  : 30        : output : TTL               :         :           : N              
+o_vaddr[8]                   : 31        : output : TTL               :         :           : N              
 GND                          : 32        : gnd    :                   :         :           :                
-o_rgb_data[5]                : 33        : output : TTL               :         :           : Y              
-o_rgb_data[0]                : 34        : output : TTL               :         :           : Y              
-o_rgb_data[6]                : 35        : output : TTL               :         :           : Y              
-o_rgb_data[4]                : 36        : output : TTL               :         :           : Y              
-o_rgb_data[2]                : 37        : output : TTL               :         :           : Y              
+o_pixel_data[2]              : 33        : output : TTL               :         :           : N              
+o_vaddr[4]                   : 34        : output : TTL               :         :           : N              
+o_vga_latch                  : 35        : output : TTL               :         :           : N              
+o_palette[0]                 : 36        : output : TTL               :         :           : N              
+o_vaddr[7]                   : 37        : output : TTL               :         :           : N              
 VCCIO                        : 38        : power  :                   : 5.0V    :           :                
-i_vdata[2]                   : 39        : input  : TTL               :         :           : Y              
-i_vdata[0]                   : 40        : input  : TTL               :         :           : Y              
+i_ctrl_addr[0]               : 39        : input  : TTL               :         :           : N              
+io_ctrl_data[7]              : 40        : bidir  : TTL               :         :           : N              
 RESERVED                     : 41        :        :                   :         :           :                
 GND                          : 42        : gnd    :                   :         :           :                
 VCCINT                       : 43        : power  :                   : 5.0V    :           :                
-o_vaddr[13]                  : 44        : output : TTL               :         :           : Y              
-o_rgb_data[1]                : 45        : output : TTL               :         :           : Y              
-o_vaddr[4]                   : 46        : output : TTL               :         :           : Y              
+o_hsync                      : 44        : output : TTL               :         :           : N              
+o_pixel_data[6]              : 45        : output : TTL               :         :           : N              
+i_vdata[5]                   : 46        : input  : TTL               :         :           : N              
 GND                          : 47        : gnd    :                   :         :           :                
-o_rgb_data[3]                : 48        : output : TTL               :         :           : Y              
-o_vga_latch                  : 49        : output : TTL               :         :           : Y              
-o_vaddr[3]                   : 50        : output : TTL               :         :           : Y              
-i_ctrl_ce2                   : 51        : input  : TTL               :         :           : Y              
-o_rgb_data[7]                : 52        : output : TTL               :         :           : Y              
+o_vga_out_b                  : 48        : output : TTL               :         :           : N              
+o_pixel_data[0]              : 49        : output : TTL               :         :           : N              
+i_vdata[3]                   : 50        : input  : TTL               :         :           : N              
+i_vdata[2]                   : 51        : input  : TTL               :         :           : N              
+o_pixel_data[4]              : 52        : output : TTL               :         :           : N              
 VCCIO                        : 53        : power  :                   : 5.0V    :           :                
-RESERVED                     : 54        :        :                   :         :           :                
-o_vaddr[11]                  : 55        : output : TTL               :         :           : Y              
-i_vdata[3]                   : 56        : input  : TTL               :         :           : Y              
-o_vaddr[5]                   : 57        : output : TTL               :         :           : Y              
-o_vaddr[14]                  : 58        : output : TTL               :         :           : Y              
+i_vdata[1]                   : 54        : input  : TTL               :         :           : N              
+io_ctrl_data[6]              : 55        : bidir  : TTL               :         :           : N              
+io_ctrl_data[5]              : 56        : bidir  : TTL               :         :           : N              
+o_palette[1]                 : 57        : output : TTL               :         :           : N              
+o_vaddr[15]                  : 58        : output : TTL               :         :           : N              
 GND                          : 59        : gnd    :                   :         :           :                
-i_vdata[4]                   : 60        : input  : TTL               :         :           : Y              
-o_vaddr[10]                  : 61        : output : TTL               :         :           : Y              
+o_enabled_b                  : 60        : output : TTL               :         :           : N              
+o_vaddr[13]                  : 61        : output : TTL               :         :           : N              
 TCK                          : 62        : input  : TTL               :         :           : N              
 RESERVED                     : 63        :        :                   :         :           :                
-o_vaddr[2]                   : 64        : output : TTL               :         :           : Y              
-o_vaddr[6]                   : 65        : output : TTL               :         :           : Y              
+io_ctrl_data[1]              : 64        : bidir  : TTL               :         :           : N              
+o_vaddr[3]                   : 65        : output : TTL               :         :           : N              
 VCCIO                        : 66        : power  :                   : 5.0V    :           :                
-o_vaddr[7]                   : 67        : output : TTL               :         :           : Y              
-o_palette[0]                 : 68        : output : TTL               :         :           : Y              
-o_palette[1]                 : 69        : output : TTL               :         :           : Y              
-i_ctrl_addr[0]               : 70        : input  : TTL               :         :           : Y              
+RESERVED                     : 67        :        :                   :         :           :                
+io_ctrl_data[3]              : 68        : bidir  : TTL               :         :           : N              
+o_vaddr[0]                   : 69        : output : TTL               :         :           : N              
+io_ctrl_data[2]              : 70        : bidir  : TTL               :         :           : N              
 TDO                          : 71        : output : TTL               :         :           : N              
 GND                          : 72        : gnd    :                   :         :           :                
-o_frame_progress_b           : 73        : output : TTL               :         :           : N              
-i_vdata[1]                   : 74        : input  : TTL               :         :           : Y              
-i_ctrl_data[1]               : 75        : input  : TTL               :         :           : Y              
-i_vdata[7]                   : 76        : input  : TTL               :         :           : Y              
-o_vaddr[1]                   : 77        : output : TTL               :         :           : Y              
+o_vaddr[6]                   : 73        : output : TTL               :         :           : N              
+io_ctrl_data[4]              : 74        : bidir  : TTL               :         :           : N              
+io_ctrl_data[0]              : 75        : bidir  : TTL               :         :           : N              
+o_vaddr[1]                   : 76        : output : TTL               :         :           : N              
+o_vaddr[2]                   : 77        : output : TTL               :         :           : N              
 VCCIO                        : 78        : power  :                   : 5.0V    :           :                
-o_active_b                   : 79        : output : TTL               :         :           : Y              
-i_vdata[5]                   : 80        : input  : TTL               :         :           : Y              
-i_ctrl_addr[1]               : 81        : input  : TTL               :         :           : Y              
+o_vaddr[5]                   : 79        : output : TTL               :         :           : N              
+i_ctrl_re_b                  : 80        : input  : TTL               :         :           : N              
+i_vdata[6]                   : 81        : input  : TTL               :         :           : N              
 GND                          : 82        : gnd    :                   :         :           :                
 i_clk                        : 83        : input  : TTL               :         :           : Y              
 user_reserve_1               : 84        : input  : TTL               :         :           : Y              

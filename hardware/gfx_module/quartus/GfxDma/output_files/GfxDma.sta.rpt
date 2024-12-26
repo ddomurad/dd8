@@ -1,5 +1,5 @@
 TimeQuest Timing Analyzer report for GfxDma
-Sat Nov 09 18:48:54 2024
+Thu Dec 26 10:18:51 2024
 Quartus II 32-bit Version 13.0.1 Build 232 06/12/2013 Service Pack 1 SJ Web Edition
 
 
@@ -77,7 +77,7 @@ applicable agreement for further details.
 +---------------+--------+--------------------------+
 ; SDC File Path ; Status ; Read at                  ;
 +---------------+--------+--------------------------+
-; GfxDma.sdc    ; OK     ; Sat Nov 09 18:48:54 2024 ;
+; GfxDma.sdc    ; OK     ; Thu Dec 26 10:18:50 2024 ;
 +---------------+--------+--------------------------+
 
 
@@ -148,74 +148,62 @@ No paths to report.
 +-------+----------------------------------------------+-------------------------------------+--------------+-------------+--------------+------------+------------+
 ; Slack ; From Node                                    ; To Node                             ; Launch Clock ; Latch Clock ; Relationship ; Clock Skew ; Data Delay ;
 +-------+----------------------------------------------+-------------------------------------+--------------+-------------+--------------+------------+------------+
+; 0.000 ; lpm_counter:reg_x_cnt_rtl_0|dffs[4]          ; reg_dst_addr_hold[7]                ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 34.000     ;
+; 0.000 ; lpm_counter:reg_y_cnt_rtl_0|p8count:p8c[0]|4 ; reg_dst_addr_hold[15]               ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 34.000     ;
 ; 0.000 ; lpm_counter:reg_x_cnt_rtl_0|dffs[0]          ; reg_dst_addr_hold[5]                ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 34.000     ;
-; 0.000 ; lpm_counter:reg_x_cnt_rtl_0|dffs[0]          ; reg_dst_addr_hold[6]                ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 34.000     ;
-; 0.000 ; reg_ctrl_dst_x_origin[4]                     ; reg_dst_addr_hold[7]                ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 34.000     ;
 ; 0.000 ; lpm_counter:reg_y_cnt_rtl_0|p8count:p8c[0]|8 ; reg_dst_addr_hold[13]               ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 34.000     ;
+; 0.000 ; lpm_counter:reg_x_cnt_rtl_0|dffs[0]          ; reg_dst_addr_hold[6]                ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 34.000     ;
 ; 0.000 ; lpm_counter:reg_y_cnt_rtl_0|p8count:p8c[0]|8 ; reg_dst_addr_hold[14]               ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 34.000     ;
-; 0.000 ; reg_ctrl_dst_y_origin[4]                     ; reg_dst_addr_hold[15]               ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 34.000     ;
-; 0.000 ; reg_ctrl_dst_x_origin[1]                     ; reg_dst_addr_hold[5]                ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 34.000     ;
-; 0.000 ; reg_ctrl_dst_x_origin[0]                     ; reg_dst_addr_hold[5]                ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 34.000     ;
-; 0.000 ; reg_ctrl_dst_x_origin[1]                     ; reg_dst_addr_hold[6]                ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 34.000     ;
-; 0.000 ; reg_ctrl_dst_x_origin[0]                     ; reg_dst_addr_hold[6]                ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 34.000     ;
 ; 0.000 ; lpm_counter:reg_x_cnt_rtl_0|dffs[3]          ; reg_dst_addr_hold[7]                ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 34.000     ;
 ; 0.000 ; lpm_counter:reg_x_cnt_rtl_0|dffs[2]          ; reg_dst_addr_hold[7]                ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 34.000     ;
 ; 0.000 ; lpm_counter:reg_x_cnt_rtl_0|dffs[0]          ; reg_dst_addr_hold[7]                ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 34.000     ;
 ; 0.000 ; reg_ctrl_dst_x_origin[1]                     ; reg_dst_addr_hold[7]                ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 34.000     ;
-; 0.000 ; lpm_counter:reg_x_cnt_rtl_0|dffs[4]          ; reg_dst_addr_hold[7]                ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 34.000     ;
-; 0.000 ; reg_ctrl_dst_y_origin[1]                     ; reg_dst_addr_hold[13]               ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 34.000     ;
-; 0.000 ; reg_ctrl_dst_y_origin[0]                     ; reg_dst_addr_hold[13]               ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 34.000     ;
-; 0.000 ; reg_ctrl_dst_y_origin[1]                     ; reg_dst_addr_hold[14]               ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 34.000     ;
-; 0.000 ; reg_ctrl_dst_y_origin[0]                     ; reg_dst_addr_hold[14]               ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 34.000     ;
+; 0.000 ; reg_ctrl_dst_x_origin[4]                     ; reg_dst_addr_hold[7]                ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 34.000     ;
 ; 0.000 ; lpm_counter:reg_y_cnt_rtl_0|p8count:p8c[0]|5 ; reg_dst_addr_hold[15]               ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 34.000     ;
 ; 0.000 ; lpm_counter:reg_y_cnt_rtl_0|p8count:p8c[0]|6 ; reg_dst_addr_hold[15]               ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 34.000     ;
 ; 0.000 ; lpm_counter:reg_y_cnt_rtl_0|p8count:p8c[0]|8 ; reg_dst_addr_hold[15]               ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 34.000     ;
 ; 0.000 ; reg_ctrl_dst_y_origin[1]                     ; reg_dst_addr_hold[15]               ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 34.000     ;
-; 0.000 ; lpm_counter:reg_y_cnt_rtl_0|p8count:p8c[0]|4 ; reg_dst_addr_hold[15]               ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 34.000     ;
+; 0.000 ; reg_ctrl_dst_y_origin[4]                     ; reg_dst_addr_hold[15]               ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 34.000     ;
+; 0.000 ; reg_ctrl_dst_x_origin[1]                     ; reg_dst_addr_hold[5]                ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 34.000     ;
+; 0.000 ; reg_ctrl_dst_x_origin[0]                     ; reg_dst_addr_hold[5]                ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 34.000     ;
+; 0.000 ; reg_ctrl_dst_y_origin[1]                     ; reg_dst_addr_hold[13]               ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 34.000     ;
+; 0.000 ; reg_ctrl_dst_y_origin[0]                     ; reg_dst_addr_hold[13]               ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 34.000     ;
+; 0.000 ; reg_ctrl_dst_x_origin[1]                     ; reg_dst_addr_hold[6]                ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 34.000     ;
+; 0.000 ; reg_ctrl_dst_x_origin[0]                     ; reg_dst_addr_hold[6]                ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 34.000     ;
+; 0.000 ; reg_ctrl_dst_y_origin[1]                     ; reg_dst_addr_hold[14]               ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 34.000     ;
+; 0.000 ; reg_ctrl_dst_y_origin[0]                     ; reg_dst_addr_hold[14]               ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 34.000     ;
 ; 0.000 ; reg_ctrl_dst_x_origin[3]                     ; reg_dst_addr_hold[7]                ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 34.000     ;
 ; 0.000 ; reg_ctrl_dst_x_origin[2]                     ; reg_dst_addr_hold[7]                ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 34.000     ;
 ; 0.000 ; reg_ctrl_dst_x_origin[0]                     ; reg_dst_addr_hold[7]                ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 34.000     ;
 ; 0.000 ; reg_ctrl_dst_y_origin[3]                     ; reg_dst_addr_hold[15]               ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 34.000     ;
 ; 0.000 ; reg_ctrl_dst_y_origin[2]                     ; reg_dst_addr_hold[15]               ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 34.000     ;
 ; 0.000 ; reg_ctrl_dst_y_origin[0]                     ; reg_dst_addr_hold[15]               ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 34.000     ;
-; 8.000 ; reg_active_clk1                              ; lpm_counter:reg_x_cnt_rtl_0|dffs[1] ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 26.000     ;
-; 8.000 ; reg_active_clk1                              ; lpm_counter:reg_x_cnt_rtl_0|dffs[3] ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 26.000     ;
-; 8.000 ; reg_active_clk1                              ; lpm_counter:reg_x_cnt_rtl_0|dffs[4] ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 26.000     ;
-; 8.000 ; reg_active_clk1                              ; lpm_counter:reg_x_cnt_rtl_0|dffs[5] ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 26.000     ;
-; 8.000 ; reg_active_clk1                              ; lpm_counter:reg_x_cnt_rtl_0|dffs[6] ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 26.000     ;
-; 8.000 ; reg_active_clk1                              ; lpm_counter:reg_x_cnt_rtl_0|dffs[7] ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 26.000     ;
-; 8.000 ; reg_active_clk1                              ; reg_active                          ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 26.000     ;
-; 8.000 ; reg_active_clk1                              ; reg_ctrl_src_addr[3]                ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 26.000     ;
-; 8.000 ; reg_active_clk1                              ; reg_ctrl_src_addr[4]                ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 26.000     ;
-; 8.000 ; reg_active_clk1                              ; reg_ctrl_src_addr[5]                ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 26.000     ;
-; 8.000 ; reg_active_clk1                              ; reg_ctrl_src_addr[6]                ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 26.000     ;
-; 8.000 ; reg_active_clk1                              ; reg_ctrl_src_addr[7]                ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 26.000     ;
 ; 8.000 ; lpm_counter:reg_x_cnt_rtl_0|dffs[0]          ; reg_dst_addr_hold[3]                ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 26.000     ;
-; 8.000 ; lpm_counter:reg_x_cnt_rtl_0|dffs[0]          ; reg_dst_addr_hold[4]                ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 26.000     ;
 ; 8.000 ; lpm_counter:reg_y_cnt_rtl_0|p8count:p8c[0]|8 ; reg_dst_addr_hold[11]               ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 26.000     ;
+; 8.000 ; lpm_counter:reg_x_cnt_rtl_0|dffs[0]          ; reg_dst_addr_hold[4]                ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 26.000     ;
 ; 8.000 ; lpm_counter:reg_y_cnt_rtl_0|p8count:p8c[0]|8 ; reg_dst_addr_hold[12]               ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 26.000     ;
+; 8.000 ; lpm_counter:reg_x_cnt_rtl_0|dffs[5]          ; reg_dst_addr_hold[7]                ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 26.000     ;
+; 8.000 ; lpm_counter:reg_x_cnt_rtl_0|dffs[1]          ; reg_dst_addr_hold[7]                ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 26.000     ;
+; 8.000 ; lpm_counter:reg_y_cnt_rtl_0|p8count:p8c[0]|3 ; reg_dst_addr_hold[15]               ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 26.000     ;
+; 8.000 ; lpm_counter:reg_y_cnt_rtl_0|p8count:p8c[0]|7 ; reg_dst_addr_hold[15]               ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 26.000     ;
 ; 8.000 ; reg_ctrl_dst_x_origin[2]                     ; reg_dst_addr_hold[5]                ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 26.000     ;
 ; 8.000 ; lpm_counter:reg_x_cnt_rtl_0|dffs[2]          ; reg_dst_addr_hold[5]                ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 26.000     ;
 ; 8.000 ; lpm_counter:reg_x_cnt_rtl_0|dffs[1]          ; reg_dst_addr_hold[5]                ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 26.000     ;
-; 8.000 ; reg_ctrl_dst_x_origin[2]                     ; reg_dst_addr_hold[6]                ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 26.000     ;
-; 8.000 ; lpm_counter:reg_x_cnt_rtl_0|dffs[2]          ; reg_dst_addr_hold[6]                ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 26.000     ;
-; 8.000 ; lpm_counter:reg_x_cnt_rtl_0|dffs[1]          ; reg_dst_addr_hold[6]                ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 26.000     ;
-; 8.000 ; lpm_counter:reg_x_cnt_rtl_0|dffs[5]          ; reg_dst_addr_hold[7]                ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 26.000     ;
-; 8.000 ; lpm_counter:reg_x_cnt_rtl_0|dffs[1]          ; reg_dst_addr_hold[7]                ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 26.000     ;
 ; 8.000 ; reg_ctrl_dst_y_origin[2]                     ; reg_dst_addr_hold[13]               ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 26.000     ;
 ; 8.000 ; lpm_counter:reg_y_cnt_rtl_0|p8count:p8c[0]|6 ; reg_dst_addr_hold[13]               ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 26.000     ;
 ; 8.000 ; lpm_counter:reg_y_cnt_rtl_0|p8count:p8c[0]|7 ; reg_dst_addr_hold[13]               ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 26.000     ;
+; 8.000 ; reg_ctrl_dst_x_origin[2]                     ; reg_dst_addr_hold[6]                ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 26.000     ;
+; 8.000 ; lpm_counter:reg_x_cnt_rtl_0|dffs[2]          ; reg_dst_addr_hold[6]                ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 26.000     ;
+; 8.000 ; lpm_counter:reg_x_cnt_rtl_0|dffs[1]          ; reg_dst_addr_hold[6]                ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 26.000     ;
 ; 8.000 ; reg_ctrl_dst_y_origin[2]                     ; reg_dst_addr_hold[14]               ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 26.000     ;
 ; 8.000 ; lpm_counter:reg_y_cnt_rtl_0|p8count:p8c[0]|6 ; reg_dst_addr_hold[14]               ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 26.000     ;
 ; 8.000 ; lpm_counter:reg_y_cnt_rtl_0|p8count:p8c[0]|7 ; reg_dst_addr_hold[14]               ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 26.000     ;
-; 8.000 ; lpm_counter:reg_y_cnt_rtl_0|p8count:p8c[0]|3 ; reg_dst_addr_hold[15]               ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 26.000     ;
-; 8.000 ; lpm_counter:reg_y_cnt_rtl_0|p8count:p8c[0]|7 ; reg_dst_addr_hold[15]               ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 26.000     ;
 ; 8.000 ; reg_ctrl_dst_x_origin[1]                     ; reg_dst_addr_hold[3]                ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 26.000     ;
 ; 8.000 ; reg_ctrl_dst_x_origin[0]                     ; reg_dst_addr_hold[3]                ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 26.000     ;
-; 8.000 ; reg_ctrl_dst_x_origin[1]                     ; reg_dst_addr_hold[4]                ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 26.000     ;
-; 8.000 ; reg_ctrl_dst_x_origin[0]                     ; reg_dst_addr_hold[4]                ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 26.000     ;
 ; 8.000 ; reg_ctrl_dst_y_origin[1]                     ; reg_dst_addr_hold[11]               ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 26.000     ;
 ; 8.000 ; reg_ctrl_dst_y_origin[0]                     ; reg_dst_addr_hold[11]               ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 26.000     ;
+; 8.000 ; reg_ctrl_dst_x_origin[1]                     ; reg_dst_addr_hold[4]                ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 26.000     ;
+; 8.000 ; reg_ctrl_dst_x_origin[0]                     ; reg_dst_addr_hold[4]                ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 26.000     ;
 ; 8.000 ; reg_ctrl_dst_y_origin[1]                     ; reg_dst_addr_hold[12]               ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 26.000     ;
 ; 8.000 ; reg_ctrl_dst_y_origin[0]                     ; reg_dst_addr_hold[12]               ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 26.000     ;
 ; 8.000 ; lpm_counter:reg_x_cnt_rtl_0|dffs[6]          ; reg_dst_addr_hold[7]                ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 26.000     ;
@@ -224,30 +212,42 @@ No paths to report.
 ; 8.000 ; lpm_counter:reg_y_cnt_rtl_0|p8count:p8c[0]|2 ; reg_dst_addr_hold[15]               ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 26.000     ;
 ; 8.000 ; reg_ctrl_dst_y_origin[6]                     ; reg_dst_addr_hold[15]               ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 26.000     ;
 ; 8.000 ; reg_ctrl_dst_y_origin[5]                     ; reg_dst_addr_hold[15]               ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 26.000     ;
-; 9.000 ; lpm_counter:reg_y_cnt_rtl_0|p8count:p8c[0]|7 ; lpm_counter:reg_x_cnt_rtl_0|dffs[1] ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 25.000     ;
-; 9.000 ; lpm_counter:reg_y_cnt_rtl_0|p8count:p8c[0]|3 ; lpm_counter:reg_x_cnt_rtl_0|dffs[1] ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 25.000     ;
-; 9.000 ; lpm_counter:reg_y_cnt_rtl_0|p8count:p8c[0]|4 ; lpm_counter:reg_x_cnt_rtl_0|dffs[1] ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 25.000     ;
-; 9.000 ; lpm_counter:reg_y_cnt_rtl_0|p8count:p8c[0]|5 ; lpm_counter:reg_x_cnt_rtl_0|dffs[1] ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 25.000     ;
-; 9.000 ; lpm_counter:reg_y_cnt_rtl_0|p8count:p8c[0]|1 ; lpm_counter:reg_x_cnt_rtl_0|dffs[1] ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 25.000     ;
-; 9.000 ; lpm_counter:reg_y_cnt_rtl_0|p8count:p8c[0]|6 ; lpm_counter:reg_x_cnt_rtl_0|dffs[1] ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 25.000     ;
-; 9.000 ; lpm_counter:reg_y_cnt_rtl_0|p8count:p8c[0]|2 ; lpm_counter:reg_x_cnt_rtl_0|dffs[1] ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 25.000     ;
-; 9.000 ; lpm_counter:reg_y_cnt_rtl_0|p8count:p8c[0]|8 ; lpm_counter:reg_x_cnt_rtl_0|dffs[1] ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 25.000     ;
-; 9.000 ; lpm_counter:reg_y_cnt_rtl_0|p8count:p8c[0]|7 ; lpm_counter:reg_x_cnt_rtl_0|dffs[3] ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 25.000     ;
-; 9.000 ; lpm_counter:reg_y_cnt_rtl_0|p8count:p8c[0]|3 ; lpm_counter:reg_x_cnt_rtl_0|dffs[3] ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 25.000     ;
-; 9.000 ; lpm_counter:reg_y_cnt_rtl_0|p8count:p8c[0]|4 ; lpm_counter:reg_x_cnt_rtl_0|dffs[3] ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 25.000     ;
-; 9.000 ; lpm_counter:reg_y_cnt_rtl_0|p8count:p8c[0]|5 ; lpm_counter:reg_x_cnt_rtl_0|dffs[3] ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 25.000     ;
-; 9.000 ; lpm_counter:reg_y_cnt_rtl_0|p8count:p8c[0]|1 ; lpm_counter:reg_x_cnt_rtl_0|dffs[3] ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 25.000     ;
-; 9.000 ; lpm_counter:reg_y_cnt_rtl_0|p8count:p8c[0]|6 ; lpm_counter:reg_x_cnt_rtl_0|dffs[3] ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 25.000     ;
-; 9.000 ; lpm_counter:reg_y_cnt_rtl_0|p8count:p8c[0]|2 ; lpm_counter:reg_x_cnt_rtl_0|dffs[3] ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 25.000     ;
-; 9.000 ; lpm_counter:reg_y_cnt_rtl_0|p8count:p8c[0]|8 ; lpm_counter:reg_x_cnt_rtl_0|dffs[3] ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 25.000     ;
-; 9.000 ; lpm_counter:reg_y_cnt_rtl_0|p8count:p8c[0]|7 ; lpm_counter:reg_x_cnt_rtl_0|dffs[4] ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 25.000     ;
-; 9.000 ; lpm_counter:reg_y_cnt_rtl_0|p8count:p8c[0]|3 ; lpm_counter:reg_x_cnt_rtl_0|dffs[4] ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 25.000     ;
-; 9.000 ; lpm_counter:reg_y_cnt_rtl_0|p8count:p8c[0]|4 ; lpm_counter:reg_x_cnt_rtl_0|dffs[4] ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 25.000     ;
-; 9.000 ; lpm_counter:reg_y_cnt_rtl_0|p8count:p8c[0]|5 ; lpm_counter:reg_x_cnt_rtl_0|dffs[4] ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 25.000     ;
-; 9.000 ; lpm_counter:reg_y_cnt_rtl_0|p8count:p8c[0]|1 ; lpm_counter:reg_x_cnt_rtl_0|dffs[4] ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 25.000     ;
-; 9.000 ; lpm_counter:reg_y_cnt_rtl_0|p8count:p8c[0]|6 ; lpm_counter:reg_x_cnt_rtl_0|dffs[4] ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 25.000     ;
-; 9.000 ; lpm_counter:reg_y_cnt_rtl_0|p8count:p8c[0]|2 ; lpm_counter:reg_x_cnt_rtl_0|dffs[4] ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 25.000     ;
-; 9.000 ; lpm_counter:reg_y_cnt_rtl_0|p8count:p8c[0]|8 ; lpm_counter:reg_x_cnt_rtl_0|dffs[4] ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 25.000     ;
+; 9.000 ; reg_active_clk1                              ; reg_src_addr[1]                     ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 25.000     ;
+; 9.000 ; reg_active_clk1                              ; reg_src_addr[0]                     ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 25.000     ;
+; 9.000 ; reg_active_clk1                              ; lpm_counter:reg_x_cnt_rtl_0|dffs[0] ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 25.000     ;
+; 9.000 ; reg_active_clk1                              ; lpm_counter:reg_x_cnt_rtl_0|dffs[1] ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 25.000     ;
+; 9.000 ; reg_active_clk1                              ; lpm_counter:reg_x_cnt_rtl_0|dffs[2] ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 25.000     ;
+; 9.000 ; reg_active_clk1                              ; lpm_counter:reg_x_cnt_rtl_0|dffs[3] ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 25.000     ;
+; 9.000 ; reg_active_clk1                              ; lpm_counter:reg_x_cnt_rtl_0|dffs[4] ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 25.000     ;
+; 9.000 ; reg_active_clk1                              ; lpm_counter:reg_x_cnt_rtl_0|dffs[5] ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 25.000     ;
+; 9.000 ; reg_active_clk1                              ; lpm_counter:reg_x_cnt_rtl_0|dffs[6] ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 25.000     ;
+; 9.000 ; reg_active_clk1                              ; lpm_counter:reg_x_cnt_rtl_0|dffs[7] ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 25.000     ;
+; 9.000 ; reg_active_clk1                              ; reg_active                          ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 25.000     ;
+; 9.000 ; reg_active_clk1                              ; reg_src_addr[2]                     ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 25.000     ;
+; 9.000 ; reg_active_clk1                              ; reg_src_addr[3]                     ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 25.000     ;
+; 9.000 ; reg_active_clk1                              ; reg_src_addr[4]                     ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 25.000     ;
+; 9.000 ; reg_active_clk1                              ; reg_src_addr[5]                     ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 25.000     ;
+; 9.000 ; reg_active_clk1                              ; reg_src_addr[6]                     ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 25.000     ;
+; 9.000 ; reg_active_clk1                              ; reg_src_addr[7]                     ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 25.000     ;
+; 9.000 ; lpm_counter:reg_y_cnt_rtl_0|p8count:p8c[0]|7 ; reg_src_addr[1]                     ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 25.000     ;
+; 9.000 ; lpm_counter:reg_y_cnt_rtl_0|p8count:p8c[0]|3 ; reg_src_addr[1]                     ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 25.000     ;
+; 9.000 ; lpm_counter:reg_y_cnt_rtl_0|p8count:p8c[0]|4 ; reg_src_addr[1]                     ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 25.000     ;
+; 9.000 ; lpm_counter:reg_y_cnt_rtl_0|p8count:p8c[0]|5 ; reg_src_addr[1]                     ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 25.000     ;
+; 9.000 ; lpm_counter:reg_y_cnt_rtl_0|p8count:p8c[0]|1 ; reg_src_addr[1]                     ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 25.000     ;
+; 9.000 ; lpm_counter:reg_y_cnt_rtl_0|p8count:p8c[0]|6 ; reg_src_addr[1]                     ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 25.000     ;
+; 9.000 ; lpm_counter:reg_y_cnt_rtl_0|p8count:p8c[0]|2 ; reg_src_addr[1]                     ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 25.000     ;
+; 9.000 ; lpm_counter:reg_y_cnt_rtl_0|p8count:p8c[0]|8 ; reg_src_addr[1]                     ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 25.000     ;
+; 9.000 ; lpm_counter:reg_y_cnt_rtl_0|p8count:p8c[0]|7 ; reg_src_addr[0]                     ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 25.000     ;
+; 9.000 ; lpm_counter:reg_y_cnt_rtl_0|p8count:p8c[0]|3 ; reg_src_addr[0]                     ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 25.000     ;
+; 9.000 ; lpm_counter:reg_y_cnt_rtl_0|p8count:p8c[0]|4 ; reg_src_addr[0]                     ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 25.000     ;
+; 9.000 ; lpm_counter:reg_y_cnt_rtl_0|p8count:p8c[0]|5 ; reg_src_addr[0]                     ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 25.000     ;
+; 9.000 ; lpm_counter:reg_y_cnt_rtl_0|p8count:p8c[0]|1 ; reg_src_addr[0]                     ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 25.000     ;
+; 9.000 ; lpm_counter:reg_y_cnt_rtl_0|p8count:p8c[0]|6 ; reg_src_addr[0]                     ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 25.000     ;
+; 9.000 ; lpm_counter:reg_y_cnt_rtl_0|p8count:p8c[0]|2 ; reg_src_addr[0]                     ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 25.000     ;
+; 9.000 ; lpm_counter:reg_y_cnt_rtl_0|p8count:p8c[0]|8 ; reg_src_addr[0]                     ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 25.000     ;
+; 9.000 ; lpm_counter:reg_y_cnt_rtl_0|p8count:p8c[0]|7 ; lpm_counter:reg_x_cnt_rtl_0|dffs[0] ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 25.000     ;
+; 9.000 ; lpm_counter:reg_y_cnt_rtl_0|p8count:p8c[0]|3 ; lpm_counter:reg_x_cnt_rtl_0|dffs[0] ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 25.000     ;
+; 9.000 ; lpm_counter:reg_y_cnt_rtl_0|p8count:p8c[0]|4 ; lpm_counter:reg_x_cnt_rtl_0|dffs[0] ; i_clk        ; i_clk       ; 38.000       ; 0.000      ; 25.000     ;
 +-------+----------------------------------------------+-------------------------------------+--------------+-------------+--------------+------------+------------+
 
 
@@ -257,8 +257,6 @@ No paths to report.
 ; Slack  ; From Node            ; To Node    ; Launch Clock ; Latch Clock ; Relationship ; Clock Skew ; Data Delay ;
 +--------+----------------------+------------+--------------+-------------+--------------+------------+------------+
 ; 4.000  ; i_clk2               ; o_dst_we_b ; i_clk2       ; i_clk2      ; 19.000       ; 0.000      ; 15.000     ;
-; 12.000 ; reg_active_clk2      ; o_dst_we_b ; i_clk        ; i_clk2      ; 38.000       ; -3.000     ; 23.000     ;
-; 14.000 ; i_free_vbus_b        ; o_dst_we_b ; i_clk        ; i_clk2      ; 38.000       ; 0.000      ; 24.000     ;
 ; 21.000 ; reg_dst_data_hold[3] ; o_dst_we_b ; i_clk        ; i_clk2      ; 38.000       ; -3.000     ; 14.000     ;
 ; 21.000 ; reg_dst_data_hold[0] ; o_dst_we_b ; i_clk        ; i_clk2      ; 38.000       ; -3.000     ; 14.000     ;
 ; 21.000 ; reg_ctrl_config      ; o_dst_we_b ; i_clk        ; i_clk2      ; 38.000       ; -3.000     ; 14.000     ;
@@ -268,6 +266,8 @@ No paths to report.
 ; 21.000 ; reg_dst_data_hold[7] ; o_dst_we_b ; i_clk        ; i_clk2      ; 38.000       ; -3.000     ; 14.000     ;
 ; 21.000 ; reg_dst_data_hold[5] ; o_dst_we_b ; i_clk        ; i_clk2      ; 38.000       ; -3.000     ; 14.000     ;
 ; 21.000 ; reg_dst_data_hold[1] ; o_dst_we_b ; i_clk        ; i_clk2      ; 38.000       ; -3.000     ; 14.000     ;
+; 21.000 ; reg_active_clk2      ; o_dst_we_b ; i_clk        ; i_clk2      ; 38.000       ; -3.000     ; 14.000     ;
+; 21.000 ; reg_free_vbus        ; o_dst_we_b ; i_clk        ; i_clk2      ; 38.000       ; -3.000     ; 14.000     ;
 ; 23.000 ; i_clk2               ; o_dst_we_b ; i_clk2       ; i_clk2      ; 38.000       ; 0.000      ; 15.000     ;
 +--------+----------------------+------------+--------------+-------------+--------------+------------+------------+
 
@@ -277,106 +277,106 @@ No paths to report.
 +-------+----------------+----------------------------------------------+--------------+-------------+--------------+------------+------------+
 ; Slack ; From Node      ; To Node                                      ; Launch Clock ; Latch Clock ; Relationship ; Clock Skew ; Data Delay ;
 +-------+----------------+----------------------------------------------+--------------+-------------+--------------+------------+------------+
+; 3.000 ; i_free_vbus    ; reg_free_vbus                                ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
 ; 3.000 ; i_src_data[7]  ; reg_ctrl_height[7]                           ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
 ; 3.000 ; io_src_addr[2] ; reg_ctrl_height[7]                           ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
 ; 3.000 ; io_src_we_b    ; reg_ctrl_height[7]                           ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
-; 3.000 ; i_src_ce2_b    ; reg_ctrl_height[7]                           ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
 ; 3.000 ; i_src_ce_b     ; reg_ctrl_height[7]                           ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
 ; 3.000 ; io_src_addr[0] ; reg_ctrl_height[7]                           ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
 ; 3.000 ; io_src_addr[1] ; reg_ctrl_height[7]                           ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
 ; 3.000 ; i_src_data[6]  ; reg_ctrl_height[6]                           ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
 ; 3.000 ; io_src_addr[2] ; reg_ctrl_height[6]                           ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
 ; 3.000 ; io_src_we_b    ; reg_ctrl_height[6]                           ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
-; 3.000 ; i_src_ce2_b    ; reg_ctrl_height[6]                           ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
 ; 3.000 ; i_src_ce_b     ; reg_ctrl_height[6]                           ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
 ; 3.000 ; io_src_addr[0] ; reg_ctrl_height[6]                           ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
 ; 3.000 ; io_src_addr[1] ; reg_ctrl_height[6]                           ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
-; 3.000 ; i_free_vbus_b  ; lpm_counter:reg_y_cnt_rtl_0|p8count:p8c[0]|2 ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
-; 3.000 ; i_free_vbus_b  ; lpm_counter:reg_y_cnt_rtl_0|p8count:p8c[0]|1 ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
-; 3.000 ; i_free_vbus_b  ; reg_ctrl_src_addr[1]                         ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
+; 3.000 ; i_free_vbus    ; lpm_counter:reg_y_cnt_rtl_0|p8count:p8c[0]|2 ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
+; 3.000 ; i_free_vbus    ; lpm_counter:reg_y_cnt_rtl_0|p8count:p8c[0]|1 ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
+; 3.000 ; i_free_vbus    ; reg_src_addr[1]                              ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
 ; 3.000 ; i_src_data[0]  ; reg_ctrl_src_x_origin[0]                     ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
 ; 3.000 ; io_src_addr[2] ; reg_ctrl_src_x_origin[0]                     ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
 ; 3.000 ; io_src_we_b    ; reg_ctrl_src_x_origin[0]                     ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
-; 3.000 ; i_src_ce2_b    ; reg_ctrl_src_x_origin[0]                     ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
 ; 3.000 ; i_src_ce_b     ; reg_ctrl_src_x_origin[0]                     ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
 ; 3.000 ; io_src_addr[0] ; reg_ctrl_src_x_origin[0]                     ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
 ; 3.000 ; io_src_addr[1] ; reg_ctrl_src_x_origin[0]                     ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
 ; 3.000 ; i_src_data[0]  ; reg_ctrl_cpy_x_mask[0]                       ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
-; 3.000 ; io_src_addr[2] ; reg_ctrl_cpy_x_mask[0]                       ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
-; 3.000 ; io_src_we_b    ; reg_ctrl_cpy_x_mask[0]                       ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
-; 3.000 ; i_src_ce2_b    ; reg_ctrl_cpy_x_mask[0]                       ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
-; 3.000 ; i_src_ce_b     ; reg_ctrl_cpy_x_mask[0]                       ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
 ; 3.000 ; io_src_addr[0] ; reg_ctrl_cpy_x_mask[0]                       ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
 ; 3.000 ; io_src_addr[1] ; reg_ctrl_cpy_x_mask[0]                       ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
-; 3.000 ; i_free_vbus_b  ; reg_ctrl_src_addr[0]                         ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
+; 3.000 ; io_src_addr[2] ; reg_ctrl_cpy_x_mask[0]                       ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
+; 3.000 ; io_src_we_b    ; reg_ctrl_cpy_x_mask[0]                       ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
+; 3.000 ; i_src_ce_b     ; reg_ctrl_cpy_x_mask[0]                       ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
+; 3.000 ; i_free_vbus    ; reg_src_addr[0]                              ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
 ; 3.000 ; i_src_data[0]  ; reg_ctrl_height[0]                           ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
 ; 3.000 ; io_src_addr[2] ; reg_ctrl_height[0]                           ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
 ; 3.000 ; io_src_we_b    ; reg_ctrl_height[0]                           ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
-; 3.000 ; i_src_ce2_b    ; reg_ctrl_height[0]                           ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
 ; 3.000 ; i_src_ce_b     ; reg_ctrl_height[0]                           ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
 ; 3.000 ; io_src_addr[0] ; reg_ctrl_height[0]                           ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
 ; 3.000 ; io_src_addr[1] ; reg_ctrl_height[0]                           ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
-; 3.000 ; i_free_vbus_b  ; lpm_counter:reg_y_cnt_rtl_0|p8count:p8c[0]|8 ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
+; 3.000 ; i_free_vbus    ; lpm_counter:reg_y_cnt_rtl_0|p8count:p8c[0]|8 ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
 ; 3.000 ; i_src_data[2]  ; reg_ctrl_height[2]                           ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
 ; 3.000 ; io_src_addr[2] ; reg_ctrl_height[2]                           ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
 ; 3.000 ; io_src_we_b    ; reg_ctrl_height[2]                           ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
-; 3.000 ; i_src_ce2_b    ; reg_ctrl_height[2]                           ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
 ; 3.000 ; i_src_ce_b     ; reg_ctrl_height[2]                           ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
 ; 3.000 ; io_src_addr[0] ; reg_ctrl_height[2]                           ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
 ; 3.000 ; io_src_addr[1] ; reg_ctrl_height[2]                           ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
-; 3.000 ; i_free_vbus_b  ; lpm_counter:reg_y_cnt_rtl_0|p8count:p8c[0]|6 ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
+; 3.000 ; i_free_vbus    ; lpm_counter:reg_y_cnt_rtl_0|p8count:p8c[0]|6 ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
 ; 3.000 ; i_src_data[3]  ; reg_ctrl_height[3]                           ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
 ; 3.000 ; io_src_addr[2] ; reg_ctrl_height[3]                           ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
 ; 3.000 ; io_src_we_b    ; reg_ctrl_height[3]                           ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
-; 3.000 ; i_src_ce2_b    ; reg_ctrl_height[3]                           ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
 ; 3.000 ; i_src_ce_b     ; reg_ctrl_height[3]                           ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
 ; 3.000 ; io_src_addr[0] ; reg_ctrl_height[3]                           ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
 ; 3.000 ; io_src_addr[1] ; reg_ctrl_height[3]                           ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
-; 3.000 ; i_free_vbus_b  ; lpm_counter:reg_y_cnt_rtl_0|p8count:p8c[0]|5 ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
+; 3.000 ; i_free_vbus    ; lpm_counter:reg_y_cnt_rtl_0|p8count:p8c[0]|5 ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
 ; 3.000 ; i_src_data[4]  ; reg_ctrl_height[4]                           ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
 ; 3.000 ; io_src_addr[2] ; reg_ctrl_height[4]                           ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
 ; 3.000 ; io_src_we_b    ; reg_ctrl_height[4]                           ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
-; 3.000 ; i_src_ce2_b    ; reg_ctrl_height[4]                           ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
 ; 3.000 ; i_src_ce_b     ; reg_ctrl_height[4]                           ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
 ; 3.000 ; io_src_addr[0] ; reg_ctrl_height[4]                           ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
 ; 3.000 ; io_src_addr[1] ; reg_ctrl_height[4]                           ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
-; 3.000 ; i_free_vbus_b  ; lpm_counter:reg_y_cnt_rtl_0|p8count:p8c[0]|4 ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
+; 3.000 ; i_free_vbus    ; lpm_counter:reg_y_cnt_rtl_0|p8count:p8c[0]|4 ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
 ; 3.000 ; i_src_data[5]  ; reg_ctrl_height[5]                           ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
 ; 3.000 ; io_src_addr[2] ; reg_ctrl_height[5]                           ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
 ; 3.000 ; io_src_we_b    ; reg_ctrl_height[5]                           ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
-; 3.000 ; i_src_ce2_b    ; reg_ctrl_height[5]                           ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
 ; 3.000 ; i_src_ce_b     ; reg_ctrl_height[5]                           ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
 ; 3.000 ; io_src_addr[0] ; reg_ctrl_height[5]                           ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
 ; 3.000 ; io_src_addr[1] ; reg_ctrl_height[5]                           ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
-; 3.000 ; i_free_vbus_b  ; lpm_counter:reg_y_cnt_rtl_0|p8count:p8c[0]|3 ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
+; 3.000 ; i_free_vbus    ; lpm_counter:reg_y_cnt_rtl_0|p8count:p8c[0]|3 ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
 ; 3.000 ; i_src_data[1]  ; reg_ctrl_height[1]                           ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
 ; 3.000 ; io_src_addr[2] ; reg_ctrl_height[1]                           ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
 ; 3.000 ; io_src_we_b    ; reg_ctrl_height[1]                           ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
-; 3.000 ; i_src_ce2_b    ; reg_ctrl_height[1]                           ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
 ; 3.000 ; i_src_ce_b     ; reg_ctrl_height[1]                           ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
 ; 3.000 ; io_src_addr[0] ; reg_ctrl_height[1]                           ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
 ; 3.000 ; io_src_addr[1] ; reg_ctrl_height[1]                           ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
-; 3.000 ; i_free_vbus_b  ; lpm_counter:reg_y_cnt_rtl_0|p8count:p8c[0]|7 ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
-; 3.000 ; i_src_data[3]  ; reg_ctrl_width[3]                            ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
-; 3.000 ; io_src_addr[2] ; reg_ctrl_width[3]                            ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
-; 3.000 ; io_src_we_b    ; reg_ctrl_width[3]                            ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
-; 3.000 ; i_src_ce2_b    ; reg_ctrl_width[3]                            ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
-; 3.000 ; i_src_ce_b     ; reg_ctrl_width[3]                            ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
-; 3.000 ; io_src_addr[0] ; reg_ctrl_width[3]                            ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
-; 3.000 ; io_src_addr[1] ; reg_ctrl_width[3]                            ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
+; 3.000 ; i_free_vbus    ; lpm_counter:reg_y_cnt_rtl_0|p8count:p8c[0]|7 ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
 ; 3.000 ; i_src_data[0]  ; reg_ctrl_width[0]                            ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
 ; 3.000 ; io_src_addr[2] ; reg_ctrl_width[0]                            ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
 ; 3.000 ; io_src_we_b    ; reg_ctrl_width[0]                            ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
-; 3.000 ; i_src_ce2_b    ; reg_ctrl_width[0]                            ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
 ; 3.000 ; i_src_ce_b     ; reg_ctrl_width[0]                            ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
 ; 3.000 ; io_src_addr[0] ; reg_ctrl_width[0]                            ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
 ; 3.000 ; io_src_addr[1] ; reg_ctrl_width[0]                            ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
-; 3.000 ; i_free_vbus_b  ; lpm_counter:reg_x_cnt_rtl_0|dffs[0]          ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
-; 3.000 ; i_src_data[2]  ; reg_ctrl_width[2]                            ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
-; 3.000 ; io_src_addr[2] ; reg_ctrl_width[2]                            ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
-; 3.000 ; io_src_we_b    ; reg_ctrl_width[2]                            ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
-; 3.000 ; i_src_ce2_b    ; reg_ctrl_width[2]                            ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
-; 3.000 ; i_src_ce_b     ; reg_ctrl_width[2]                            ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
+; 3.000 ; i_free_vbus    ; lpm_counter:reg_x_cnt_rtl_0|dffs[0]          ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
+; 3.000 ; i_src_data[1]  ; reg_ctrl_width[1]                            ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
+; 3.000 ; io_src_addr[2] ; reg_ctrl_width[1]                            ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
+; 3.000 ; io_src_we_b    ; reg_ctrl_width[1]                            ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
+; 3.000 ; i_src_ce_b     ; reg_ctrl_width[1]                            ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
+; 3.000 ; io_src_addr[0] ; reg_ctrl_width[1]                            ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
+; 3.000 ; io_src_addr[1] ; reg_ctrl_width[1]                            ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
+; 3.000 ; i_free_vbus    ; lpm_counter:reg_x_cnt_rtl_0|dffs[1]          ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
+; 3.000 ; i_src_data[5]  ; reg_ctrl_width[5]                            ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
+; 3.000 ; io_src_addr[2] ; reg_ctrl_width[5]                            ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
+; 3.000 ; io_src_we_b    ; reg_ctrl_width[5]                            ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
+; 3.000 ; i_src_ce_b     ; reg_ctrl_width[5]                            ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
+; 3.000 ; io_src_addr[0] ; reg_ctrl_width[5]                            ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
+; 3.000 ; io_src_addr[1] ; reg_ctrl_width[5]                            ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
+; 3.000 ; i_src_data[4]  ; reg_ctrl_width[4]                            ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
+; 3.000 ; io_src_addr[2] ; reg_ctrl_width[4]                            ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
+; 3.000 ; io_src_we_b    ; reg_ctrl_width[4]                            ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
+; 3.000 ; i_src_ce_b     ; reg_ctrl_width[4]                            ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
+; 3.000 ; io_src_addr[0] ; reg_ctrl_width[4]                            ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
+; 3.000 ; io_src_addr[1] ; reg_ctrl_width[4]                            ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
+; 3.000 ; i_src_data[3]  ; reg_ctrl_width[3]                            ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
+; 3.000 ; io_src_addr[2] ; reg_ctrl_width[3]                            ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
+; 3.000 ; io_src_we_b    ; reg_ctrl_width[3]                            ; i_clk        ; i_clk       ; 0.000        ; 3.000      ; 10.000     ;
 +-------+----------------+----------------------------------------------+--------------+-------------+--------------+------------+------------+
 
 
@@ -395,8 +395,8 @@ No paths to report.
 ; 17.000 ; reg_dst_data_hold[7] ; o_dst_we_b ; i_clk        ; i_clk2      ; 0.000        ; -3.000     ; 14.000     ;
 ; 17.000 ; reg_dst_data_hold[5] ; o_dst_we_b ; i_clk        ; i_clk2      ; 0.000        ; -3.000     ; 14.000     ;
 ; 17.000 ; reg_dst_data_hold[1] ; o_dst_we_b ; i_clk        ; i_clk2      ; 0.000        ; -3.000     ; 14.000     ;
-; 24.000 ; i_free_vbus_b        ; o_dst_we_b ; i_clk        ; i_clk2      ; 0.000        ; 0.000      ; 24.000     ;
-; 26.000 ; reg_active_clk2      ; o_dst_we_b ; i_clk        ; i_clk2      ; 0.000        ; -3.000     ; 23.000     ;
+; 17.000 ; reg_active_clk2      ; o_dst_we_b ; i_clk        ; i_clk2      ; 0.000        ; -3.000     ; 14.000     ;
+; 17.000 ; reg_free_vbus        ; o_dst_we_b ; i_clk        ; i_clk2      ; 0.000        ; -3.000     ; 14.000     ;
 ; 34.000 ; i_clk2               ; o_dst_we_b ; i_clk2       ; i_clk2      ; -19.000      ; 0.000      ; 15.000     ;
 +--------+----------------------+------------+--------------+-------------+--------------+------------+------------+
 
@@ -514,9 +514,8 @@ No paths to report.
 +-----------------+------------+--------+--------+------------+-----------------+
 ; Data Port       ; Clock Port ; Rise   ; Fall   ; Clock Edge ; Clock Reference ;
 +-----------------+------------+--------+--------+------------+-----------------+
-; i_free_vbus_b   ; i_clk      ; 28.000 ; 28.000 ; Rise       ; i_clk           ;
-; i_src_ce2_b     ; i_clk      ; 28.000 ; 28.000 ; Rise       ; i_clk           ;
-; i_src_ce_b      ; i_clk      ; 28.000 ; 28.000 ; Rise       ; i_clk           ;
+; i_free_vbus     ; i_clk      ; 27.000 ; 27.000 ; Rise       ; i_clk           ;
+; i_src_ce_b      ; i_clk      ; 27.000 ; 27.000 ; Rise       ; i_clk           ;
 ; i_src_data[*]   ; i_clk      ; 11.000 ; 11.000 ; Rise       ; i_clk           ;
 ;  i_src_data[0]  ; i_clk      ; 11.000 ; 11.000 ; Rise       ; i_clk           ;
 ;  i_src_data[1]  ; i_clk      ; 11.000 ; 11.000 ; Rise       ; i_clk           ;
@@ -526,11 +525,11 @@ No paths to report.
 ;  i_src_data[5]  ; i_clk      ; 11.000 ; 11.000 ; Rise       ; i_clk           ;
 ;  i_src_data[6]  ; i_clk      ; 11.000 ; 11.000 ; Rise       ; i_clk           ;
 ;  i_src_data[7]  ; i_clk      ; 11.000 ; 11.000 ; Rise       ; i_clk           ;
-; io_src_addr[*]  ; i_clk      ; 28.000 ; 28.000 ; Rise       ; i_clk           ;
-;  io_src_addr[0] ; i_clk      ; 28.000 ; 28.000 ; Rise       ; i_clk           ;
-;  io_src_addr[1] ; i_clk      ; 28.000 ; 28.000 ; Rise       ; i_clk           ;
-;  io_src_addr[2] ; i_clk      ; 28.000 ; 28.000 ; Rise       ; i_clk           ;
-; io_src_we_b     ; i_clk      ; 28.000 ; 28.000 ; Rise       ; i_clk           ;
+; io_src_addr[*]  ; i_clk      ; 27.000 ; 27.000 ; Rise       ; i_clk           ;
+;  io_src_addr[0] ; i_clk      ; 27.000 ; 27.000 ; Rise       ; i_clk           ;
+;  io_src_addr[1] ; i_clk      ; 27.000 ; 27.000 ; Rise       ; i_clk           ;
+;  io_src_addr[2] ; i_clk      ; 27.000 ; 27.000 ; Rise       ; i_clk           ;
+; io_src_we_b     ; i_clk      ; 27.000 ; 27.000 ; Rise       ; i_clk           ;
 +-----------------+------------+--------+--------+------------+-----------------+
 
 
@@ -539,8 +538,7 @@ No paths to report.
 +-----------------+------------+--------+--------+------------+-----------------+
 ; Data Port       ; Clock Port ; Rise   ; Fall   ; Clock Edge ; Clock Reference ;
 +-----------------+------------+--------+--------+------------+-----------------+
-; i_free_vbus_b   ; i_clk      ; -3.000 ; -3.000 ; Rise       ; i_clk           ;
-; i_src_ce2_b     ; i_clk      ; -3.000 ; -3.000 ; Rise       ; i_clk           ;
+; i_free_vbus     ; i_clk      ; -3.000 ; -3.000 ; Rise       ; i_clk           ;
 ; i_src_ce_b      ; i_clk      ; -3.000 ; -3.000 ; Rise       ; i_clk           ;
 ; i_src_data[*]   ; i_clk      ; -3.000 ; -3.000 ; Rise       ; i_clk           ;
 ;  i_src_data[0]  ; i_clk      ; -3.000 ; -3.000 ; Rise       ; i_clk           ;
@@ -579,62 +577,7 @@ No paths to report.
 ;  io_src_addr[11]   ; i_clk      ; 8.000  ; 8.000  ; Rise       ; i_clk           ;
 ;  io_src_addr[12]   ; i_clk      ; 8.000  ; 8.000  ; Rise       ; i_clk           ;
 ; o_active           ; i_clk      ; 8.000  ; 8.000  ; Rise       ; i_clk           ;
-; o_dst_addr[*]      ; i_clk      ; 8.000  ; 8.000  ; Rise       ; i_clk           ;
-;  o_dst_addr[0]     ; i_clk      ; 8.000  ; 8.000  ; Rise       ; i_clk           ;
-;  o_dst_addr[1]     ; i_clk      ; 8.000  ; 8.000  ; Rise       ; i_clk           ;
-;  o_dst_addr[2]     ; i_clk      ; 8.000  ; 8.000  ; Rise       ; i_clk           ;
-;  o_dst_addr[3]     ; i_clk      ; 8.000  ; 8.000  ; Rise       ; i_clk           ;
-;  o_dst_addr[4]     ; i_clk      ; 8.000  ; 8.000  ; Rise       ; i_clk           ;
-;  o_dst_addr[5]     ; i_clk      ; 8.000  ; 8.000  ; Rise       ; i_clk           ;
-;  o_dst_addr[6]     ; i_clk      ; 8.000  ; 8.000  ; Rise       ; i_clk           ;
-;  o_dst_addr[7]     ; i_clk      ; 8.000  ; 8.000  ; Rise       ; i_clk           ;
-;  o_dst_addr[8]     ; i_clk      ; 8.000  ; 8.000  ; Rise       ; i_clk           ;
-;  o_dst_addr[9]     ; i_clk      ; 8.000  ; 8.000  ; Rise       ; i_clk           ;
-;  o_dst_addr[10]    ; i_clk      ; 8.000  ; 8.000  ; Rise       ; i_clk           ;
-;  o_dst_addr[11]    ; i_clk      ; 8.000  ; 8.000  ; Rise       ; i_clk           ;
-;  o_dst_addr[12]    ; i_clk      ; 8.000  ; 8.000  ; Rise       ; i_clk           ;
-;  o_dst_addr[13]    ; i_clk      ; 8.000  ; 8.000  ; Rise       ; i_clk           ;
-;  o_dst_addr[14]    ; i_clk      ; 8.000  ; 8.000  ; Rise       ; i_clk           ;
-;  o_dst_addr[15]    ; i_clk      ; 8.000  ; 8.000  ; Rise       ; i_clk           ;
-; o_dst_data[*]      ; i_clk      ; 8.000  ; 8.000  ; Rise       ; i_clk           ;
-;  o_dst_data[0]     ; i_clk      ; 8.000  ; 8.000  ; Rise       ; i_clk           ;
-;  o_dst_data[1]     ; i_clk      ; 8.000  ; 8.000  ; Rise       ; i_clk           ;
-;  o_dst_data[2]     ; i_clk      ; 8.000  ; 8.000  ; Rise       ; i_clk           ;
-;  o_dst_data[3]     ; i_clk      ; 8.000  ; 8.000  ; Rise       ; i_clk           ;
-;  o_dst_data[4]     ; i_clk      ; 8.000  ; 8.000  ; Rise       ; i_clk           ;
-;  o_dst_data[5]     ; i_clk      ; 8.000  ; 8.000  ; Rise       ; i_clk           ;
-;  o_dst_data[6]     ; i_clk      ; 8.000  ; 8.000  ; Rise       ; i_clk           ;
-;  o_dst_data[7]     ; i_clk      ; 8.000  ; 8.000  ; Rise       ; i_clk           ;
-; o_dst_we_b         ; i_clk      ; 26.000 ; 26.000 ; Rise       ; i_clk           ;
-; o_src_ram_page[*]  ; i_clk      ; 8.000  ; 8.000  ; Rise       ; i_clk           ;
-;  o_src_ram_page[0] ; i_clk      ; 8.000  ; 8.000  ; Rise       ; i_clk           ;
-;  o_src_ram_page[1] ; i_clk      ; 8.000  ; 8.000  ; Rise       ; i_clk           ;
-; o_src_re_b         ; i_clk      ; 17.000 ; 17.000 ; Rise       ; i_clk           ;
-; o_dst_we_b         ; i_clk2     ; 15.000 ; 15.000 ; Rise       ; i_clk2          ;
-; o_dst_we_b         ; i_clk2     ; 15.000 ; 15.000 ; Fall       ; i_clk2          ;
-+--------------------+------------+--------+--------+------------+-----------------+
-
-
-+----------------------------------------------------------------------------------+
-; Minimum Clock to Output Times                                                    ;
-+--------------------+------------+--------+--------+------------+-----------------+
-; Data Port          ; Clock Port ; Rise   ; Fall   ; Clock Edge ; Clock Reference ;
-+--------------------+------------+--------+--------+------------+-----------------+
-; io_src_addr[*]     ; i_clk      ; 8.000  ; 8.000  ; Rise       ; i_clk           ;
-;  io_src_addr[0]    ; i_clk      ; 8.000  ; 8.000  ; Rise       ; i_clk           ;
-;  io_src_addr[1]    ; i_clk      ; 8.000  ; 8.000  ; Rise       ; i_clk           ;
-;  io_src_addr[2]    ; i_clk      ; 8.000  ; 8.000  ; Rise       ; i_clk           ;
-;  io_src_addr[3]    ; i_clk      ; 8.000  ; 8.000  ; Rise       ; i_clk           ;
-;  io_src_addr[4]    ; i_clk      ; 8.000  ; 8.000  ; Rise       ; i_clk           ;
-;  io_src_addr[5]    ; i_clk      ; 8.000  ; 8.000  ; Rise       ; i_clk           ;
-;  io_src_addr[6]    ; i_clk      ; 8.000  ; 8.000  ; Rise       ; i_clk           ;
-;  io_src_addr[7]    ; i_clk      ; 8.000  ; 8.000  ; Rise       ; i_clk           ;
-;  io_src_addr[8]    ; i_clk      ; 8.000  ; 8.000  ; Rise       ; i_clk           ;
-;  io_src_addr[9]    ; i_clk      ; 8.000  ; 8.000  ; Rise       ; i_clk           ;
-;  io_src_addr[10]   ; i_clk      ; 8.000  ; 8.000  ; Rise       ; i_clk           ;
-;  io_src_addr[11]   ; i_clk      ; 8.000  ; 8.000  ; Rise       ; i_clk           ;
-;  io_src_addr[12]   ; i_clk      ; 8.000  ; 8.000  ; Rise       ; i_clk           ;
-; o_active           ; i_clk      ; 8.000  ; 8.000  ; Rise       ; i_clk           ;
+; o_addr_sel         ; i_clk      ; 8.000  ; 8.000  ; Rise       ; i_clk           ;
 ; o_dst_addr[*]      ; i_clk      ; 8.000  ; 8.000  ; Rise       ; i_clk           ;
 ;  o_dst_addr[0]     ; i_clk      ; 8.000  ; 8.000  ; Rise       ; i_clk           ;
 ;  o_dst_addr[1]     ; i_clk      ; 8.000  ; 8.000  ; Rise       ; i_clk           ;
@@ -665,76 +608,97 @@ No paths to report.
 ; o_src_ram_page[*]  ; i_clk      ; 8.000  ; 8.000  ; Rise       ; i_clk           ;
 ;  o_src_ram_page[0] ; i_clk      ; 8.000  ; 8.000  ; Rise       ; i_clk           ;
 ;  o_src_ram_page[1] ; i_clk      ; 8.000  ; 8.000  ; Rise       ; i_clk           ;
-; o_src_re_b         ; i_clk      ; 17.000 ; 17.000 ; Rise       ; i_clk           ;
 ; o_dst_we_b         ; i_clk2     ; 15.000 ; 15.000 ; Rise       ; i_clk2          ;
 ; o_dst_we_b         ; i_clk2     ; 15.000 ; 15.000 ; Fall       ; i_clk2          ;
 +--------------------+------------+--------+--------+------------+-----------------+
 
 
-+--------------------------------------------------------------------+
-; Propagation Delay                                                  ;
-+---------------+----------------+--------+--------+--------+--------+
-; Input Port    ; Output Port    ; RR     ; RF     ; FR     ; FF     ;
-+---------------+----------------+--------+--------+--------+--------+
-; i_free_vbus_b ; o_dst_addr[0]  ;        ; 22.000 ; 22.000 ;        ;
-; i_free_vbus_b ; o_dst_addr[1]  ;        ; 22.000 ; 22.000 ;        ;
-; i_free_vbus_b ; o_dst_addr[2]  ;        ; 22.000 ; 22.000 ;        ;
-; i_free_vbus_b ; o_dst_addr[3]  ;        ; 22.000 ; 22.000 ;        ;
-; i_free_vbus_b ; o_dst_addr[4]  ;        ; 22.000 ; 22.000 ;        ;
-; i_free_vbus_b ; o_dst_addr[5]  ;        ; 22.000 ; 22.000 ;        ;
-; i_free_vbus_b ; o_dst_addr[6]  ;        ; 22.000 ; 22.000 ;        ;
-; i_free_vbus_b ; o_dst_addr[7]  ;        ; 22.000 ; 22.000 ;        ;
-; i_free_vbus_b ; o_dst_addr[8]  ;        ; 22.000 ; 22.000 ;        ;
-; i_free_vbus_b ; o_dst_addr[9]  ;        ; 22.000 ; 22.000 ;        ;
-; i_free_vbus_b ; o_dst_addr[10] ;        ; 22.000 ; 22.000 ;        ;
-; i_free_vbus_b ; o_dst_addr[11] ;        ; 22.000 ; 22.000 ;        ;
-; i_free_vbus_b ; o_dst_addr[12] ;        ; 22.000 ; 22.000 ;        ;
-; i_free_vbus_b ; o_dst_addr[13] ;        ; 22.000 ; 22.000 ;        ;
-; i_free_vbus_b ; o_dst_addr[14] ;        ; 22.000 ; 22.000 ;        ;
-; i_free_vbus_b ; o_dst_addr[15] ;        ; 22.000 ; 22.000 ;        ;
-; i_free_vbus_b ; o_dst_data[0]  ;        ; 22.000 ; 22.000 ;        ;
-; i_free_vbus_b ; o_dst_data[1]  ;        ; 22.000 ; 22.000 ;        ;
-; i_free_vbus_b ; o_dst_data[2]  ;        ; 22.000 ; 22.000 ;        ;
-; i_free_vbus_b ; o_dst_data[3]  ;        ; 22.000 ; 22.000 ;        ;
-; i_free_vbus_b ; o_dst_data[4]  ;        ; 22.000 ; 22.000 ;        ;
-; i_free_vbus_b ; o_dst_data[5]  ;        ; 22.000 ; 22.000 ;        ;
-; i_free_vbus_b ; o_dst_data[6]  ;        ; 22.000 ; 22.000 ;        ;
-; i_free_vbus_b ; o_dst_data[7]  ;        ; 22.000 ; 22.000 ;        ;
-; i_free_vbus_b ; o_dst_we_b     ; 24.000 ;        ;        ; 24.000 ;
-+---------------+----------------+--------+--------+--------+--------+
++----------------------------------------------------------------------------------+
+; Minimum Clock to Output Times                                                    ;
++--------------------+------------+--------+--------+------------+-----------------+
+; Data Port          ; Clock Port ; Rise   ; Fall   ; Clock Edge ; Clock Reference ;
++--------------------+------------+--------+--------+------------+-----------------+
+; io_src_addr[*]     ; i_clk      ; 8.000  ; 8.000  ; Rise       ; i_clk           ;
+;  io_src_addr[0]    ; i_clk      ; 8.000  ; 8.000  ; Rise       ; i_clk           ;
+;  io_src_addr[1]    ; i_clk      ; 8.000  ; 8.000  ; Rise       ; i_clk           ;
+;  io_src_addr[2]    ; i_clk      ; 8.000  ; 8.000  ; Rise       ; i_clk           ;
+;  io_src_addr[3]    ; i_clk      ; 8.000  ; 8.000  ; Rise       ; i_clk           ;
+;  io_src_addr[4]    ; i_clk      ; 8.000  ; 8.000  ; Rise       ; i_clk           ;
+;  io_src_addr[5]    ; i_clk      ; 8.000  ; 8.000  ; Rise       ; i_clk           ;
+;  io_src_addr[6]    ; i_clk      ; 8.000  ; 8.000  ; Rise       ; i_clk           ;
+;  io_src_addr[7]    ; i_clk      ; 8.000  ; 8.000  ; Rise       ; i_clk           ;
+;  io_src_addr[8]    ; i_clk      ; 8.000  ; 8.000  ; Rise       ; i_clk           ;
+;  io_src_addr[9]    ; i_clk      ; 8.000  ; 8.000  ; Rise       ; i_clk           ;
+;  io_src_addr[10]   ; i_clk      ; 8.000  ; 8.000  ; Rise       ; i_clk           ;
+;  io_src_addr[11]   ; i_clk      ; 8.000  ; 8.000  ; Rise       ; i_clk           ;
+;  io_src_addr[12]   ; i_clk      ; 8.000  ; 8.000  ; Rise       ; i_clk           ;
+; o_active           ; i_clk      ; 8.000  ; 8.000  ; Rise       ; i_clk           ;
+; o_addr_sel         ; i_clk      ; 8.000  ; 8.000  ; Rise       ; i_clk           ;
+; o_dst_addr[*]      ; i_clk      ; 8.000  ; 8.000  ; Rise       ; i_clk           ;
+;  o_dst_addr[0]     ; i_clk      ; 8.000  ; 8.000  ; Rise       ; i_clk           ;
+;  o_dst_addr[1]     ; i_clk      ; 8.000  ; 8.000  ; Rise       ; i_clk           ;
+;  o_dst_addr[2]     ; i_clk      ; 8.000  ; 8.000  ; Rise       ; i_clk           ;
+;  o_dst_addr[3]     ; i_clk      ; 8.000  ; 8.000  ; Rise       ; i_clk           ;
+;  o_dst_addr[4]     ; i_clk      ; 8.000  ; 8.000  ; Rise       ; i_clk           ;
+;  o_dst_addr[5]     ; i_clk      ; 8.000  ; 8.000  ; Rise       ; i_clk           ;
+;  o_dst_addr[6]     ; i_clk      ; 8.000  ; 8.000  ; Rise       ; i_clk           ;
+;  o_dst_addr[7]     ; i_clk      ; 8.000  ; 8.000  ; Rise       ; i_clk           ;
+;  o_dst_addr[8]     ; i_clk      ; 8.000  ; 8.000  ; Rise       ; i_clk           ;
+;  o_dst_addr[9]     ; i_clk      ; 8.000  ; 8.000  ; Rise       ; i_clk           ;
+;  o_dst_addr[10]    ; i_clk      ; 8.000  ; 8.000  ; Rise       ; i_clk           ;
+;  o_dst_addr[11]    ; i_clk      ; 8.000  ; 8.000  ; Rise       ; i_clk           ;
+;  o_dst_addr[12]    ; i_clk      ; 8.000  ; 8.000  ; Rise       ; i_clk           ;
+;  o_dst_addr[13]    ; i_clk      ; 8.000  ; 8.000  ; Rise       ; i_clk           ;
+;  o_dst_addr[14]    ; i_clk      ; 8.000  ; 8.000  ; Rise       ; i_clk           ;
+;  o_dst_addr[15]    ; i_clk      ; 8.000  ; 8.000  ; Rise       ; i_clk           ;
+; o_dst_data[*]      ; i_clk      ; 8.000  ; 8.000  ; Rise       ; i_clk           ;
+;  o_dst_data[0]     ; i_clk      ; 8.000  ; 8.000  ; Rise       ; i_clk           ;
+;  o_dst_data[1]     ; i_clk      ; 8.000  ; 8.000  ; Rise       ; i_clk           ;
+;  o_dst_data[2]     ; i_clk      ; 8.000  ; 8.000  ; Rise       ; i_clk           ;
+;  o_dst_data[3]     ; i_clk      ; 8.000  ; 8.000  ; Rise       ; i_clk           ;
+;  o_dst_data[4]     ; i_clk      ; 8.000  ; 8.000  ; Rise       ; i_clk           ;
+;  o_dst_data[5]     ; i_clk      ; 8.000  ; 8.000  ; Rise       ; i_clk           ;
+;  o_dst_data[6]     ; i_clk      ; 8.000  ; 8.000  ; Rise       ; i_clk           ;
+;  o_dst_data[7]     ; i_clk      ; 8.000  ; 8.000  ; Rise       ; i_clk           ;
+; o_dst_we_b         ; i_clk      ; 17.000 ; 17.000 ; Rise       ; i_clk           ;
+; o_src_ram_page[*]  ; i_clk      ; 8.000  ; 8.000  ; Rise       ; i_clk           ;
+;  o_src_ram_page[0] ; i_clk      ; 8.000  ; 8.000  ; Rise       ; i_clk           ;
+;  o_src_ram_page[1] ; i_clk      ; 8.000  ; 8.000  ; Rise       ; i_clk           ;
+; o_dst_we_b         ; i_clk2     ; 15.000 ; 15.000 ; Rise       ; i_clk2          ;
+; o_dst_we_b         ; i_clk2     ; 15.000 ; 15.000 ; Fall       ; i_clk2          ;
++--------------------+------------+--------+--------+------------+-----------------+
 
 
-+--------------------------------------------------------------------+
-; Minimum Propagation Delay                                          ;
-+---------------+----------------+--------+--------+--------+--------+
-; Input Port    ; Output Port    ; RR     ; RF     ; FR     ; FF     ;
-+---------------+----------------+--------+--------+--------+--------+
-; i_free_vbus_b ; o_dst_addr[0]  ;        ; 22.000 ; 22.000 ;        ;
-; i_free_vbus_b ; o_dst_addr[1]  ;        ; 22.000 ; 22.000 ;        ;
-; i_free_vbus_b ; o_dst_addr[2]  ;        ; 22.000 ; 22.000 ;        ;
-; i_free_vbus_b ; o_dst_addr[3]  ;        ; 22.000 ; 22.000 ;        ;
-; i_free_vbus_b ; o_dst_addr[4]  ;        ; 22.000 ; 22.000 ;        ;
-; i_free_vbus_b ; o_dst_addr[5]  ;        ; 22.000 ; 22.000 ;        ;
-; i_free_vbus_b ; o_dst_addr[6]  ;        ; 22.000 ; 22.000 ;        ;
-; i_free_vbus_b ; o_dst_addr[7]  ;        ; 22.000 ; 22.000 ;        ;
-; i_free_vbus_b ; o_dst_addr[8]  ;        ; 22.000 ; 22.000 ;        ;
-; i_free_vbus_b ; o_dst_addr[9]  ;        ; 22.000 ; 22.000 ;        ;
-; i_free_vbus_b ; o_dst_addr[10] ;        ; 22.000 ; 22.000 ;        ;
-; i_free_vbus_b ; o_dst_addr[11] ;        ; 22.000 ; 22.000 ;        ;
-; i_free_vbus_b ; o_dst_addr[12] ;        ; 22.000 ; 22.000 ;        ;
-; i_free_vbus_b ; o_dst_addr[13] ;        ; 22.000 ; 22.000 ;        ;
-; i_free_vbus_b ; o_dst_addr[14] ;        ; 22.000 ; 22.000 ;        ;
-; i_free_vbus_b ; o_dst_addr[15] ;        ; 22.000 ; 22.000 ;        ;
-; i_free_vbus_b ; o_dst_data[0]  ;        ; 22.000 ; 22.000 ;        ;
-; i_free_vbus_b ; o_dst_data[1]  ;        ; 22.000 ; 22.000 ;        ;
-; i_free_vbus_b ; o_dst_data[2]  ;        ; 22.000 ; 22.000 ;        ;
-; i_free_vbus_b ; o_dst_data[3]  ;        ; 22.000 ; 22.000 ;        ;
-; i_free_vbus_b ; o_dst_data[4]  ;        ; 22.000 ; 22.000 ;        ;
-; i_free_vbus_b ; o_dst_data[5]  ;        ; 22.000 ; 22.000 ;        ;
-; i_free_vbus_b ; o_dst_data[6]  ;        ; 22.000 ; 22.000 ;        ;
-; i_free_vbus_b ; o_dst_data[7]  ;        ; 22.000 ; 22.000 ;        ;
-; i_free_vbus_b ; o_dst_we_b     ; 24.000 ;        ;        ; 24.000 ;
-+---------------+----------------+--------+--------+--------+--------+
++--------------------------------------------------------+
+; Propagation Delay                                      ;
++------------+---------------+----+--------+--------+----+
+; Input Port ; Output Port   ; RR ; RF     ; FR     ; FF ;
++------------+---------------+----+--------+--------+----+
+; i_clk3     ; o_dst_data[0] ;    ; 22.000 ; 22.000 ;    ;
+; i_clk3     ; o_dst_data[1] ;    ; 22.000 ; 22.000 ;    ;
+; i_clk3     ; o_dst_data[2] ;    ; 22.000 ; 22.000 ;    ;
+; i_clk3     ; o_dst_data[3] ;    ; 22.000 ; 22.000 ;    ;
+; i_clk3     ; o_dst_data[4] ;    ; 22.000 ; 22.000 ;    ;
+; i_clk3     ; o_dst_data[5] ;    ; 22.000 ; 22.000 ;    ;
+; i_clk3     ; o_dst_data[6] ;    ; 22.000 ; 22.000 ;    ;
+; i_clk3     ; o_dst_data[7] ;    ; 22.000 ; 22.000 ;    ;
++------------+---------------+----+--------+--------+----+
+
+
++--------------------------------------------------------+
+; Minimum Propagation Delay                              ;
++------------+---------------+----+--------+--------+----+
+; Input Port ; Output Port   ; RR ; RF     ; FR     ; FF ;
++------------+---------------+----+--------+--------+----+
+; i_clk3     ; o_dst_data[0] ;    ; 22.000 ; 22.000 ;    ;
+; i_clk3     ; o_dst_data[1] ;    ; 22.000 ; 22.000 ;    ;
+; i_clk3     ; o_dst_data[2] ;    ; 22.000 ; 22.000 ;    ;
+; i_clk3     ; o_dst_data[3] ;    ; 22.000 ; 22.000 ;    ;
+; i_clk3     ; o_dst_data[4] ;    ; 22.000 ; 22.000 ;    ;
+; i_clk3     ; o_dst_data[5] ;    ; 22.000 ; 22.000 ;    ;
+; i_clk3     ; o_dst_data[6] ;    ; 22.000 ; 22.000 ;    ;
+; i_clk3     ; o_dst_data[7] ;    ; 22.000 ; 22.000 ;    ;
++------------+---------------+----+--------+--------+----+
 
 
 +--------------------------------------------------------------------------------+
@@ -757,23 +721,6 @@ No paths to report.
 ;  io_src_addr[11]   ; i_clk      ; 15.000 ;      ; Rise       ; i_clk           ;
 ;  io_src_addr[12]   ; i_clk      ; 15.000 ;      ; Rise       ; i_clk           ;
 ; io_src_we_b        ; i_clk      ; 15.000 ;      ; Rise       ; i_clk           ;
-; o_dst_addr[*]      ; i_clk      ; 24.000 ;      ; Rise       ; i_clk           ;
-;  o_dst_addr[0]     ; i_clk      ; 24.000 ;      ; Rise       ; i_clk           ;
-;  o_dst_addr[1]     ; i_clk      ; 24.000 ;      ; Rise       ; i_clk           ;
-;  o_dst_addr[2]     ; i_clk      ; 24.000 ;      ; Rise       ; i_clk           ;
-;  o_dst_addr[3]     ; i_clk      ; 24.000 ;      ; Rise       ; i_clk           ;
-;  o_dst_addr[4]     ; i_clk      ; 24.000 ;      ; Rise       ; i_clk           ;
-;  o_dst_addr[5]     ; i_clk      ; 24.000 ;      ; Rise       ; i_clk           ;
-;  o_dst_addr[6]     ; i_clk      ; 24.000 ;      ; Rise       ; i_clk           ;
-;  o_dst_addr[7]     ; i_clk      ; 24.000 ;      ; Rise       ; i_clk           ;
-;  o_dst_addr[8]     ; i_clk      ; 24.000 ;      ; Rise       ; i_clk           ;
-;  o_dst_addr[9]     ; i_clk      ; 24.000 ;      ; Rise       ; i_clk           ;
-;  o_dst_addr[10]    ; i_clk      ; 24.000 ;      ; Rise       ; i_clk           ;
-;  o_dst_addr[11]    ; i_clk      ; 24.000 ;      ; Rise       ; i_clk           ;
-;  o_dst_addr[12]    ; i_clk      ; 24.000 ;      ; Rise       ; i_clk           ;
-;  o_dst_addr[13]    ; i_clk      ; 24.000 ;      ; Rise       ; i_clk           ;
-;  o_dst_addr[14]    ; i_clk      ; 24.000 ;      ; Rise       ; i_clk           ;
-;  o_dst_addr[15]    ; i_clk      ; 24.000 ;      ; Rise       ; i_clk           ;
 ; o_dst_data[*]      ; i_clk      ; 24.000 ;      ; Rise       ; i_clk           ;
 ;  o_dst_data[0]     ; i_clk      ; 24.000 ;      ; Rise       ; i_clk           ;
 ;  o_dst_data[1]     ; i_clk      ; 24.000 ;      ; Rise       ; i_clk           ;
@@ -809,23 +756,6 @@ No paths to report.
 ;  io_src_addr[11]   ; i_clk      ; 15.000 ;      ; Rise       ; i_clk           ;
 ;  io_src_addr[12]   ; i_clk      ; 15.000 ;      ; Rise       ; i_clk           ;
 ; io_src_we_b        ; i_clk      ; 15.000 ;      ; Rise       ; i_clk           ;
-; o_dst_addr[*]      ; i_clk      ; 24.000 ;      ; Rise       ; i_clk           ;
-;  o_dst_addr[0]     ; i_clk      ; 24.000 ;      ; Rise       ; i_clk           ;
-;  o_dst_addr[1]     ; i_clk      ; 24.000 ;      ; Rise       ; i_clk           ;
-;  o_dst_addr[2]     ; i_clk      ; 24.000 ;      ; Rise       ; i_clk           ;
-;  o_dst_addr[3]     ; i_clk      ; 24.000 ;      ; Rise       ; i_clk           ;
-;  o_dst_addr[4]     ; i_clk      ; 24.000 ;      ; Rise       ; i_clk           ;
-;  o_dst_addr[5]     ; i_clk      ; 24.000 ;      ; Rise       ; i_clk           ;
-;  o_dst_addr[6]     ; i_clk      ; 24.000 ;      ; Rise       ; i_clk           ;
-;  o_dst_addr[7]     ; i_clk      ; 24.000 ;      ; Rise       ; i_clk           ;
-;  o_dst_addr[8]     ; i_clk      ; 24.000 ;      ; Rise       ; i_clk           ;
-;  o_dst_addr[9]     ; i_clk      ; 24.000 ;      ; Rise       ; i_clk           ;
-;  o_dst_addr[10]    ; i_clk      ; 24.000 ;      ; Rise       ; i_clk           ;
-;  o_dst_addr[11]    ; i_clk      ; 24.000 ;      ; Rise       ; i_clk           ;
-;  o_dst_addr[12]    ; i_clk      ; 24.000 ;      ; Rise       ; i_clk           ;
-;  o_dst_addr[13]    ; i_clk      ; 24.000 ;      ; Rise       ; i_clk           ;
-;  o_dst_addr[14]    ; i_clk      ; 24.000 ;      ; Rise       ; i_clk           ;
-;  o_dst_addr[15]    ; i_clk      ; 24.000 ;      ; Rise       ; i_clk           ;
 ; o_dst_data[*]      ; i_clk      ; 24.000 ;      ; Rise       ; i_clk           ;
 ;  o_dst_data[0]     ; i_clk      ; 24.000 ;      ; Rise       ; i_clk           ;
 ;  o_dst_data[1]     ; i_clk      ; 24.000 ;      ; Rise       ; i_clk           ;
@@ -861,23 +791,6 @@ No paths to report.
 ;  io_src_addr[11]   ; i_clk      ; 15.000    ;           ; Rise       ; i_clk           ;
 ;  io_src_addr[12]   ; i_clk      ; 15.000    ;           ; Rise       ; i_clk           ;
 ; io_src_we_b        ; i_clk      ; 15.000    ;           ; Rise       ; i_clk           ;
-; o_dst_addr[*]      ; i_clk      ; 24.000    ;           ; Rise       ; i_clk           ;
-;  o_dst_addr[0]     ; i_clk      ; 24.000    ;           ; Rise       ; i_clk           ;
-;  o_dst_addr[1]     ; i_clk      ; 24.000    ;           ; Rise       ; i_clk           ;
-;  o_dst_addr[2]     ; i_clk      ; 24.000    ;           ; Rise       ; i_clk           ;
-;  o_dst_addr[3]     ; i_clk      ; 24.000    ;           ; Rise       ; i_clk           ;
-;  o_dst_addr[4]     ; i_clk      ; 24.000    ;           ; Rise       ; i_clk           ;
-;  o_dst_addr[5]     ; i_clk      ; 24.000    ;           ; Rise       ; i_clk           ;
-;  o_dst_addr[6]     ; i_clk      ; 24.000    ;           ; Rise       ; i_clk           ;
-;  o_dst_addr[7]     ; i_clk      ; 24.000    ;           ; Rise       ; i_clk           ;
-;  o_dst_addr[8]     ; i_clk      ; 24.000    ;           ; Rise       ; i_clk           ;
-;  o_dst_addr[9]     ; i_clk      ; 24.000    ;           ; Rise       ; i_clk           ;
-;  o_dst_addr[10]    ; i_clk      ; 24.000    ;           ; Rise       ; i_clk           ;
-;  o_dst_addr[11]    ; i_clk      ; 24.000    ;           ; Rise       ; i_clk           ;
-;  o_dst_addr[12]    ; i_clk      ; 24.000    ;           ; Rise       ; i_clk           ;
-;  o_dst_addr[13]    ; i_clk      ; 24.000    ;           ; Rise       ; i_clk           ;
-;  o_dst_addr[14]    ; i_clk      ; 24.000    ;           ; Rise       ; i_clk           ;
-;  o_dst_addr[15]    ; i_clk      ; 24.000    ;           ; Rise       ; i_clk           ;
 ; o_dst_data[*]      ; i_clk      ; 24.000    ;           ; Rise       ; i_clk           ;
 ;  o_dst_data[0]     ; i_clk      ; 24.000    ;           ; Rise       ; i_clk           ;
 ;  o_dst_data[1]     ; i_clk      ; 24.000    ;           ; Rise       ; i_clk           ;
@@ -913,23 +826,6 @@ No paths to report.
 ;  io_src_addr[11]   ; i_clk      ; 15.000    ;           ; Rise       ; i_clk           ;
 ;  io_src_addr[12]   ; i_clk      ; 15.000    ;           ; Rise       ; i_clk           ;
 ; io_src_we_b        ; i_clk      ; 15.000    ;           ; Rise       ; i_clk           ;
-; o_dst_addr[*]      ; i_clk      ; 24.000    ;           ; Rise       ; i_clk           ;
-;  o_dst_addr[0]     ; i_clk      ; 24.000    ;           ; Rise       ; i_clk           ;
-;  o_dst_addr[1]     ; i_clk      ; 24.000    ;           ; Rise       ; i_clk           ;
-;  o_dst_addr[2]     ; i_clk      ; 24.000    ;           ; Rise       ; i_clk           ;
-;  o_dst_addr[3]     ; i_clk      ; 24.000    ;           ; Rise       ; i_clk           ;
-;  o_dst_addr[4]     ; i_clk      ; 24.000    ;           ; Rise       ; i_clk           ;
-;  o_dst_addr[5]     ; i_clk      ; 24.000    ;           ; Rise       ; i_clk           ;
-;  o_dst_addr[6]     ; i_clk      ; 24.000    ;           ; Rise       ; i_clk           ;
-;  o_dst_addr[7]     ; i_clk      ; 24.000    ;           ; Rise       ; i_clk           ;
-;  o_dst_addr[8]     ; i_clk      ; 24.000    ;           ; Rise       ; i_clk           ;
-;  o_dst_addr[9]     ; i_clk      ; 24.000    ;           ; Rise       ; i_clk           ;
-;  o_dst_addr[10]    ; i_clk      ; 24.000    ;           ; Rise       ; i_clk           ;
-;  o_dst_addr[11]    ; i_clk      ; 24.000    ;           ; Rise       ; i_clk           ;
-;  o_dst_addr[12]    ; i_clk      ; 24.000    ;           ; Rise       ; i_clk           ;
-;  o_dst_addr[13]    ; i_clk      ; 24.000    ;           ; Rise       ; i_clk           ;
-;  o_dst_addr[14]    ; i_clk      ; 24.000    ;           ; Rise       ; i_clk           ;
-;  o_dst_addr[15]    ; i_clk      ; 24.000    ;           ; Rise       ; i_clk           ;
 ; o_dst_data[*]      ; i_clk      ; 24.000    ;           ; Rise       ; i_clk           ;
 ;  o_dst_data[0]     ; i_clk      ; 24.000    ;           ; Rise       ; i_clk           ;
 ;  o_dst_data[1]     ; i_clk      ; 24.000    ;           ; Rise       ; i_clk           ;
@@ -950,7 +846,7 @@ No paths to report.
 +------------+----------+----------+----------+----------+----------+
 ; From Clock ; To Clock ; RR Paths ; FR Paths ; RF Paths ; FF Paths ;
 +------------+----------+----------+----------+----------+----------+
-; i_clk      ; i_clk    ; 3243     ; 0        ; 0        ; 0        ;
+; i_clk      ; i_clk    ; 2894     ; 0        ; 0        ; 0        ;
 ; i_clk      ; i_clk2   ; 11       ; 0        ; 0        ; 0        ;
 ; i_clk2     ; i_clk2   ; 1        ; 1        ; 0        ; 0        ;
 +------------+----------+----------+----------+----------+----------+
@@ -962,7 +858,7 @@ Entries labeled "false path" only account for clock-to-clock false paths and not
 +------------+----------+----------+----------+----------+----------+
 ; From Clock ; To Clock ; RR Paths ; FR Paths ; RF Paths ; FF Paths ;
 +------------+----------+----------+----------+----------+----------+
-; i_clk      ; i_clk    ; 3243     ; 0        ; 0        ; 0        ;
+; i_clk      ; i_clk    ; 2894     ; 0        ; 0        ; 0        ;
 ; i_clk      ; i_clk2   ; 11       ; 0        ; 0        ; 0        ;
 ; i_clk2     ; i_clk2   ; 1        ; 1        ; 0        ; 0        ;
 +------------+----------+----------+----------+----------+----------+
@@ -1001,7 +897,7 @@ No dedicated SERDES Receiver circuitry present in device or used in design
 Info: *******************************************************************
 Info: Running Quartus II 32-bit TimeQuest Timing Analyzer
     Info: Version 13.0.1 Build 232 06/12/2013 Service Pack 1 SJ Web Edition
-    Info: Processing started: Sat Nov 09 18:48:53 2024
+    Info: Processing started: Thu Dec 26 10:18:49 2024
 Info: Command: quartus_sta GfxDma -c GfxDma
 Info: qsta_default_script.tcl version: #1
 Warning (20028): Parallel compilation is not licensed and has been disabled
@@ -1009,6 +905,9 @@ Info (306004): Started post-fitting delay annotation
 Info (306005): Delay annotation completed successfully
 Warning (335095): TimeQuest Timing Analyzer does not support the analysis of latches as synchronous elements for the currently selected device family.
 Info (332104): Reading SDC File: 'GfxDma.sdc'
+Warning (332174): Ignored filter at GfxDma.sdc(81): o_src_re_b could not be matched with a port
+Warning (332049): Ignored set_output_delay at GfxDma.sdc(81): Argument <targets> is an empty collection
+    Info (332050): set_output_delay -add_delay  -clock [get_clocks {i_clk}]  0.000 [get_ports {o_src_re_b}]
 Info: Found TIMEQUEST_REPORT_SCRIPT_INCLUDE_DEFAULT_ANALYSIS = ON
 Info (332146): Worst-case setup slack is 0.000
     Info (332119):     Slack End Point TNS Clock 
@@ -1029,10 +928,10 @@ Info (332146): Worst-case minimum pulse width slack is 14.000
 Info (332001): The selected device family is not supported by the report_metastability command.
 Info (332101): Design is fully constrained for setup requirements
 Info (332101): Design is fully constrained for hold requirements
-Info: Quartus II 32-bit TimeQuest Timing Analyzer was successful. 0 errors, 2 warnings
+Info: Quartus II 32-bit TimeQuest Timing Analyzer was successful. 0 errors, 4 warnings
     Info: Peak virtual memory: 267 megabytes
-    Info: Processing ended: Sat Nov 09 18:48:54 2024
-    Info: Elapsed time: 00:00:01
+    Info: Processing ended: Thu Dec 26 10:18:51 2024
+    Info: Elapsed time: 00:00:02
     Info: Total CPU time (on all processors): 00:00:01
 
 
