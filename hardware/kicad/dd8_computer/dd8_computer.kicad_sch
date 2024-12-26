@@ -35,16 +35,6 @@
 				(justify left top)
 			)
 		)
-		(pin "~{gfx_{ce}}" input
-			(at 190.5 157.48 180)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-			(uuid "2dad31db-e1a5-415b-9abd-6efe2bc6a33f")
-		)
 		(pin "data_{cpu}[0..7]" input
 			(at 190.5 134.62 180)
 			(effects
@@ -54,16 +44,6 @@
 				(justify left)
 			)
 			(uuid "9666d91f-a7f0-4dd6-ad41-df532fbb0567")
-		)
-		(pin "clk_{2}" input
-			(at 190.5 125.73 180)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-			(uuid "68da8d09-1876-491d-a929-455fa84a9403")
 		)
 		(pin "~{we_{cpu}}" input
 			(at 190.5 161.29 180)
@@ -75,16 +55,6 @@
 			)
 			(uuid "7f017dec-3ce3-4838-89fb-3e70209105de")
 		)
-		(pin "~{ramb0_{ce}}" input
-			(at 190.5 153.67 180)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-			(uuid "533278f8-3277-40e3-94b4-d0e501179419")
-		)
 		(pin "~{oe_{cpu}}" input
 			(at 190.5 163.83 180)
 			(effects
@@ -94,26 +64,6 @@
 				(justify left)
 			)
 			(uuid "dd64f2d8-05e7-409e-aee3-eb766b562e44")
-		)
-		(pin "addr_{cpu}[0..15]" input
-			(at 190.5 130.81 180)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-			(uuid "3a154775-9d6d-4b83-86d9-750f1188cab8")
-		)
-		(pin "~{plt_{cs}}" input
-			(at 190.5 149.86 180)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-			(uuid "558a445c-46e7-4067-aa5e-23a5e1b0aad7")
 		)
 		(pin "gfx_{fr_start}" output
 			(at 237.744 133.35 0)
@@ -154,6 +104,86 @@
 				(justify right)
 			)
 			(uuid "e985131e-afe6-4d2a-8fcd-ad0acc0ca515")
+		)
+		(pin "~{oe_{driver}}" input
+			(at 190.5 139.7 180)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+			(uuid "bec9b359-bbb3-48d6-bd64-47581180119a")
+		)
+		(pin "clk" input
+			(at 190.5 143.51 180)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+			(uuid "b0311d7e-9bbe-44c8-b184-52d4b146fc75")
+		)
+		(pin "~{ce_{ram}}" input
+			(at 190.5 147.32 180)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+			(uuid "53e11d52-24f7-463c-9abb-84559adf695a")
+		)
+		(pin "~{ce_{dma}}" input
+			(at 190.5 152.4 180)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+			(uuid "c418186d-1e3e-49bf-997b-4b018daccca9")
+		)
+		(pin "addr_{cpu}[0..12]" input
+			(at 190.5 156.21 180)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+			(uuid "fd6cc0c5-4491-415a-b68c-057d560c7b10")
+		)
+		(pin "ram_{page}[0..1]" input
+			(at 190.5 127 180)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+			(uuid "e0d704d1-2fb9-4704-956f-92c662e83abe")
+		)
+		(pin "~{ce_{plt}}" input
+			(at 190.5 130.81 180)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+			(uuid "06b7e1ea-bd42-4fbc-aa72-41a350d19c86")
+		)
+		(pin "~{ce_{vga}}" input
+			(at 208.28 122.174 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+			(uuid "00829764-c964-4dec-9dd2-b83230e1d7bd")
 		)
 		(instances
 			(project "dd8_computer"

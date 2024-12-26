@@ -1,16 +1,17 @@
 [*]
 [*] GTKWave Analyzer v3.3.120 (w)1999-2024 BSI
-[*] Sun Dec 22 14:39:01 2024
+[*] Wed Dec 25 20:38:07 2024
 [*]
 [dumpfile] "/home/work/proj/dd8/hardware/gfx_module/src/out/gfx_tb.vcd"
-[dumpfile_mtime] "Sun Dec 22 14:23:04 2024"
-[dumpfile_size] 370654
+[dumpfile_mtime] "Wed Dec 25 20:33:57 2024"
+[dumpfile_size] 344411
 [savefile] "/home/work/proj/dd8/hardware/gfx_module/src/gfx_tb.gtkw"
-[timestart] 21645000
-[size] 2050 1358
+[timestart] 2594000
+[size] 1878 1358
 [pos] -1 -1
-*-18.677271 23497000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+*-19.577271 5238000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] GfxTb.
+[treeopen] GfxTb.gfxDmaInst.
 [sst_width] 273
 [signals_width] 254
 [sst_expanded] 1
@@ -52,63 +53,45 @@ GfxTb.gfxVgaInst.i_clk
 GfxTb.gfxVgaInst.o_vaddr[15:0]
 GfxTb.gfxVgaInst.i_vdata[7:0]
 GfxTb.gfxVgaInst.o_pixel_data[7:0]
-@28
+@29
 GfxTb.gfxVgaInst.o_palette[1:0]
+@28
 GfxTb.gfxVgaInst.o_enabled_b
 [color] 2
 GfxTb.gfxVgaInst.o_free_vbus
 GfxTb.gfxVgaInst.o_vga_latch
 GfxTb.gfxVgaInst.o_vga_out_b
-@c00200
+@800200
 -int
 @22
 GfxTb.gfxVgaInst.reg_vdata[7:0]
-@1401200
--int
 @1000200
+-int
 -vga
-@800200
->-200
+@c00200
 -dma
 @28
->-200
-[color] 3
 GfxTb.gfxDmaInst.i_clk
->-200
 GfxTb.gfxDmaInst.i_clk2
->-200
 GfxTb.gfxDmaInst.i_src_ce_b
->-200
-GfxTb.gfxDmaInst.o_src_re_b
->-200
 GfxTb.gfxDmaInst.io_src_we_b
 @22
->-200
 GfxTb.gfxDmaInst.io_src_addr[12:0]
 @28
->-200
 GfxTb.gfxDmaInst.o_src_ram_page[1:0]
 @22
->-200
 GfxTb.gfxDmaInst.i_src_data[7:0]
 @28
->-200
 GfxTb.gfxDmaInst.o_dst_we_b
 @22
->-200
 GfxTb.gfxDmaInst.o_dst_addr[15:0]
->-200
 GfxTb.gfxDmaInst.o_dst_data[7:0]
 @28
->-200
 GfxTb.gfxDmaInst.o_addr_sel
->-200
 GfxTb.gfxDmaInst.o_active
-@1000200
->-200
+@1401200
 -dma
 @800200
->0
 -addmux
 -addmux0
 @28
@@ -140,9 +123,7 @@ GfxTb.gfxAddrMuxInst1.o_addr7_b
 -vram0
 @28
 GfxTb.vram32Inst0.i_ce_b
-@29
 GfxTb.vram32Inst0.i_re_b
-@28
 GfxTb.vram32Inst0.i_we_b
 @22
 GfxTb.vram32Inst0.i_addr[14:0]

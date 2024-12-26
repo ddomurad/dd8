@@ -52,7 +52,7 @@ module GfxDma(
   inout io_src_we_b,           // source RAM or DMA chip write enable
   inout [12:0] io_src_addr,    // when inactive, the address is used to select the control register, when DMA is active, the address is used to select the source RAM address
   output [1:0] o_src_ram_page, // source RAM page select, 4x8Kb
-  input [7:0] i_src_data,      // when inactive, the data is used to write to the control register, when DMA is active, the data is used to read the source RAM data
+  inout [7:0] i_src_data,      // when inactive, the data is used to write to the control register, when DMA is active, the data is used to read the source RAM data
   
   // dst side interface, used to write the destination data to the VRAM
   output o_dst_we_b,        // destination VRAM write enable
@@ -135,9 +135,7 @@ module GfxDma(
   
   assign #(8/3) io_src_addr = reg_active_clk1 ? reg_src_addr : 13'hz; 
   assign #(8/3) o_src_ram_page = reg_active_clk1 ? reg_ctrl_src_ram_page : 2'hz;
-  assign #(15/3) io_src_we_b = reg_active_clk1 ? 1'h1 : 1'hz; //although we need de src_we for internal registers
-                                                              //we could also consider allow for reading ?
-
+  assign #(15/3) io_src_we_b = reg_active_clk1 ? 1'h1 : 1'hz; 
   
   assign dst_addr_offset = {reg_ctrl_dst_y_origin - reg_y_cnt, reg_ctrl_dst_x_origin - reg_x_cnt}; // calculate the destination address offset
   assign #(0) o_dst_addr =  reg_dst_addr_hold;
@@ -145,7 +143,6 @@ module GfxDma(
   assign #(18/3) o_dst_we_b = ~dst_out_enabled || skip_cpy || i_clk2 ;  // write to the VRAM in the low phase of the clock cycle
   assign #(8/3) o_active = reg_active;
   assign #(15/3) o_addr_sel = reg_free_vbus;
-
   
   always @ (posedge i_clk)  begin
     reg_free_vbus <= i_free_vbus;

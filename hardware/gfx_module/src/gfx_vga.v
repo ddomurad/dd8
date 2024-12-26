@@ -30,9 +30,10 @@ module GfxVga (
 
   // chip control interface
   input wire         i_ctrl_ce_b,  // chip enabled
-  input wire         i_ctrl_w_b,   // control write signal
+  input wire         i_ctrl_re_b,   // control write signal
+  input wire         i_ctrl_we_b,   // control write signal
   input wire  [1:0]  i_ctrl_addr,  // control register address
-  input wire  [7:0]  i_ctrl_data,  // control data
+  inout wire  [7:0]  io_ctrl_data,  // control data
 
   // vram interface
   output wire [15:0] o_vaddr,     // 64Kb video RAM pixel address
@@ -123,7 +124,7 @@ module GfxVga (
   assign vaddr = ctrl_double_res ? {reg_v_cnt[8:0], h_cnt_shifted[8:2]} : {reg_v_cnt[8:1], h_cnt_shifted[8:1]};
   assign vaddr_shifted = {(vaddr[15:8] + reg_ctrl_y_shift), (vaddr[7:0] + reg_ctrl_x_shift)};
  
-  assign #(36/3) o_vaddr = (active && ctrl_enable) ? vaddr_shifted: 16'hzzzz;
+  assign #(36/3) o_vaddr = vaddr_shifted;
 
   // Double resolution mapping
   assign dbr_pixel0 = {6'h00, reg_vdata[1:0]};
@@ -146,20 +147,28 @@ module GfxVga (
     reg_ctrl_status  = 2'h0;
     reg_ctrl_x_shift = 8'h00;
     reg_ctrl_y_shift = 8'h00;
-    reg_ctrl_palette = 2'b00;
+    reg_ctrl_palette = 2'h0;
     reg_h_cnt        = 10'h000;
     reg_v_cnt        = 10'd000;
     reg_vdata        = 8'h00;
   end
 
+  assign io_ctrl_data = (i_ctrl_ce_b || i_ctrl_re_b || !i_ctrl_we_b) ? 8'hzz : (
+    i_ctrl_addr == CTRL_ADDR_STATUS ? {6'h00, reg_ctrl_status} : 
+    i_ctrl_addr == CTRL_ADDR_X_SHIFT ? reg_ctrl_x_shift :
+    i_ctrl_addr == CTRL_ADDR_Y_SHIFT ? reg_ctrl_y_shift :
+	 i_ctrl_addr == CTRL_ADDR_PALETTE ? {6'h00, reg_ctrl_palette} : 
+    8'h00
+  );
 
-  always @ (negedge i_ctrl_w_b) begin 
-    if (~i_ctrl_ce_b) begin 
+
+  always @ (negedge i_ctrl_we_b) begin 
+    if (!i_ctrl_ce_b) begin 
       case (i_ctrl_addr)
-        CTRL_ADDR_STATUS: reg_ctrl_status  <= i_ctrl_data[1:0];
-        CTRL_ADDR_X_SHIFT: reg_ctrl_x_shift  <= i_ctrl_data;
-        CTRL_ADDR_Y_SHIFT: reg_ctrl_y_shift  <= i_ctrl_data;
-        CTRL_ADDR_PALETTE: reg_ctrl_palette  <= i_ctrl_data[1:0];
+        CTRL_ADDR_STATUS: reg_ctrl_status <= io_ctrl_data[1:0];
+        CTRL_ADDR_X_SHIFT: reg_ctrl_x_shift <= io_ctrl_data;
+        CTRL_ADDR_Y_SHIFT: reg_ctrl_y_shift <= io_ctrl_data;
+        CTRL_ADDR_PALETTE: reg_ctrl_palette  <= io_ctrl_data[1:0];
       endcase
     end
   end

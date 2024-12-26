@@ -149,6 +149,7 @@ module GfxTb();
     .i_rw_l_b(reg_cbus_we_b),
     .i_addr_l(reg_cbus_addr[9:0]),
     .io_data_l(cbus_data),
+
     .i_ce_r_b(vga_enabled_b), //todo: confirm
     .i_oe_r_b(vga_enabled_b),
     .i_rw_r_b(1'b1),
@@ -175,9 +176,10 @@ module GfxTb();
     .i_clk(clk),
 
     .i_ctrl_ce_b(reg_cbus_vga_ce_b), //note: connected directrly to cpu bus
-    .i_ctrl_w_b(reg_cbus_we_b),
+    .i_ctrl_re_b(reg_cbus_re_b),
+    .i_ctrl_we_b(reg_cbus_we_b),
     .i_ctrl_addr(reg_cbus_addr[1:0]),
-    .i_ctrl_data(cbus_data),
+    .io_ctrl_data(cbus_data),
 
     .o_vaddr(vga_vram_addr),
     .i_vdata(vram_data),
